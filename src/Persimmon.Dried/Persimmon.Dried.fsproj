@@ -61,6 +61,10 @@
     <Content Include="packages.config" />
     <Content Include="app.config" />
     <Compile Include="Gen.fs" />
+    <Compile Include="Shrink.fs" />
+    <Compile Include="Prop.fs" />
+    <Compile Include="Arbitrary.fs" />
+    <Compile Include="Syntax.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">
