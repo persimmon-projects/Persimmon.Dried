@@ -109,7 +109,7 @@ module PropResultSyntax =
 [<AbstractClass>]
 type Prop internal () =
 
-  abstract member Apply: Parameters -> PropResult
+  abstract member Apply: GenParameters -> PropResult
 
   override __.ToString() = "Prop"
 

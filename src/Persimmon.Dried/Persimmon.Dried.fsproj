@@ -64,6 +64,8 @@
     <Compile Include="Shrink.fs" />
     <Compile Include="Prop.fs" />
     <Compile Include="Arbitrary.fs" />
+    <Compile Include="FreqMap.fs" />
+    <Compile Include="Runner.fs" />
     <Compile Include="Syntax.fs" />
   </ItemGroup>
   <ItemGroup>

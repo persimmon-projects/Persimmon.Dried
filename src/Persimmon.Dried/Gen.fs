@@ -3,18 +3,10 @@
 open System
 open FsRandom
 
-type Parameters = {
+type GenParameters = {
   Size: int
-  State: PrngState
+  PrngState: PrngState
 }
-
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Parameters =
-
-  let Default = {
-    Size = 100
-    State = Utility.createRandomState ()
-  }
 
 [<AbstractClass>]
 type internal R<'T>(labels: Set<string>, result: 'T option) =
@@ -53,7 +45,7 @@ type internal R<'T>(labels: Set<string>, result: 'T option) =
 type internal IGen<'T>() =
   abstract member SieveCopy: obj -> bool
   default __.SieveCopy(_) = true
-  abstract member DoApply: Parameters -> R<'T>
+  abstract member DoApply: GenParameters -> R<'T>
 
 type Gen<'T> internal (igen: IGen<'T>) =
   
@@ -75,7 +67,14 @@ type Gen<'T> internal (igen: IGen<'T>) =
 
 module Gen =
 
-  let private gen (f: Parameters -> R<'T>) =
+  module Parameters =
+
+    let Default = {
+      Size = 100
+      PrngState = Utility.createRandomState ()
+    }
+
+  let private gen (f: GenParameters -> R<'T>) =
     Gen({ new IGen<'T>() with member  __.DoApply(p) = f p })
 
   let private r x = { new R<_>(x) with member __.Sieve(_) = true }
@@ -103,7 +102,7 @@ module Gen =
     }
     Gen(gen)
 
-  let choose f = gen (fun p -> r (Random.next f p.State |> fst |> Some))
+  let choose f = gen (fun p -> r (Random.next f p.PrngState |> fst |> Some))
 
   let sized (f: int -> Gen<'T>) = gen (fun p -> (f p.Size).Gen.DoApply(p))
   let size = sized constant
