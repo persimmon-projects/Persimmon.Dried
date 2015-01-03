@@ -76,3 +76,8 @@ module Syntax =
       p |> Prop.map (fun r2 -> PropResult.merge r1 r2 (if r1.Status = r2.Status then True else False)))
   let (@|) s p = PropImpl.label s p
   let (|@) p s = PropImpl.label s p
+
+  let property name = PropertyBuilder(name)
+
+  module UseTestNameByReflection =
+    let property = PropertyBuilder("")

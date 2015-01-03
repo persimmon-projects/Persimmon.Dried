@@ -88,7 +88,7 @@ module Result =
     s -/ t -/ pretty prms (FreqMap.pretty res.FreqMap)
   )
 
-module Runner =
+module private Impl =
 
   open System
 
@@ -189,3 +189,7 @@ module Runner =
   let mainRunner prms p =
     if Result.isPassed <| check prms p then 0
     else -1
+
+let check prms p = Impl.check prms p
+let run prms p = Impl.run prms p
+let mainRunner prms p = Impl.mainRunner prms p

@@ -67,6 +67,7 @@
     <Compile Include="Arbitrary.fs" />
     <Compile Include="FreqMap.fs" />
     <Compile Include="Runner.fs" />
+    <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Syntax.fs" />
   </ItemGroup>
   <ItemGroup>
