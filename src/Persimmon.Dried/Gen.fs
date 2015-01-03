@@ -126,6 +126,9 @@ module Gen =
           rs.Map(fun x -> r :: x))) (r (Some [])))
     |> map List.rev
 
+  // frequency function is a port of https://github.com/fsharp/FsCheck/blob/f90b83ee2396d00a21b507ee6a09b72ff62f75f1/src/FsCheck/Gen.fs#L142
+  // FsCheck is released under the terms of the Revised BSD License.
+  // Copyright (c) 2008-2015 Kurt Schelfthout. All rights reserved.
   let frequency xs = 
     let rec pick n xs =
       if Seq.isEmpty xs then fail
