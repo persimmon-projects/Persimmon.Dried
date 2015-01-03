@@ -2,27 +2,6 @@
 
 open FsRandom
 
-type Parameters = {
-  MinSuccessfulTests: int
-  MinSize: int
-  MaxSize: int
-  PrngState: PrngState
-  Workers: int
-  MaxDiscardRatio: float32
-}
-
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module Parameters =
-
-  let Default = {
-    MinSuccessfulTests = 100
-    MinSize = 0
-    MaxSize = Gen.Parameters.Default.Size
-    PrngState = Gen.Parameters.Default.PrngState
-    Workers = 1
-    MaxDiscardRatio = 5.0f
-  }
-
 type Status =
   | Passed
   | Proved of PropArg<obj> list
@@ -37,6 +16,42 @@ type Result = {
   FreqMap: FreqMap<obj list>
   Time: int64
 }
+
+type TestCallback() =
+  abstract member OnPropEval: string * int * int * int -> unit
+  default __.OnPropEval(name, threadIdx, succeeded, discarded) = ()
+  abstract member OnTestResult: string * Result -> unit
+  default __.OnTestResult(name, result) = ()
+  member this.Chain(testCallback: TestCallback): TestCallback = { new TestCallback() with
+      override __.OnPropEval(name, threadIdx, succeeded, discarded) =
+        this.OnPropEval(name, threadIdx, succeeded, discarded)
+        testCallback.OnPropEval(name, threadIdx, succeeded, discarded)
+      override __.OnTestResult(name, result) =
+        this.OnTestResult(name, result)
+        testCallback.OnTestResult(name, result) }
+
+type Parameters = {
+  MinSuccessfulTests: int
+  MinSize: int
+  MaxSize: int
+  PrngState: PrngState
+  Workers: int
+  Callback: TestCallback
+  MaxDiscardRatio: float32
+}
+
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Parameters =
+
+  let Default = {
+    MinSuccessfulTests = 100
+    MinSize = 0
+    MaxSize = Gen.Parameters.Default.Size
+    PrngState = Gen.Parameters.Default.PrngState
+    Workers = 1
+    Callback = new TestCallback()
+    MaxDiscardRatio = 5.0f
+  }
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Result =
@@ -84,10 +99,12 @@ module Runner =
         match propRes.Status with
         | Undecided ->
           d <- d + 1
+          prms.Callback.OnPropEval("", workerIdx, n, d)
           if n + d > prms.MinSuccessfulTests && 1 + prms.Workers * int prms.MaxDiscardRatio * n < d then
             res <- Some { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
         | True ->
           n <- n + 1
+          prms.Callback.OnPropEval("", workerIdx, n, d)
         | Proof ->
           n <- n + 1
           res <- Some { Status = Proved propRes.Args; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
@@ -136,7 +153,9 @@ module Runner =
         finally
           stop := true
 
-    { r with Time = DateTime.UtcNow.Ticks - start }
+    let timedRes = { r with Time = DateTime.UtcNow.Ticks - start }
+    prms.Callback.OnTestResult("", timedRes)
+    timedRes
 
   let run prms p = check prms p |> ignore
 
