@@ -7,6 +7,8 @@ type PropArg<'T> = {
   Arg: 'T
   Shrinks: int
   OrigArg: 'T
+  PrettyArg: Pretty
+  PrettyOrigArg: Pretty
 }
 with
   member this.BoxedTypeParam() = {
@@ -14,7 +16,27 @@ with
     Arg = box this.Arg
     Shrinks = this.Shrinks
     OrigArg = box this.OrigArg
+    PrettyArg = this.PrettyArg
+    PrettyOrigArg = this.PrettyOrigArg
   }
+
+module PropArg =
+
+  open Pretty
+  open Helper
+
+  let pretty args = Pretty(fun prms ->
+    if Seq.isEmpty args then ""
+    else
+      seq {
+        for (a, i) in args |> Seq.mapi (fun i a -> (a, i)) ->
+          let l = "> "+ (if a.Label = "" then "ARG_" + string i else a.Label)
+          let s =
+            if a.Shrinks = 0 then ""
+            else newLine + l + "_ORIGINAL: " + a.PrettyOrigArg.Apply(prms)
+          l + ": " + a.PrettyArg.Apply(prms) + "" + s
+      }
+      |> String.concat newLine)
 
 type PropStatus =
   | Proof
@@ -175,7 +197,7 @@ module internal PropImpl =
     try p () :> Prop
     with e -> exn e
 
-  let forAllNoShrink (g1: Gen<_>) (f: _ -> #Prop) = apply (fun prms ->
+  let forAllNoShrink (g1: Gen<_>) (f: _ -> #Prop) pp = apply (fun prms ->
     let gr = g1.Gen.DoApply(prms)
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
@@ -183,9 +205,9 @@ module internal PropImpl =
       let p = secure (fun () -> f x)
       let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
       provedToTrue(p.Apply(prms))
-      |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x })
+      |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x })
 
-  let forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) = apply (fun prms ->
+  let forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
 
@@ -209,7 +231,7 @@ module internal PropImpl =
 
     let rec shrinker x (r: PropResult) shrinks orig =
       let xs = shrink x |> Seq.filter gr.Sieve
-      let res = r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = shrinks; OrigArg = orig }
+      let res = r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = shrinks; OrigArg = orig; PrettyArg = pp x; PrettyOrigArg = pp orig }
       if Seq.isEmpty xs then res
       else
         match getFirstFailure xs with
@@ -220,11 +242,12 @@ module internal PropImpl =
     | None -> undecided.Value.Apply(prms)
     | Some x ->
       let r = result x
-      if not <| PropResult.isFailure r then r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x }
+      if not <| PropResult.isFailure r then
+        r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
       else shrinker x r 0 x)
 
-  let forAll (g: Gen<_>) (f: _ -> #Prop) (s1: Shrink<_>) =
-    forAllShrink g (Shrink.shrink s1) f
+  let forAll (g: Gen<_>) (f: _ -> #Prop) (s1: Shrink<_>) pp =
+    forAllShrink g (Shrink.shrink s1) f pp
 
   module Gen =
     let (==) (g1: Gen<_>) (g2: Gen<_>) = apply (fun prms ->
@@ -233,8 +256,8 @@ module internal PropImpl =
       | (Some r1, Some r2) when r1.Equals(r2) -> proved.Value.Apply(prms)
       | _ -> falsified.Value.Apply(prms))
 
-    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) =
-      forAll g1 (fun r -> forAll g2 (fun x -> notEqual x r s) s) s
+    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) pp =
+      forAll g1 (fun r -> forAll g2 (fun x -> notEqual x r s pp) s pp) s pp
 
     let (!==) (g1:Gen<_>) (g2: Gen<_>) = apply (fun prms ->
       match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
@@ -253,14 +276,16 @@ module internal PropImpl =
       false
     with :? 'T -> true
 
-  let exists (g: Gen<_>) (f: _ -> #Prop) = apply (fun prms ->
+  let exists (g: Gen<_>) (f: _ -> #Prop) pp = apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
     | Some x ->
       let p = secure (fun () -> f x)
       let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
-      let r = p.Apply(prms) |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x }
+      let r =
+        p.Apply(prms)
+        |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
       match r.Status with
       | True -> { r with Status = Proof }
       | False -> { r with Status = Undecided }

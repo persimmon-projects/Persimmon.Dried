@@ -18,7 +18,8 @@ type PropModule internal () =
   member __.all ps = PropImpl.all ps
   member __.atLeastOne ps = PropImpl.atLeastOne ps
   member __.secure p = PropImpl.secure p
-  member __.forAllNoShrink(g) = fun f -> PropImpl.forAllNoShrink g f
+  member __.forAllNoShrink(arb: NonShrinkerArbitrary<_>) =
+    fun f -> PropImpl.forAllNoShrink arb.Gen f arb.PrettyPrinter
   member this.forAllNoShrink(g1, g2) = fun f ->
     this.forAllNoShrink g1 (fun t -> this.forAllNoShrink g2 (f t))
   member this.forAllNoShrink(g1, g2, g3) = fun f ->
@@ -32,7 +33,7 @@ type PropModule internal () =
   member this.forAllNoShrink(g1, g2, g3, g4, g5, g6, g7) = fun f ->
     this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4, g5, g6, g7) (f t))
   member __.forAllShrink g shrink f = PropImpl.forAllShrink g shrink f
-  member __.forAll(arb) = fun f -> PropImpl.forAll arb.Gen f arb.Shrinker
+  member __.forAll(arb: Arbitrary<_>) = fun f -> PropImpl.forAll arb.Gen f arb.Shrinker arb.PrettyPrinter
   member this.forAll(a1, a2) = fun f ->
     this.forAll a1 (fun t -> this.forAll a2 (f t))
   member this.forAll(a1, a2, a3) = fun f ->

@@ -64,6 +64,18 @@ module FreqMap =
 
   let counts (m: FreqMap<_>) = m.Underlying |> Seq.map (fun (KeyValue(k, v)) -> (k, v)) |> Seq.sortBy snd
 
-  let tryFindRaito t (m: FreqMap<_>) = tryFindCount t m |> Option.map (fun c -> float32 c / float32 m.Total)
+  let tryFindRatio t (m: FreqMap<_>) = tryFindCount t m |> Option.map (fun c -> float32 c / float32 m.Total)
 
-  let raitos m = counts m |> Seq.map (fun (t, c) -> (t, float32 c / float32 m.Total))
+  let ratios (m: FreqMap<'T>) = counts m |> Seq.map (fun (t, c) -> (unbox<'T> t, float32 c / float32 m.Total))
+
+  open Pretty
+  open Helper
+
+  let pretty (fm: FreqMap<_ list>) = Pretty(fun prms ->
+    if fm.Total = 0 then ""
+    else
+      "> Collected test data: " -/ String.concat newLine (seq {
+        for (xs, r) in ratios fm do
+          if List.isEmpty xs then
+            yield sprintf "%f%% %s" (round (r * 100.0f)) (xs |> Seq.map (fun x -> x.ToString()) |> String.concat ", ")
+      }))

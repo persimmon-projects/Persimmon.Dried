@@ -62,6 +62,7 @@
     <Content Include="app.config" />
     <Compile Include="Gen.fs" />
     <Compile Include="Shrink.fs" />
+    <Compile Include="Pretty.fs" />
     <Compile Include="Prop.fs" />
     <Compile Include="Arbitrary.fs" />
     <Compile Include="FreqMap.fs" />

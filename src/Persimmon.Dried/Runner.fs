@@ -61,6 +61,33 @@ module Result =
     | Passed | Proved _ -> true
     | _ -> false
 
+  open Pretty
+  open Helper
+
+  let prettyTestRes res = Pretty(fun prms ->
+    let labels ls =
+      if Set.isEmpty ls then ""
+      else "> Labels of failing property: " -/ (ls |> Set.map (fun x -> x.ToString()) |> String.concat newLine)
+    let s =
+      match res.Status with
+      | Proved(args) -> "OK, proved property." -/ (PropArg.pretty args |> pretty prms)
+      | Passed -> "OK, passed "+ string res.Succeeded + " tests."
+      | Failed(args, l) ->
+        "Falsified after " + string res.Succeeded + " passed tests."
+          -/ labels l
+          -/ (PropArg.pretty args |> pretty prms)
+      | Exhausted ->
+        "Gave up after only "+ string res.Succeeded + " passed tests. " + string res.Discarded + " tests were discarded."
+      | PropException(args,e,l) ->
+        "Exception raised on property evaluation."
+          -/ labels l
+          -/ (PropArg.pretty args |> pretty prms)
+          -/ "> Exception: "
+          + (prettyExn e |> pretty prms)
+    let t = if prms.Verbosity <= 1 then "" else "Elapsed time: " + prettyTime res.Time
+    s -/ t -/ pretty prms (FreqMap.pretty res.FreqMap)
+  )
+
 module Runner =
 
   open System
