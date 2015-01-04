@@ -59,9 +59,9 @@ module Syntax =
   open PropTypeClass
   open PropResult
 
-  let inline (&&&) p1 p2 =
+  let inline (.&.) p1 p2 =
     Prop.combine (&&&) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
-  let inline  (|||) p1 p2 =
+  let inline  (.|.) p1 p2 =
     Prop.combine (|||) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
   let inline (++) p1 p2 =
     Prop.combine (++) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
