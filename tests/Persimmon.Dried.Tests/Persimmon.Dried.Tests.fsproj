@@ -61,7 +61,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="app.config" />
+    <Compile Include="Arb.fs" />
     <Compile Include="ShrinkTest.fs" />
+    <Compile Include="PropTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">
