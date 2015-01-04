@@ -3,17 +3,17 @@
 [<Sealed; NoComparison; NoEquality>]
 type PropModule internal () =
   member __.apply f = PropImpl.apply f
+  member __.apply r = PropImpl.applyResult r
+  member __.apply b = PropImpl.applyBool b
   member __.map f g = PropImpl.map f g
   member __.bind f g = PropImpl.bind f g
   member __.combine f g1 g2 = PropImpl.combine f g1 g2
-  member __.applyResult r = PropImpl.applyResult r
   member __.provedToTrue r = PropImpl.provedToTrue r
   member __.undecided = PropImpl.undecided
   member __.falsified = PropImpl.falsified
   member __.proved = PropImpl.proved
   member __.passed = PropImpl.passed
   member __.exn e = PropImpl.exn e
-  member __.applyBool b = PropImpl.applyBool b
   member __.sizedProp f = PropImpl.sizedProp f
   member __.all ps = PropImpl.all ps
   member __.atLeastOne ps = PropImpl.atLeastOne ps
@@ -68,7 +68,7 @@ module Syntax =
     p1
     |> Prop.bind (fun r1 ->
       if PropResult.isProved r1 then p2 |> Prop.map (fun r2 -> PropResult.merge r1 r2 r2.Status)
-      elif not <| PropResult.isSuccess r1 then Prop.applyResult { r1 with Status = Undecided }
+      elif not <| PropResult.isSuccess r1 then Prop.apply { r1 with Status = Undecided }
       else p2 |> Prop.map (fun r2 -> Prop.provedToTrue (PropResult.merge r1 r2 r2.Status)))
   let (==) (p1: Prop) (p: Prop) =
     p1

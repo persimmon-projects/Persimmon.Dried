@@ -9,5 +9,5 @@ module ShrinkTest =
     prop (Prop.forAll Arb.int (fun n ->
       Shrink.shrink Arb.int.Shrinker n
       |> Seq.forall ((<>) n)
-      |> Prop.applyBool))
+      |> Prop.apply))
   }
