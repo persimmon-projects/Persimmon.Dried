@@ -29,8 +29,8 @@ type PropertyBuilder(name: string) =
   [<CustomOperation("maxDiscardRatio")>]
   member __.MaxDiscardRatio((p, pp), v) =
     ({ p with MaxDiscardRatio = v }, pp)
-  [<CustomOperation("prop")>]
-  member __.Prop((prms, prettyPrms), p) =
+  [<CustomOperation("apply")>]
+  member __.Apply((prms, prettyPrms), p) =
     let meta = { Name = name; Parameters = [] }
     let body () =
       let res = check prms p

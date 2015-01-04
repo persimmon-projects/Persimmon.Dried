@@ -197,8 +197,80 @@ module internal PropImpl =
     try p () :> Prop
     with e -> exn e
 
-  let forAllNoShrink (g1: Gen<_>) (f: _ -> #Prop) pp = apply (fun prms ->
-    let gr = g1.Gen.DoApply(prms)
+  module Gen =
+    let (==) (g1: Gen<_>) (g2: Gen<_>) = apply (fun prms ->
+      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
+      | (None, None) -> proved.Value.Apply(prms)
+      | (Some r1, Some r2) when r1.Equals(r2) -> proved.Value.Apply(prms)
+      | _ -> falsified.Value.Apply(prms))
+
+//    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) pp =
+//      forAll g1 (fun r -> forAll g2 (fun x -> notEqual x r s pp) s pp) s pp
+
+    let (!==) (g1:Gen<_>) (g2: Gen<_>) = apply (fun prms ->
+      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
+      | (None, None) -> falsified.Value.Apply(prms)
+      | (Some r1, Some r2) when r1 = r2 -> falsified.Value.Apply(prms)
+      | _ -> proved.Value.Apply(prms))
+
+  open Gen
+
+  let someFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> atLeastOne
+  let noneFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> all
+
+  let raises<'T, 'U when 'T :> exn> (x: Lazy<'U>) =
+    try
+      x.Force() |> ignore
+      false
+    with :? 'T -> true
+
+  let within maximumMs (wrappedProp: Lazy<Prop>) =
+    let rec attempt prms endTime =
+      let result = wrappedProp.Value.Apply(prms)
+      if DateTime.UtcNow.Ticks > endTime then
+        let r =
+          if PropResult.isFailure result then result
+          else { Status = False; Args = []; Labels = Set.empty; Collected = [] }
+        { r with Labels = Set.singleton "Timeout" }
+      else
+        if PropResult.isSuccess result then result
+        else attempt prms endTime
+    { new Prop() with
+      member __.Apply(prms) =
+        let now = DateTime.UtcNow
+        let endTime = now + TimeSpan(0, 0, 0, 0, maximumMs)
+        attempt prms endTime.Ticks }
+
+  let collectF (f: _ -> #Prop) = fun t -> apply (fun prms ->
+    let prop = f t
+    prop.Apply(prms) |> PropResult.collect t)
+
+  let collect t (prop: Prop) = apply (fun prms -> prop.Apply(prms) |> PropResult.collect t)
+
+  let classify c ifTrue (prop: Prop) : Prop = if c then collect ifTrue prop else collect () prop
+
+  let classifyF c ifTrue ifFalse (prop: Prop) : Prop =
+    if c then collect ifTrue prop else collect ifFalse prop
+
+type PropApply =
+  | PropApply
+  static member Instance(PropApply, p: Prop) = p
+  static member Instance(PropApply, f) = PropImpl.apply f
+  static member Instance(PropApply, b) = PropImpl.applyBool b
+  static member Instance(PropApply, r) = PropImpl.applyResult r
+  
+module PropTypeClass =
+
+  let inline instance (a:^a) (b:^b) =                                                      
+    ((^a or ^b) : (static member Instance: ^a * ^b -> Prop) (a, b))
+
+open PropImpl
+
+[<Sealed; NoComparison; NoEquality>]
+type PropModule internal () =
+
+  member __.forAllNoShrink(g: Gen<_>, pp) = fun f -> apply (fun prms ->
+    let gr = g.Gen.DoApply(prms)
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
     | Some x ->
@@ -207,7 +279,10 @@ module internal PropImpl =
       provedToTrue(p.Apply(prms))
       |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x })
 
-  let forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
+  member inline this.forAllNoShrink(arb: NonShrinkerArbitrary<_>) = fun f ->
+    this.forAllNoShrink(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
+
+  member __.forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
 
@@ -246,37 +321,10 @@ module internal PropImpl =
         r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
       else shrinker x r 0 x)
 
-  let forAll (g: Gen<_>) (f: _ -> #Prop) (s1: Shrink<_>) pp =
-    forAllShrink g (Shrink.shrink s1) f pp
+  member inline this.forAll(arb: Arbitrary<_>) = fun f ->
+    this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
 
-  module Gen =
-    let (==) (g1: Gen<_>) (g2: Gen<_>) = apply (fun prms ->
-      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
-      | (None, None) -> proved.Value.Apply(prms)
-      | (Some r1, Some r2) when r1.Equals(r2) -> proved.Value.Apply(prms)
-      | _ -> falsified.Value.Apply(prms))
-
-    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) pp =
-      forAll g1 (fun r -> forAll g2 (fun x -> notEqual x r s pp) s pp) s pp
-
-    let (!==) (g1:Gen<_>) (g2: Gen<_>) = apply (fun prms ->
-      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
-      | (None, None) -> falsified.Value.Apply(prms)
-      | (Some r1, Some r2) when r1 = r2 -> falsified.Value.Apply(prms)
-      | _ -> proved.Value.Apply(prms))
-
-  open Gen
-
-  let someFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> atLeastOne
-  let noneFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> all
-
-  let raises<'T, 'U when 'T :> exn> (x: Lazy<'U>) =
-    try
-      x.Force() |> ignore
-      false
-    with :? 'T -> true
-
-  let exists (g: Gen<_>) (f: _ -> #Prop) pp = apply (fun prms ->
+  member __.exists(g: Gen<_>, pp) = fun f -> apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
@@ -291,30 +339,7 @@ module internal PropImpl =
       | False -> { r with Status = Undecided }
       | _ -> r)
 
-  let within maximumMs (wrappedProp: Lazy<Prop>) =
-    let rec attempt prms endTime =
-      let result = wrappedProp.Value.Apply(prms)
-      if DateTime.UtcNow.Ticks > endTime then
-        let r =
-          if PropResult.isFailure result then result
-          else { Status = False; Args = []; Labels = Set.empty; Collected = [] }
-        { r with Labels = Set.singleton "Timeout" }
-      else
-        if PropResult.isSuccess result then result
-        else attempt prms endTime
-    { new Prop() with
-      member __.Apply(prms) =
-        let now = DateTime.UtcNow
-        let endTime = now + TimeSpan(0, 0, 0, 0, maximumMs)
-        attempt prms endTime.Ticks }
+  member inline this.exists (arb: NonShrinkerArbitrary<_>) = fun f ->
+    this.exists(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
 
-  let collectF (f: _ -> #Prop) = fun t -> apply (fun prms ->
-    let prop = f t
-    prop.Apply(prms) |> PropResult.collect t)
-
-  let collect t (prop: Prop) = apply (fun prms -> prop.Apply(prms) |> PropResult.collect t)
-
-  let classify c ifTrue (prop: Prop) : Prop = if c then collect ifTrue prop else collect () prop
-
-  let classifyF c ifTrue ifFalse (prop: Prop) : Prop =
-    if c then collect ifTrue prop else collect ifFalse prop
+  member inline this.exists (arb: Arbitrary<_>) = fun f -> this.exists arb.NonShrinker f

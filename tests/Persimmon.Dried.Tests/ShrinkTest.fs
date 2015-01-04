@@ -6,8 +6,7 @@ open Persimmon.Dried
 module ShrinkTest =
 
   let ``int`` = property "int" {
-    prop (Prop.forAll Arb.int (fun n ->
+    apply (Prop.forAll Arb.int (fun n ->
       Shrink.shrink Arb.int.Shrinker n
-      |> Seq.forall ((<>) n)
-      |> Prop.apply))
+      |> Seq.forall ((<>) n)))
   }
