@@ -65,13 +65,15 @@ module Syntax =
     Prop.combine (|||) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
   let inline (++) p1 p2 =
     Prop.combine (++) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
-  let inline (==>) p1 (Lazy p2) =
-    let p2 = instance PropApply p2
+  let inline (==>) p1 (p2: Lazy<_>) =
     instance PropApply p1
     |> Prop.bind (fun r1 ->
-      if PropResult.isProved r1 then p2 |> Prop.map (fun r2 -> PropResult.merge r1 r2 r2.Status)
+      if PropResult.isProved r1 then
+        instance PropApply p2.Value |> Prop.map (fun r2 -> PropResult.merge r1 r2 r2.Status)
       elif not <| PropResult.isSuccess r1 then Prop.apply { r1 with Status = Undecided }
-      else p2 |> Prop.map (fun r2 -> Prop.provedToTrue (PropResult.merge r1 r2 r2.Status)))
+      else
+        instance PropApply p2.Value
+        |> Prop.map (fun r2 -> Prop.provedToTrue (PropResult.merge r1 r2 r2.Status)))
   let inline (==) p1 p =
     instance PropApply p1
     |> Prop.bind (fun r1 ->
