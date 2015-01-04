@@ -252,12 +252,43 @@ module internal PropImpl =
   let classifyF c ifTrue ifFalse (prop: Prop) : Prop =
     if c then collect ifTrue prop else collect ifFalse prop
 
+  module Persimmon =
+
+    open Persimmon
+
+    let applyAssertionResult (r: AssertionResult<_>) =
+      { new Prop() with
+        member __.Apply(_) =
+          match r with
+          | Passed _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
+          | NotPassed (Violated msg) ->
+            { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
+          | NotPassed (Skipped _) ->
+            // TODO: Are you sure to return True?
+            { Status = True; Args = []; Labels = Set.empty; Collected = [] } }
+
+    let applyTestResult (r: TestResult<_>) =
+      { new Prop() with
+        member __.Apply(prms) =
+          match r with
+          | Done _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
+          | Error(_, es, x::_) ->
+            match x with
+            | Violated msg -> { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
+            | Skipped _ ->
+              // TODO: Are you sure to return True?
+              { Status = True; Args = []; Labels = Set.empty; Collected = [] }
+          | Error(_, es, _) ->
+            { Status = Exception (List.head es); Args = []; Labels = Set.empty; Collected = [] } }
+
 type PropApply =
   | PropApply
   static member Instance(PropApply, p: Prop) = p
   static member Instance(PropApply, f) = PropImpl.apply f
   static member Instance(PropApply, b) = PropImpl.applyBool b
   static member Instance(PropApply, r) = PropImpl.applyResult r
+  static member Instance(PropApply, r) = PropImpl.Persimmon.applyAssertionResult r
+  static member Instance(PropApply, r) = PropImpl.Persimmon.applyTestResult r
   
 module PropTypeClass =
 
@@ -266,6 +297,7 @@ module PropTypeClass =
 
 open PropImpl
 
+// module like class
 [<Sealed; NoComparison; NoEquality>]
 type PropModule internal () =
 
