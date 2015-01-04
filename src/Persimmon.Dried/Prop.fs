@@ -373,3 +373,20 @@ type PropModule internal () =
     this.exists(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
 
   member inline this.exists (arb: Arbitrary<_>) = fun f -> this.exists arb.NonShrinker f
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  member __.collect(t, prop) = PropImpl.collect t prop
+
+  member inline this.collect(t) = fun p -> this.collect(t, PropTypeClass.instance PropApply p)
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  member __.classify(c, ifTrue, prop) = PropImpl.classify c ifTrue prop
+
+  member inline this.classify(c, ifTrue) =
+    fun p -> this.classify(c, ifTrue, PropTypeClass.instance PropApply p)
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  member __.classify(c, ifTrue, ifFalse, prop) = PropImpl.classifyF c ifTrue ifFalse prop
+
+  member inline this.classify(c, ifTrue, ifFalse: 'T) =
+    fun p -> this.classify(c, ifTrue, ifFalse, PropTypeClass.instance PropApply p)

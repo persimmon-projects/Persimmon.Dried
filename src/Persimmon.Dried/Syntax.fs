@@ -50,9 +50,6 @@ module Syntax =
     member __.raises<'T, 'U when 'T :> exn> x = PropImpl.raises<'T, 'U> x
     member __.within maximumMs wrappedProp = PropImpl.within maximumMs wrappedProp
     member __.collect(f: _ -> #Prop) = fun t -> PropImpl.collectF f t
-    member __.collect(t) = fun prop -> PropImpl.collect t prop
-    member __.classify(c, ifTrue) = fun prop -> PropImpl.classify c ifTrue prop
-    member __.classify(c, ifTrue, ifFalse) = fun prop -> PropImpl.classifyF c ifTrue ifFalse prop
 
   let Prop = PropModule()
 
