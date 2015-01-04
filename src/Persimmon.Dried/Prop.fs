@@ -77,11 +77,6 @@ module PropResult =
     Collected = List.append x.Collected y.Collected
   }
 
-[<AutoOpen>]
-module PropResultSyntax =
-
-  open PropResult
-
   let (&&&) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
     | (Exception _,_) -> l
@@ -119,7 +114,7 @@ module PropResultSyntax =
     | (True, _) -> r
     | (False, _) -> l
 
-  let (==>>) (l: PropResult) (r: PropResult) =
+  let (==>) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
     | (Exception _,_) -> l
     | (_, Exception _) -> r
@@ -136,6 +131,8 @@ type Prop internal () =
   override __.ToString() = "Prop"
 
 module internal PropImpl =
+
+  open PropResult
 
   let map f (p: Prop) = { new Prop() with
     member __.Apply(prms) = p.Apply(prms) |> f }
