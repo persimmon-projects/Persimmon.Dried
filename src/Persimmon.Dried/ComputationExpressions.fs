@@ -4,7 +4,9 @@ open Persimmon
 open Runner
 
 type PropertyBuilder(name: string) =
-  member __.Yield(()) = (Parameters.Default, Pretty.Parameters.Default)
+  member val RunnerParameters = Parameters.Default with get, set
+  member val PrettyParameters = Pretty.Parameters.Default with get, set
+  member this.Yield(()) = (this.RunnerParameters, this.PrettyParameters)
   [<CustomOperation("verbosity")>]
   member __.Verbosity((p, _), v) =
     (p, { Verbosity = v })
