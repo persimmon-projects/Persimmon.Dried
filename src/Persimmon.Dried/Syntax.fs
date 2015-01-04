@@ -16,6 +16,7 @@ module Syntax =
     member __.proved = PropImpl.proved
     member __.passed = PropImpl.passed
     member __.exn e = PropImpl.exn e
+    member __.exnNull = lazy (PropImpl.exn null)
     member __.sizedProp f = PropImpl.sizedProp f
     member __.all ps = PropImpl.all ps
     member __.atLeastOne ps = PropImpl.atLeastOne ps
