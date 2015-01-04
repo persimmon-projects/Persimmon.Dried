@@ -119,7 +119,7 @@ module PropResultSyntax =
     | (True, _) -> r
     | (False, _) -> l
 
-  let (==>) (l: PropResult) (r: PropResult) =
+  let (==>>) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
     | (Exception _,_) -> l
     | (_, Exception _) -> r
@@ -139,8 +139,6 @@ module internal PropImpl =
 
   let map f (p: Prop) = { new Prop() with
     member __.Apply(prms) = p.Apply(prms) |> f }
-
-  let label s p = p |> map (fun r -> { r with Labels = Set.add s r.Labels })
 
   let bind (f: _ -> Prop) (p: Prop) = { new Prop() with
     member __.Apply(prms) = (p.Apply(prms) |> f).Apply(prms) }

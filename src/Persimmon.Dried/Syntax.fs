@@ -55,21 +55,29 @@ module Syntax =
 
   let Prop = PropModule()
 
-  let (&&&) (p1: Prop) (p2: Prop) = Prop.combine (&&&) p1 (Prop.secure (fun () -> p2))
-  let (|||) (p1: Prop) (p2: Prop) = Prop.combine (|||) p1 (Prop.secure (fun () -> p2))
-  let (++) (p1: Prop) (p2: Prop) = Prop.combine (++) p1 (Prop.secure (fun () -> p2))
-  let (==>) (p1: Prop) (p2: Prop) =
-    p1
+  open PropTypeClass
+
+  let inline (&&&) p1 p2 =
+    Prop.combine (&&&) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
+  let inline  (|||) p1 p2 =
+    Prop.combine (|||) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
+  let inline (++) p1 p2 =
+    Prop.combine (++) (instance PropApply p1) (Prop.secure (fun () -> instance PropApply p2))
+  let inline (==>) p1 (Lazy p2) =
+    let p2 = instance PropApply p2
+    instance PropApply p1
     |> Prop.bind (fun r1 ->
       if PropResult.isProved r1 then p2 |> Prop.map (fun r2 -> PropResult.merge r1 r2 r2.Status)
       elif not <| PropResult.isSuccess r1 then Prop.apply { r1 with Status = Undecided }
       else p2 |> Prop.map (fun r2 -> Prop.provedToTrue (PropResult.merge r1 r2 r2.Status)))
-  let (==) (p1: Prop) (p: Prop) =
-    p1
+  let inline (==) p1 p =
+    instance PropApply p1
     |> Prop.bind (fun r1 ->
-      p |> Prop.map (fun r2 -> PropResult.merge r1 r2 (if r1.Status = r2.Status then True else False)))
-  let (@|) s p = PropImpl.label s p
-  let (|@) p s = PropImpl.label s p
+      instance PropApply p
+      |> Prop.map (fun r2 ->
+        PropResult.merge r1 r2 (if r1.Status = r2.Status then True else False)))
+  let inline (@|) s p = instance PropApply p |> Prop.map (fun r -> { r with Labels = Set.add s r.Labels })
+  let inline (|@) p s = s @| p
 
   let property name = PropertyBuilder(name)
 
