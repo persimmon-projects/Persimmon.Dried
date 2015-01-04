@@ -40,6 +40,12 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  let uint16 = {
+    Gen = Gen.choose (Statistics.uniformDiscrete (int UInt16.MinValue, int UInt16.MaxValue)) |> Gen.map uint16
+    Shrinker = Shrink.shrinkUInt16
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   let sbyte = {
     Gen = Gen.choose (Statistics.uniformDiscrete (int SByte.MinValue, int SByte.MaxValue)) |> Gen.map sbyte
     Shrinker = Shrink.shrinkSbyte
@@ -56,4 +62,21 @@ module Arb =
     Gen = Gen.choose (Statistics.uniformDiscrete (Int32.MinValue, Int32.MaxValue))
     Shrinker = Shrink.shrinkInt
     PrettyPrinter = Pretty.prettyAny
+  }
+
+  let float32 = {
+    Gen = gen {
+      let! s = Gen.choose (Statistics.uniformDiscrete (0, 1))
+      let! e = Gen.choose (Statistics.uniformDiscrete (0, 0xfe))
+      let! m = Gen.choose (Statistics.uniformDiscrete (0, 0x7fffff))
+      return System.Convert.ToSingle((s <<< 31) ||| (e <<< 23) ||| m)
+    }
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  let list a = {
+    Gen = Gen.listOf a.Gen
+    Shrinker = Shrink.shrinkList a.Shrinker
+    PrettyPrinter = Pretty.prettyList
   }
