@@ -4,6 +4,7 @@ open Persimmon
 open Runner
 
 type PropertyBuilder(name: string) =
+  new() = PropertyBuilder("")
   member val RunnerParameters = Parameters.Default with get, set
   member val PrettyParameters = Pretty.Parameters.Default with get, set
   member this.Yield(()) = (this.RunnerParameters, this.PrettyParameters)

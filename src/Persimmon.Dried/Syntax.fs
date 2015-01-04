@@ -82,4 +82,4 @@ module Syntax =
   let property name = PropertyBuilder(name)
 
   module UseTestNameByReflection =
-    let property = PropertyBuilder("")
+    let property = PropertyBuilder()
