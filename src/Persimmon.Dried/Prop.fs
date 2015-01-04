@@ -293,12 +293,14 @@ module PropTypeClass =
   let inline instance (a:^a) (b:^b) =                                                      
     ((^a or ^b) : (static member Instance: ^a * ^b -> Prop) (a, b))
 
+open System.ComponentModel
 open PropImpl
 
 // module like class
 [<Sealed; NoComparison; NoEquality>]
 type PropModule internal () =
 
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.forAllNoShrink(g: Gen<_>, pp) = fun f -> apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     match gr.Retrieve with
@@ -354,6 +356,7 @@ type PropModule internal () =
   member inline this.forAll(arb: Arbitrary<_>) = fun f ->
     this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
 
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.exists(g: Gen<_>, pp) = fun f -> apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
     match gr.Retrieve with
