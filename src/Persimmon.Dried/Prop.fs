@@ -154,17 +154,6 @@ module internal PropImpl =
 
   open PropResult
 
-  let map f (p: Prop) = { new Prop() with
-    member __.Apply(prms) = p.Apply(prms) |> f }
-
-  let bind (f: _ -> Prop) (p: Prop) = { new Prop() with
-    member __.Apply(prms) = (p.Apply(prms) |> f).Apply(prms) }
-
-  let combine f p1 p2 =
-    p1 |> bind (fun r1 ->
-    p2 |> bind (fun r2 ->
-      { new Prop() with member __.Apply(prms) = f r1 r2 }))
-
   let apply f = { new Prop() with
     member __.Apply(prms) =
       try
@@ -173,8 +162,16 @@ module internal PropImpl =
         { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] }
   }
 
-  let applyResult r = { new Prop() with
-    member __.Apply(prms) = r }
+  let map f (p: Prop) = apply (p.Apply >> f)
+
+  let bind (f: _ -> Prop) (p: Prop) = apply (fun prms -> (p.Apply(prms) |> f).Apply(prms))
+
+  let combine f p1 p2 =
+    p1 |> bind (fun r1 ->
+    p2 |> bind (fun r2 ->
+      { new Prop() with member __.Apply(prms) = f r1 r2 }))
+
+  let applyResult r = apply (fun _ -> r)
 
   let provedToTrue r =
     match r.Status with
