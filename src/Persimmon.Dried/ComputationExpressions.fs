@@ -33,10 +33,13 @@ type PropertyBuilder(name: string) =
   member __.MaxDiscardRatio((p, pp), v) =
     ({ p with MaxDiscardRatio = v }, pp)
   [<CustomOperation("apply")>]
-  member __.Apply((prms, prettyPrms), p) =
+  member __.Apply((prms, prettyPrms), p: Prop) =
     let meta = { Name = name; Parameters = [] }
     let body () =
-      let res = check prms p
+      let res =
+        p
+        |> PropImpl.bind PropImpl.applyResult
+        |> check prms
       match res.Status with
       | Proved _ | Passed ->
         Done(meta, NonEmptyList.singleton (AssertionResult.Passed()))
