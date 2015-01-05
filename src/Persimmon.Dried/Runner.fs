@@ -145,7 +145,7 @@ module private Impl =
           rng <- rng.Next64Bits() |> snd
       match res with
       | None ->
-        if int prms.MaxDiscardRatio * n > d then { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+        if prms.MaxDiscardRatio * float32 n > float32 d then { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
         else { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
       | Some res -> res
 
