@@ -80,3 +80,9 @@ module Arb =
     Shrinker = Shrink.shrinkList a.Shrinker
     PrettyPrinter = Pretty.prettyList
   }
+
+  let nonEmptyList a = {
+    Gen = Gen.nonEmptyListOf a.Gen
+    Shrinker = Shrink.shrinkList a.Shrinker
+    PrettyPrinter = Pretty.prettyList
+  }
