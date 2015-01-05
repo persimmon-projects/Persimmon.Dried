@@ -38,12 +38,32 @@ module PropArg =
       }
       |> String.concat newLine)
 
+[<CustomEquality;NoComparison>]
 type PropStatus =
   | Proof
   | True
   | False
   | Undecided
   | Exception of exn
+with
+  override this.Equals(other: obj) =
+    match other with
+    | :? PropStatus as other ->
+      match this, other with
+      | Proof, Proof
+      | True, True
+      | False, False
+      | Undecided, Undecided
+      | Exception _, Exception _ -> true
+      | _ -> false
+    | _ -> false
+  override this.GetHashCode() =
+    match this with
+    | Proof -> 0
+    | True -> 1
+    | False -> 2
+    | Undecided -> 3
+    | Exception _ -> 4
 
 type PropResult = {
   Status: PropStatus
