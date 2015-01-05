@@ -229,7 +229,7 @@ module internal PropImpl =
   open Gen
 
   let someFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> atLeastOne
-  let noneFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> all
+  let noneFailing (gs: Gen<_> seq) = gs |> Seq.map ((!==) fail) |> all
 
   let raises<'T, 'U when 'T :> exn> (x: Lazy<'U>) =
     try
