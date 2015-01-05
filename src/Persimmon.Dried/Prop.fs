@@ -89,6 +89,7 @@ module PropResult =
 
   let addArg (a: PropArg<'T>) r = { r with Args = a.BoxedTypeParam() :: r.Args }
   let collect (a: 'T) r = { r with Collected = box a :: r.Collected }
+  let label s r = { r with Labels = Set.add s r.Labels }
 
   let merge x y st = {
     Status = st
