@@ -302,3 +302,8 @@ module PropTest =
       apply (Prop.forAll a (fun gs ->
         Prop.noneFailing gs .|. lazy (gs |> List.exists (Gen.sample >> Option.isNone))))
     }
+
+  let ``chek some prop`` = property "check some prop" {
+    apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a + b = b + a))
+    apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a * b = b * a))
+  }

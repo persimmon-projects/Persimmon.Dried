@@ -3,57 +3,61 @@
 open Persimmon
 open Runner
 
-type PropertyBuilder(name: string) =
-  new() = PropertyBuilder("")
+type PropertiesState = {
+  RunnerParams: Parameters
+  PrettyParams: PrettyParameters
+  Properties: Prop seq
+}
+
+type PropertiesBuilder(name: string) =
+  new() = PropertiesBuilder("")
   member val RunnerParameters = Parameters.Default with get, set
   member val PrettyParameters = Pretty.Parameters.Default with get, set
-  member this.Yield(()) = (this.RunnerParameters, this.PrettyParameters)
+  member this.Yield(()) = { RunnerParams = this.RunnerParameters; PrettyParams = this.PrettyParameters; Properties = Seq.empty }
   [<CustomOperation("verbosity")>]
-  member __.Verbosity((p, _), v) =
-    (p, { Verbosity = v })
+  member __.Verbosity(s, v) =
+    { s with PrettyParams = { Verbosity = v } }
   [<CustomOperation("minSuccessfulTests")>]
-  member __.MinSuccessfulTests((p, pp), v) =
-    ({ p with MinSuccessfulTests = v }, pp)
+  member __.MinSuccessfulTests(s, v) =
+    { s with RunnerParams = { s.RunnerParams with MinSuccessfulTests = v } }
   [<CustomOperation("minSize")>]
-  member __.MinSize((p, pp), v) =
-    ({ p with MinSize = v }, pp)
+  member __.MinSize(s, v) =
+    { s with RunnerParams = { s.RunnerParams with MinSize = v } }
   [<CustomOperation("maxSize")>]
-  member __.MaxSize((p, pp), v) =
-    ({ p with MaxSize = v }, pp)
+  member __.MaxSize(s, v) =
+    { s with RunnerParams = { s.RunnerParams with MaxSize = v } }
   [<CustomOperation("prngState")>]
-  member __.PrngState((p, pp), v) =
-    ({ p with Parameters.PrngState = v }, pp)
+  member __.PrngState(s, v) =
+    { s with RunnerParams = { s.RunnerParams with PrngState = v } }
   [<CustomOperation("workers")>]
-  member __.Workers((p, pp), v) =
-    ({ p with Workers = v }, pp)
+  member __.Workers(s, v) =
+    { s with RunnerParams = { s.RunnerParams with Workers = v } }
   [<CustomOperation("callback")>]
-  member __.Callback((p, pp), v) =
-    ({ p with Callback = v }, pp)
+  member __.Callback(s, v) =
+    { s with RunnerParams = { s.RunnerParams with Callback = v } }
   [<CustomOperation("maxDiscardRatio")>]
-  member __.MaxDiscardRatio((p, pp), v) =
-    ({ p with MaxDiscardRatio = v }, pp)
+  member __.MaxDiscardRatio(s, v) =
+    { s with RunnerParams = { s.RunnerParams with MaxDiscardRatio = v } }
   [<CustomOperation("apply")>]
-  member __.Apply((prms, prettyPrms), p: Prop) =
-    let meta = { Name = name; Parameters = [] }
-    let body () =
-      let res =
-        p
-        |> PropImpl.bind PropImpl.applyResult
-        |> check prms
-      match res.Status with
-      | Proved _ | Passed ->
-        Done(meta, NonEmptyList.singleton (AssertionResult.Passed()))
-      | Failed _
-      | Exhausted ->
-        let v = Violated (Result.prettyTestRes res |> Pretty.pretty prettyPrms)
-        Done(meta, NonEmptyList.singleton (NotPassed v))
-      | PropException (_, e, _) ->
-        let v = Violated (Result.prettyTestRes res |> Pretty.pretty prettyPrms)
-        Error(meta, [e], [v])
-    TestCase(meta, body)
+  member __.Apply(s, p) =
+    { s with Properties = seq { yield! s.Properties; yield p } }
   member __.Delay(f: unit -> _) = f
   member __.Run(f) =
     try
-      f ()
+      let s = f ()
+      let meta = { Name = name; Parameters = [] }
+      let body () =
+        let res = s.Properties |> PropImpl.all |> check s.RunnerParams
+        match res.Status with
+        | Proved _ | Passed ->
+          Done(meta, NonEmptyList.singleton (AssertionResult.Passed()))
+        | Failed _
+        | Exhausted ->
+          let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
+          Done(meta, NonEmptyList.singleton (NotPassed v))
+        | PropException (_, e, _) ->
+          let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
+          Error(meta, [e], [v])
+      TestCase(meta, body)
     with e ->
       TestCase.makeError name [] e
