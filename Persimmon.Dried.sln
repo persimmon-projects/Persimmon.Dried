@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{681805
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried.Tests", "tests\Persimmon.Dried.Tests\Persimmon.Dried.Tests.fsproj", "{956AE151-E895-4D5C-8E7F-A4D89C304DA1}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Benchmark", "Benchmark\Benchmark.fsproj", "{4DB09691-27BF-4558-A9ED-4D42F245938A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{956AE151-E895-4D5C-8E7F-A4D89C304DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{956AE151-E895-4D5C-8E7F-A4D89C304DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{956AE151-E895-4D5C-8E7F-A4D89C304DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB09691-27BF-4558-A9ED-4D42F245938A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB09691-27BF-4558-A9ED-4D42F245938A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB09691-27BF-4558-A9ED-4D42F245938A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB09691-27BF-4558-A9ED-4D42F245938A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
