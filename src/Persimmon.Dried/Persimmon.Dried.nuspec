@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <dependencies>
+      <dependency id="Persimmon" version="$version$" />
+      <dependency id="FsRandom" version="1.3.1" />
+    </dependencies>
+    <title>$title$</title>
+    <authors>bleis-tift, Gab-km, pocketberserker</authors>
+    <owners>bleis-tift, Gab-km, pocketberserker</owners>
+    <licenseUrl>https://github.com/persimmon-projects/Persimmon.Dried/tree/$version$/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/persimmon-projects/Persimmon.Dried</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Persimmon.Dried is a random testing library for Persimmon.</description>
+    <tags>f# test testing</tags>
+  </metadata>
+</package>
