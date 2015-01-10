@@ -14,6 +14,7 @@ module Arb =
           (3, Gen.constant Prop.proved.Value)
           (3, Gen.constant undecidedOrPassed)
           (2, Gen.constant Prop.undecided.Value)
+          (1, Gen.constant (Prop.skip ""))
           (1, Gen.constant (Prop.exn null))
         ]
       Shrinker = Shrink.shrinkAny

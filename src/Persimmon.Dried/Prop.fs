@@ -44,6 +44,7 @@ type PropStatus =
   | True
   | False
   | Undecided
+  | Skipped of string
   | Exception of exn
 with
   override this.Equals(other: obj) =
@@ -54,6 +55,7 @@ with
       | True, True
       | False, False
       | Undecided, Undecided
+      | Skipped _, Skipped _
       | Exception _, Exception _ -> true
       | _ -> false
     | _ -> false
@@ -63,7 +65,8 @@ with
     | True -> 1
     | False -> 2
     | Undecided -> 3
-    | Exception _ -> 4
+    | Skipped _ -> 4
+    | Exception _ -> 5
 
 type PropResult = {
   Status: PropStatus
@@ -102,6 +105,8 @@ module PropResult =
     match l.Status, r.Status with
     | (Exception _,_) -> l
     | (_, Exception _) -> r
+    | (Skipped _, _) -> l
+    | (_, Skipped _) -> r
     | (False, _) -> l
     | (_, False) -> r
     | (Undecided, _) -> l
@@ -114,6 +119,8 @@ module PropResult =
     match l.Status, r.Status with
     | (Exception _, _) -> l
     | (_, Exception _) -> r
+    | (Skipped _, _) -> l
+    | (_, Skipped _) -> r
     | (False, False) -> merge l r False
     | (False, _) -> r
     | (_, False) -> l
@@ -127,6 +134,8 @@ module PropResult =
     match l.Status, r.Status with
     | (Exception _, _) -> l
     | (_, Exception _) -> r
+    | (Skipped _, _) -> l
+    | (_, Skipped _) -> r
     | (_, Undecided) -> l
     | (Undecided, _) -> r
     | (_, Proof) -> l
@@ -139,6 +148,8 @@ module PropResult =
     match l.Status, r.Status with
     | (Exception _,_) -> l
     | (_, Exception _) -> r
+    | (Skipped _,_) -> l
+    | (_, Skipped _) -> r
     | (False, _) -> merge l r Undecided
     | (Undecided, _) -> l
     | (Proof, _) -> merge l r r.Status
@@ -183,7 +194,8 @@ module internal PropImpl =
   let falsified = lazy applyResult { Status = False; Args = []; Labels = Set.empty; Collected = [] }
   let proved = lazy applyResult { Status = Proof; Args = []; Labels = Set.empty; Collected = [] }
   let passed = lazy applyResult { Status = True; Args = []; Labels = Set.empty; Collected = [] }
-  let exn(e: exn) = applyResult { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] }
+  let exn (e: exn) = applyResult { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] }
+  let skip s = applyResult { Status = Skipped s; Args = []; Labels = Set.empty; Collected = [] }
 
   let applyBool b = if b then proved.Value else falsified.Value
 
@@ -276,9 +288,8 @@ module internal PropImpl =
           | Passed _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
           | NotPassed (Violated msg) ->
             { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
-          | NotPassed (Skipped _) ->
-            // TODO: Are you sure to return True?
-            { Status = True; Args = []; Labels = Set.empty; Collected = [] } }
+          | NotPassed (Skipped s) ->
+            { Status = PropStatus.Skipped s; Args = []; Labels = Set.empty; Collected = [] } }
 
     let applyTestResult (r: TestResult<_>) =
       { new Prop() with
@@ -288,9 +299,8 @@ module internal PropImpl =
           | Error(_, es, x::_) ->
             match x with
             | Violated msg -> { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
-            | Skipped _ ->
-              // TODO: Are you sure to return True?
-              { Status = True; Args = []; Labels = Set.empty; Collected = [] }
+            | Skipped s ->
+              { Status = PropStatus.Skipped s; Args = []; Labels = Set.empty; Collected = [] }
           | Error(_, es, _) ->
             { Status = Exception (List.head es); Args = []; Labels = Set.empty; Collected = [] } }
 

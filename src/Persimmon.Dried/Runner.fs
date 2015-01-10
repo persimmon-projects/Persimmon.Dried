@@ -5,6 +5,7 @@ open FsRandom
 type Status =
   | Passed
   | Proved of PropArg<obj> list
+  | Skipped of string
   | Failed of PropArg<obj> list * Set<string>
   | Exhausted
   | PropException of PropArg<obj> list * exn * Set<string>
@@ -58,7 +59,7 @@ module Result =
 
   let isPassed r =
     match r.Status with
-    | Passed | Proved _ -> true
+    | Passed | Proved _ | Skipped _ -> true
     | _ -> false
 
   open Pretty
@@ -72,6 +73,7 @@ module Result =
       match res.Status with
       | Proved(args) -> "OK, proved property." -/ (PropArg.pretty args |> pretty prms)
       | Passed -> "OK, passed "+ string res.Succeeded + " tests."
+      | Skipped s -> "OK, skipped tests." -/ ("  reason: " + s)
       | Failed(args, l) ->
         "Falsified after " + string res.Succeeded + " passed tests."
           -/ labels l
@@ -143,6 +145,9 @@ module private Impl =
           res <- Some { Status = PropException(propRes.Args, e, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
           stop := true
           rng <- rng.Next64Bits() |> snd
+        | PropStatus.Skipped s ->
+          res <- Some { Status = Skipped s; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+          stop := true
       match res with
       | None ->
         if prms.MaxDiscardRatio * float32 n > float32 d then { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }

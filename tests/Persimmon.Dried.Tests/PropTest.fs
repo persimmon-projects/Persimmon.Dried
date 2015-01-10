@@ -52,6 +52,10 @@ module PropTest =
     apply (Prop.passed.Value ==> lazy (propException ()) == Prop.exnNull.Value)
   }
 
+  let ``==> skip`` = property "==> skip" {
+    apply (Prop.passed.Value ==> lazy (Prop.skip "==> skip test") == Prop.skipWithoutMessage.Value)
+  }
+
   let ``.&. commutativity`` =
     let g =
       [
@@ -81,6 +85,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.undecided.Value
         Prop.exnNull.Value
@@ -91,11 +96,22 @@ module PropTest =
       apply (Prop.forAll a (fun p -> (p .&. Prop.proved) == p))
     }
 
-  let ``.&. false`` = property ".&. false" {
-    apply (Prop.forAll Arb.prop (fun p ->
-      let q = p .&. Prop.falsified
-      (q == Prop.falsified.Value) .|. lazy ((q == Prop.exnNull.Value) .&. lazy (p == Prop.exnNull.Value))))
-  }
+  let ``.&. false`` =
+    let g =
+      [
+        Prop.proved.Value
+        Prop.passed.Value
+        Prop.falsified.Value
+        Prop.undecided.Value
+        Prop.exnNull.Value
+      ]
+      |> List.map Gen.constant |> Gen.oneOf
+    let a = { Arb.prop with Gen = g }
+    property ".&. false" {
+      apply (Prop.forAll a (fun p ->
+        let q = p .&. Prop.falsified
+        (q == Prop.falsified.Value) .|. lazy ((q == Prop.exnNull.Value) .&. lazy (p == Prop.exnNull.Value))))
+    }
 
   let ``.&. undecided`` =
     let g = [ Prop.proved.Value; Prop.passed.Value; Prop.undecided.Value ] |> List.map Gen.constant |> Gen.oneOf
@@ -117,6 +133,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.undecided.Value
         Prop.exnNull.Value
@@ -137,6 +154,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.undecided.Value
         Prop.exnNull.Value
@@ -166,6 +184,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.undecided.Value
         Prop.exnNull.Value
@@ -186,6 +205,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.exnNull.Value
       ]
@@ -200,6 +220,7 @@ module PropTest =
       [
         Prop.proved.Value
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.exnNull.Value
       ]
@@ -250,6 +271,11 @@ module PropTest =
         (Prop.exn e).Apply(prms).Status = Exception e))
     }
 
+    let skipped = property "skipped" {
+      apply (Prop.forAll Arb.genParameters (fun prms ->
+        (Prop.skip "skipped test").Apply(prms).Status = Skipped "skipped test"))
+    }
+
   let all =
     let a = Arb.nonEmptyList { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
     property "all" {
@@ -277,6 +303,7 @@ module PropTest =
     let g =
       [
         Prop.passed.Value
+        Prop.skipWithoutMessage.Value
         Prop.falsified.Value
         Prop.undecided.Value
         Prop.exnNull.Value
