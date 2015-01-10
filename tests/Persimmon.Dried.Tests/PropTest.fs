@@ -71,12 +71,21 @@ module PropTest =
     }
 
   let ``.&. exception`` = property ".&. exception" {
-    apply (Prop.forAll Arb.prop (fun p ->
+    apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p .&. lazy (propException ()) == Prop.exnNull.Value))
   }
 
   let ``.&. exception2`` = property ".&. exception2" {
     apply (Prop.passed.Value .&. lazy (propException ()) == Prop.exnNull.Value)
+  }
+
+  let ``.&. skip`` = property ".&. skip" {
+    apply (Prop.forAll Arb.prop (fun p ->
+      p .&. lazy (Prop.skip ".&. skip test") == Prop.skipWithoutMessage.Value))
+  }
+
+  let ``.&. skip 2`` = property ".&. skip 2" {
+    apply (Prop.passed.Value .&. lazy (Prop.skip ".&. skip test 2") == Prop.skipWithoutMessage.Value)
   }
 
   let ``.&. identity`` =
@@ -144,8 +153,13 @@ module PropTest =
     }
 
   let ``.|. exception`` = property ".|. exception" {
-    apply (Prop.forAll Arb.prop (fun p ->
+    apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p .|. lazy (propException ()) == Prop.exnNull.Value))
+  }
+
+  let ``.|. skip`` = property ".|. skip" {
+    apply (Prop.forAll Arb.prop (fun p ->
+      p .|. lazy (Prop.skip ".|. skip test") == Prop.skipWithoutMessage.Value))
   }
 
   let ``.|. identity`` =
@@ -195,8 +209,13 @@ module PropTest =
     }
 
   let ``++ exception`` = property "++ exception" {
-    apply (Prop.forAll Arb.prop (fun p ->
+    apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p ++ lazy (propException ()) == Prop.exnNull.Value))
+  }
+
+  let ``++ skip`` = property "++ skip" {
+    apply (Prop.forAll Arb.prop (fun p ->
+      p ++ lazy (Prop.skip "++ skip test") == Prop.skipWithoutMessage.Value))
   }
 
   let ``++ identity 1`` =

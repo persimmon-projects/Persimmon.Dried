@@ -21,6 +21,22 @@ module Arb =
       PrettyPrinter = Pretty.prettyAny
     }
 
+  let nonSkippedProp =
+    let undecidedOrPassed = Prop.forAll Arb.bool (fun b -> b ==> lazy true)
+    {
+      Gen =
+        Gen.frequency [
+          (4, Gen.constant Prop.falsified.Value)
+          (4, Gen.constant Prop.passed.Value)
+          (3, Gen.constant Prop.proved.Value)
+          (3, Gen.constant undecidedOrPassed)
+          (2, Gen.constant Prop.undecided.Value)
+          (1, Gen.constant (Prop.exn null))
+        ]
+      Shrinker = Shrink.shrinkAny
+      PrettyPrinter = Pretty.prettyAny
+    }
+
   let genParameters = {
     Gen =
       Arb.int.Gen

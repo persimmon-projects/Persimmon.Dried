@@ -44,8 +44,8 @@ type PropStatus =
   | True
   | False
   | Undecided
-  | Skipped of string
   | Exception of exn
+  | Skipped of string
 with
   override this.Equals(other: obj) =
     match other with
@@ -65,8 +65,8 @@ with
     | True -> 1
     | False -> 2
     | Undecided -> 3
-    | Skipped _ -> 4
-    | Exception _ -> 5
+    | Exception _ -> 4
+    | Skipped _ -> 5
 
 type PropResult = {
   Status: PropStatus
@@ -80,7 +80,7 @@ module PropResult =
 
   let isSuccess r =
     match r.Status with
-    | Proof | True -> true
+    | Proof | True | Skipped _ -> true
     | _ -> false
 
   let isFailure r =
@@ -103,10 +103,10 @@ module PropResult =
 
   let (&&&) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
-    | (Exception _,_) -> l
-    | (_, Exception _) -> r
     | (Skipped _, _) -> l
     | (_, Skipped _) -> r
+    | (Exception _,_) -> l
+    | (_, Exception _) -> r
     | (False, _) -> l
     | (_, False) -> r
     | (Undecided, _) -> l
@@ -117,10 +117,10 @@ module PropResult =
 
   let (|||) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
-    | (Exception _, _) -> l
-    | (_, Exception _) -> r
     | (Skipped _, _) -> l
     | (_, Skipped _) -> r
+    | (Exception _, _) -> l
+    | (_, Exception _) -> r
     | (False, False) -> merge l r False
     | (False, _) -> r
     | (_, False) -> l
@@ -132,10 +132,10 @@ module PropResult =
 
   let (++) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
-    | (Exception _, _) -> l
-    | (_, Exception _) -> r
     | (Skipped _, _) -> l
     | (_, Skipped _) -> r
+    | (Exception _, _) -> l
+    | (_, Exception _) -> r
     | (_, Undecided) -> l
     | (Undecided, _) -> r
     | (_, Proof) -> l
@@ -146,10 +146,10 @@ module PropResult =
 
   let (==>) (l: PropResult) (r: PropResult) =
     match l.Status, r.Status with
-    | (Exception _,_) -> l
-    | (_, Exception _) -> r
     | (Skipped _,_) -> l
     | (_, Skipped _) -> r
+    | (Exception _,_) -> l
+    | (_, Exception _) -> r
     | (False, _) -> merge l r Undecided
     | (Undecided, _) -> l
     | (Proof, _) -> merge l r r.Status
