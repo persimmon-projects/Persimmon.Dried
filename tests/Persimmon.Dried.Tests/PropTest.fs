@@ -44,7 +44,6 @@ module PropTest =
       apply (Prop.forAll Arb.int (fun n ->
         n > 0 ==> lazy (positiveDomain n)))
     }
-    |> skip "gave up test"
 
   let propException (): Prop = failwith "exception"
 

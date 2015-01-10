@@ -144,10 +144,10 @@ module private Impl =
         | Exception e ->
           res <- Some { Status = PropException(propRes.Args, e, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
           stop := true
-          rng <- rng.Next64Bits() |> snd
         | PropStatus.Skipped s ->
           res <- Some { Status = Skipped s; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
           stop := true
+        rng <- rng.Next64Bits() |> snd
       match res with
       | None ->
         if prms.MaxDiscardRatio * float32 n > float32 d then { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
