@@ -51,6 +51,8 @@ type PropertiesBuilder(name: string) =
         match res.Status with
         | Proved _ | Passed ->
           Done(meta, NonEmptyList.singleton (AssertionResult.Passed()))
+        | Skipped s ->
+          Done(meta, NonEmptyList.singleton (AssertionResult.NotPassed (NotPassedCause.Skipped s)))
         | Failed _
         | Exhausted ->
           let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
