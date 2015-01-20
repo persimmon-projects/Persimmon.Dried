@@ -12,3 +12,8 @@ Persimmon.Dried is a port of [scalacheck](https://github.com/rickynils/scalachec
 
 * [Persimmon.Dried](https://www.nuget.org/packages/Persimmon.Dried)
 
+## Documentation
+
+* [English](http://persimmon-projects.github.io/Persimmon.Dried/)
+* [Japanese](http://persimmon-projects.github.io/Persimmon.Dried/ja/)
+
