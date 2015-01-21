@@ -1,5 +1,6 @@
 ﻿namespace Persimmon.Dried
 
+open System.Diagnostics
 open Persimmon
 open Runner
 
@@ -47,19 +48,21 @@ type PropertiesBuilder(name: string) =
       let s = f ()
       let meta = { Name = name; Parameters = [] }
       let body () =
+        let watch = Stopwatch.StartNew()
         let res = s.Properties |> PropImpl.all |> check s.RunnerParams
+        watch.Stop()
         match res.Status with
         | Proved _ | Passed ->
-          Done(meta, NonEmptyList.singleton (AssertionResult.Passed()))
+          Done(meta, NonEmptyList.singleton (AssertionResult.Passed()), watch.Elapsed)
         | Skipped s ->
-          Done(meta, NonEmptyList.singleton (AssertionResult.NotPassed (NotPassedCause.Skipped s)))
+          Done(meta, NonEmptyList.singleton (AssertionResult.NotPassed (NotPassedCause.Skipped s)), watch.Elapsed)
         | Failed _
         | Exhausted ->
           let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
-          Done(meta, NonEmptyList.singleton (NotPassed v))
+          Done(meta, NonEmptyList.singleton (NotPassed v), watch.Elapsed)
         | PropException (_, e, _) ->
           let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
-          Error(meta, [e], [v])
+          Error(meta, [e], [v], watch.Elapsed)
       TestCase(meta, body)
     with e ->
       TestCase.makeError name [] e
