@@ -64,6 +64,7 @@
     <Compile Include="Arb.fs" />
     <Compile Include="ShrinkTest.fs" />
     <Compile Include="PropTest.fs" />
+    <Compile Include="ArbTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">
