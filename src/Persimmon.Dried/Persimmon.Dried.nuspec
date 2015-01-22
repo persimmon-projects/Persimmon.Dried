@@ -11,6 +11,7 @@
     <authors>bleis-tift, Gab-km, pocketberserker</authors>
     <owners>bleis-tift, Gab-km, pocketberserker</owners>
     <licenseUrl>https://github.com/persimmon-projects/Persimmon.Dried/tree/$version$/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/persimmon-projects/Persimmon.Dried/$version$/docs/files/images/logo.png</iconUrl>
     <projectUrl>https://github.com/persimmon-projects/Persimmon.Dried</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Persimmon.Dried is a random testing library for Persimmon.</description>
