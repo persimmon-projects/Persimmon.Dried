@@ -63,7 +63,7 @@ module Pretty =
 
   let prettyString t = Pretty(fun _ -> "\""+ escapeControlChars t + "\"")
 
-  let prettyList l = Pretty(fun _ -> (l |> List.fold (sprintf "%s, \"%A\"") "List(") + ")")
+  let prettyList l = Pretty(fun _ -> (l |> List.fold (sprintf "%s \"%A\"; ") "[") + "]")
 
   let prettyExn (e: exn) = Pretty(fun prms ->
     let strs = e.ToString().Split([|"\r\n";"\r";"\n"|], StringSplitOptions.None)
