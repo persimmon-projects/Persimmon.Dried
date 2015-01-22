@@ -177,6 +177,48 @@ module Gen =
       |> choose
       |> bind (fun k -> seqOfLength k g))
 
+  let promote (f: _ -> Gen<_>) =
+    gen (fun p ->
+      let t = ref true
+      { new R<_>(Some (fun a ->
+        match (f a).Apply(p) with
+        | Some v -> v
+        | None -> t := false; Unchecked.defaultof<_>)) with
+        member __.Sieve(_) = !t })
+
+  module private Random =
+
+    let boolVariant b (s: PrngState) =
+      let _, x = s.Next64Bits()
+      let _, y = x.Next64Bits()
+      if b then y else x
+
+    let chop n = n % 2
+
+    let even n = n % 2 = 0
+
+    let chip finished n s = boolVariant (even n) s |> boolVariant finished
+
+    let stop n = n <= 1
+
+    let rec bigNatVariant n g =
+      if stop n then chip true n g
+      else (bigNatVariant (chop n)) (chip false n g)
+
+    let natVariant n g =
+      if stop n then chip true n g
+      else bigNatVariant n g
+
+    let variantTheGen n g =
+      if n >= 1 then natVariant (n - 1) (boolVariant false g)
+      elif n = 0 then natVariant 0 (boolVariant true g)
+      else bigNatVariant -n (boolVariant true g)
+
+    let variantState n (g: PrngState) = variantTheGen n g
+
+  let variant n (g: Gen<_>) =
+    gen (fun p -> r (g.Apply({ p with PrngState = Random.variantState n p.PrngState })))
+
 type GenBuilder internal () =
   member __.Return(x) = Gen.constant x
   member __.ReturnFrom(g: Gen<_>) = g

@@ -64,6 +64,7 @@
     <Compile Include="Gen.fs" />
     <Compile Include="Shrink.fs" />
     <Compile Include="Pretty.fs" />
+    <Compile Include="CoArbitrary.fs" />
     <Compile Include="Arbitrary.fs" />
     <Compile Include="Prop.fs" />
     <Compile Include="FreqMap.fs" />
