@@ -80,9 +80,14 @@ module Gen =
   let private r x = { new R<_>(x) with member __.Sieve(_) = true }
 
   let inline suchThat p (g: Gen<_>) = g.SuchThat(p)
+
   let map f (g: Gen<_>) = gen (fun p -> g.Gen.DoApply(p).Map(f))
+
   let bind (f: 'T -> Gen<'U>) (g: Gen<'T>) =
-    gen (fun p -> g.Gen.DoApply(p).Bind(fun t -> (f t).Gen.DoApply(p)))
+    gen (fun p -> g.Gen.DoApply(p).Bind(fun t ->
+      let _, s = p.PrngState.Next64Bits()
+      (f t).Gen.DoApply({ p with PrngState = s })))
+
   let filter pred (g: Gen<_>) = suchThat pred g
 
   let constant x = gen (fun _ -> r (Some x)) //|> suchThat ((=) x)
