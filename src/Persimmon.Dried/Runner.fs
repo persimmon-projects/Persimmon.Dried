@@ -198,3 +198,19 @@ module private Impl =
 let check prms p = Impl.check prms p
 let run prms p = Impl.run prms p
 let mainRunner prms p = Impl.mainRunner prms p
+
+let createConsoleReporter verbosity =
+  let prettyPrms = { Verbosity = verbosity }
+  { new TestCallback() with
+    override __.OnTestResult(name, res) =
+      if verbosity > 0 then
+        if name = "" then
+          let s =
+            (if Result.isPassed res then "+ " else "! ")
+              + Pretty.pretty prettyPrms (Result.prettyTestRes res)
+          printf "\r%s\n" (Pretty.format s "" "" 75)
+        else
+          let s =
+            (if Result.isPassed res then "+ " else "! ") + name + ": "
+             + Pretty.pretty prettyPrms (Result.prettyTestRes res)
+          printf "\r%s\n" (Pretty.format s "" "" 75) }
