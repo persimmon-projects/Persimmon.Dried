@@ -93,6 +93,24 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  let char = {
+    Gen = Gen.frequency
+      [
+        (0xD800 - Operators.int Char.MinValue,
+          Gen.choose (Statistics.uniformDiscrete (Operators.int Char.MinValue, 0xD800 - 1)) |> Gen.map char)
+        (Operators.int Char.MaxValue - 0xDFFF,
+          Gen.choose (Statistics.uniformDiscrete (0xDFFF + 1, Operators.int Char.MaxValue)) |> Gen.map char)
+      ]
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  let string = {
+    Gen = (array char).Gen |> Gen.map (fun xs -> String(xs))
+    Shrinker = Shrink.shrinkString
+    PrettyPrinter = Pretty.prettyString
+  }
+
   let func (c: CoArbitrary<_>) (a: Arbitrary<_>) = {
     Gen = Gen.promote (fun x -> a.Gen |> CoArbitrary.apply x c)
     Shrinker = Shrink.shrinkAny
