@@ -127,3 +127,22 @@ module Arb =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
+
+  let guid = {
+    Gen = gen {
+      let! a = int.Gen
+      let! b = int16.Gen
+      let! c = int16.Gen
+      let! d = byte.Gen
+      let! e = byte.Gen
+      let! f = byte.Gen
+      let! g = byte.Gen
+      let! h = byte.Gen
+      let! i = byte.Gen
+      let! j = byte.Gen
+      let! k = byte.Gen
+      return Guid(a, b, c, d, e, f, g, h, i, j, k)
+    }
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyGuid
+  }

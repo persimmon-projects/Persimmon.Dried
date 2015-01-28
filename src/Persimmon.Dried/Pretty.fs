@@ -79,3 +79,5 @@ module Pretty =
     else sprintf "%d min %.3f sec " min sec
 
   let prettyDateTime (fmt: string) (dt: DateTime) = Pretty(fun _ -> dt.ToString(fmt))
+
+  let prettyGuid (g: Guid) = Pretty(fun _ -> g.ToString())
