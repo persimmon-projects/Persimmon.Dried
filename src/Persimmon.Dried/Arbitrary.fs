@@ -87,6 +87,12 @@ module Arb =
     PrettyPrinter = Pretty.prettyList
   }
 
+  let array a = {
+    Gen = Gen.arrayOf a.Gen
+    Shrinker = Shrink.shrinkArray a.Shrinker
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   let func (c: CoArbitrary<_>) (a: Arbitrary<_>) = {
     Gen = Gen.promote (fun x -> a.Gen |> CoArbitrary.apply x c)
     Shrinker = Shrink.shrinkAny
