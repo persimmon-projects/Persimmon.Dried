@@ -77,3 +77,5 @@ module Pretty =
     let sec = float (millis - (60L * 1000L * min)) / 1000.0
     if min <= 0L then sprintf "%.3f sec " sec
     else sprintf "%d min %.3f sec " min sec
+
+  let prettyDateTime (fmt: string) (dt: DateTime) = Pretty(fun _ -> dt.ToString(fmt))

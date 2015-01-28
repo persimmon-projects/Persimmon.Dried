@@ -111,6 +111,17 @@ module Arb =
     PrettyPrinter = Pretty.prettyString
   }
 
+  let datetime fmt = {
+    Gen = gen {
+      //FIXME: use uint64 generator
+      let! l = int.Gen |> Gen.map int64
+      let d = DateTime.MinValue
+      return DateTime(d.Ticks + l)
+    }
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyDateTime fmt
+  }
+
   let func (c: CoArbitrary<_>) (a: Arbitrary<_>) = {
     Gen = Gen.promote (fun x -> a.Gen |> CoArbitrary.apply x c)
     Shrinker = Shrink.shrinkAny
