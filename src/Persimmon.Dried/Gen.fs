@@ -177,14 +177,14 @@ module Gen =
       |> choose
       |> bind (fun k -> seqOfLength k g))
 
-  let promote (f: _ -> Gen<_>) =
+  let promote (f: _ -> Gen<_>) defaultValue =
     gen (fun p ->
-      let t = ref true
-      { new R<_>(Some (fun a ->
+      (fun a ->
         match (f a).Apply(p) with
         | Some v -> v
-        | None -> t := false; Unchecked.defaultof<_>)) with
-        member __.Sieve(_) = !t })
+        | None -> defaultValue)
+      |> Some
+      |> r)
 
   module private Random =
 

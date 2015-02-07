@@ -123,7 +123,7 @@ module Arb =
   }
 
   let func (c: CoArbitrary<_>) (a: Arbitrary<_>) = {
-    Gen = Gen.promote (fun x -> a.Gen |> CoArbitrary.apply x c)
+    Gen = a.Gen |> Gen.bind (Gen.promote (fun x -> a.Gen |> CoArbitrary.apply x c))
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
