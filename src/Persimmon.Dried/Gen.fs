@@ -203,18 +203,16 @@ module Gen =
 
     let rec bigNatVariant n g =
       if stop n then chip true n g
-      else (bigNatVariant (chop n)) (chip false n g)
+      else bigNatVariant (chop n) (chip false n g)
 
     let natVariant n g =
       if stop n then chip true n g
       else bigNatVariant n g
 
-    let variantTheGen n g =
+    let variantState n (g: PrngState) =
       if n >= 1 then natVariant (n - 1) (boolVariant false g)
       elif n = 0 then natVariant 0 (boolVariant true g)
       else bigNatVariant -n (boolVariant true g)
-
-    let variantState n (g: PrngState) = variantTheGen n g
 
   let variant n (g: Gen<_>) =
     gen (fun p -> r (g.Apply({ p with PrngState = Random.variantState n p.PrngState })))
