@@ -71,6 +71,7 @@
     <Compile Include="Runner.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Syntax.fs" />
+    <Compile Include="Commands.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">
