@@ -37,3 +37,24 @@ module ShrinkTest =
         let ls = shrinkClosure (Arb.list Arb.int).Shrinker l
         sprintf "%A" l @| (Seq.exists (List.isEmpty) ls && Seq.exists ((=) [0]) ls)))
   }
+
+  let ``choice shrinks`` = property "choice shrinks" {
+    apply (Prop.forAll (Arb.choice Arb.int Arb.int) (fun e ->
+      Shrink.shrink (Shrink.shrinkChoice Shrink.shrinkInt Shrink.shrinkInt) e
+      |> Seq.exists ((=) e)
+      |> not))
+  }
+
+  let ``choice 1 of 2`` = property "choice 1 of 2" {
+    apply (Prop.forAll Arb.int (fun i ->
+      let e = Choice1Of2 i
+      Shrink.shrink (Shrink.shrinkChoice Shrink.shrinkInt Shrink.shrinkInt) e
+      |> Seq.forall (function | Choice1Of2 _ -> true | _ -> false)))
+  }
+
+  let ``choice 2 of 2`` = property "choice 2 of 2" {
+    apply (Prop.forAll Arb.int (fun i ->
+      let e = Choice2Of2 i
+      Shrink.shrink (Shrink.shrinkChoice Shrink.shrinkInt Shrink.shrinkInt) e
+      |> Seq.forall (function | Choice2Of2 _ -> true | _ -> false)))
+  }

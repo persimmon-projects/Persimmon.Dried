@@ -146,3 +146,19 @@ module Arb =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyGuid
   }
+
+  let option (a: Arbitrary<_>) = {
+    Gen = Gen.sized(fun n ->
+      Gen.frequency [
+        (n, Gen.resize (n / 2) a.Gen |> Gen.map Some)
+        (1, Gen.constant None)
+      ])
+    Shrinker = Shrink.shrinkOption a.Shrinker
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  let choice (at: Arbitrary<_>) (au: Arbitrary<_>) = {
+    Gen = Gen.oneOf [ Gen.map Choice1Of2 at.Gen; Gen.map Choice2Of2 au.Gen ]
+    Shrinker = Shrink.shrinkChoice at.Shrinker au.Shrinker
+    PrettyPrinter = Pretty.prettyAny
+  }

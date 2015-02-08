@@ -123,3 +123,7 @@ module Shrink =
       Seq.append (Seq.append xs ys) zs)
 
   let xmap st (from: _ -> _) (to': _ -> _) = apply (fun u -> shrink (to' u) st |> Seq.map from)
+
+  let shrinkChoice s1 s2 = apply (function
+    | Choice1Of2 t -> shrink s1 t |> Seq.map Choice1Of2
+    | Choice2Of2 u -> shrink s2 u |> Seq.map Choice2Of2)
