@@ -99,7 +99,7 @@ type NoOp<'Sut, 'State> = | NoOp
       member __.NextState(state) = state
       member __.PreCondition(_) = true
       member __.PostCondition(_, _) = Prop.apply(true)
-      member this.StructuredFormatDisplay = sprintf "%A" NoOp
+      member __.StructuredFormatDisplay = sprintf "%A" NoOp
 
 module Commands =
 
@@ -284,7 +284,7 @@ module Commands =
         | None ->
           //printfn "NOT IMPL"
           Prop.undecided.Value
-      with e ->
+      with _ ->
         suts.Clear()
         reraise ()
     )

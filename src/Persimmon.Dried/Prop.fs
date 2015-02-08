@@ -181,7 +181,7 @@ module internal PropImpl =
   let combine f p1 p2 =
     p1 |> bind (fun r1 ->
     p2 |> bind (fun r2 ->
-      { new Prop() with member __.Apply(prms) = f r1 r2 }))
+      { new Prop() with member __.Apply(_) = f r1 r2 }))
 
   let applyResult r = apply (fun _ -> r)
 
@@ -293,7 +293,7 @@ module internal PropImpl =
 
     let applyTestResult (r: TestResult<_>) =
       { new Prop() with
-        member __.Apply(prms) =
+        member __.Apply(_) =
           match r with
           | Done _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
           | Error(_, [], [], _) ->
@@ -370,7 +370,7 @@ type PropModule internal () =
       if Seq.isEmpty xs then res
       else
         match getFirstFailure xs with
-        | Choice1Of2 (x2, r2) -> res
+        | Choice1Of2 (_, _) -> res
         | Choice2Of2(x2, r2) -> shrinker x2 (replOrig r r2) (shrinks + 1) orig
 
     match gr.Retrieve with

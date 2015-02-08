@@ -3,8 +3,8 @@
 [<Sealed>]
 type Pretty(p: PrettyParameters -> string) =
   member __.Apply(prms) = p prms
-  member this.Map(f: string -> string) = Pretty(fun prms -> f (p prms))
-  member this.Bind(f: string -> Pretty) = Pretty(fun prms -> (f (p prms)).Apply(prms))
+  member __.Map(f: string -> string) = Pretty(fun prms -> f (p prms))
+  member __.Bind(f: string -> Pretty) = Pretty(fun prms -> (f (p prms)).Apply(prms))
 
 and PrettyParameters = {
   Verbosity: int

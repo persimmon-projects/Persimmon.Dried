@@ -51,7 +51,7 @@ type Gen<'T> internal (igen: IGen<'T>) =
   
   member internal __.Gen = igen
 
-  member this.SuchThat(f: 'T -> bool) =
+  member __.SuchThat(f: 'T -> bool) =
     let gen = { new IGen<'T>() with
       member __.DoApply(p) =
         let res = igen.DoApply(p)

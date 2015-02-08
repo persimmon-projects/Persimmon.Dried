@@ -20,9 +20,9 @@ type Result = {
 
 type TestCallback() =
   abstract member OnPropEval: string * int * int * int -> unit
-  default __.OnPropEval(name, threadIdx, succeeded, discarded) = ()
+  default __.OnPropEval(_, _, _, _) = ()
   abstract member OnTestResult: string * Result -> unit
-  default __.OnTestResult(name, result) = ()
+  default __.OnTestResult(_, _) = ()
   member this.Chain(testCallback: TestCallback): TestCallback = { new TestCallback() with
       override __.OnPropEval(name, threadIdx, succeeded, discarded) =
         this.OnPropEval(name, threadIdx, succeeded, discarded)

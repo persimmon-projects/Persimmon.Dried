@@ -71,7 +71,7 @@ module FreqMap =
   open Pretty
   open Helper
 
-  let pretty (fm: FreqMap<_ list>) = Pretty(fun prms ->
+  let pretty (fm: FreqMap<_ list>) = Pretty(fun _ ->
     if fm.Total = 0 then ""
     else
       "> Collected test data: " -/ String.concat newLine (seq {

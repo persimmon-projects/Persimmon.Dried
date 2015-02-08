@@ -130,7 +130,7 @@ module PropTest =
     }
 
   let ``.&. right prio`` = property {
-    apply (Prop.forAll (Arb.int, Arb.genParameters) (fun sz prms ->
+    apply (Prop.forAll (Arb.int, Arb.genParameters) (fun _ prms ->
       let p =
         (Prop.proved.Value |> Prop.map (PropResult.label "RHS"))
         .&. Prop.proved |> Prop.map(PropResult.label "LHS")

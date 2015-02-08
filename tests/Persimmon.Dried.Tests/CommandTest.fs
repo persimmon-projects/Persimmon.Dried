@@ -29,7 +29,7 @@ type Get private () =
   override __.StructuredFormatDisplay = "Get"
   override __.Run(sut) = sut.Value
   override __.NextState(state) = state
-  override __.PreCondition(state) = true
+  override __.PreCondition(_) = true
   override __.PostCondition(state, result) =
     let r = result = state
     Prop.apply r
@@ -40,7 +40,7 @@ type Inc private () =
   override __.StructuredFormatDisplay = "Inc"
   override __.Run(sut: Counter) = sut.Inc()
   override __.NextState(state) = state + 1
-  override __.PreCondition(state) = true
+  override __.PreCondition(_) = true
   override __.PostCondition(state, result) =
     let r = result = state + 1
     Prop.apply r
@@ -60,15 +60,15 @@ type Dec private () =
 type TestCommands private () =
   static member Instance = TestCommands()
   interface Commands<Counter, int> with
-    member x.CanCreateNewSut(_, _, _) = true
-    member x.DestroySut(_) = ()
-    member x.GenCommand(_) =
+    member __.CanCreateNewSut(_, _, _) = true
+    member __.DestroySut(_) = ()
+    member __.GenCommand(_) =
       [ Get.Instance; Inc.Instance; Dec.Instance ]
       |> List.map (Command.boxResult >> Gen.constant)
       |> Gen.oneOf
-    member x.GenInitialState = Gen.choose (Statistics.uniformDiscrete (0, 100))
-    member x.InitialPreCondition(_) = true
-    member x.NewSut(state) = Counter(state)
+    member __.GenInitialState = Gen.choose (Statistics.uniformDiscrete (0, 100))
+    member __.InitialPreCondition(_) = true
+    member __.NewSut(state) = Counter(state)
 
 module CommandTest =
 
