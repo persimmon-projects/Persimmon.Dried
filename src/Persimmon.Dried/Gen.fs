@@ -233,6 +233,23 @@ module Gen =
     |> suchThat (List.forall (fun c -> Char.IsLetter c || Char.IsDigit c))
     |> map (fun cs -> String(Array.ofList cs))
 
+  let pick n l =
+    if n > Seq.length l || n < 0 then fail
+    else
+      gen (fun p ->
+        let a = ResizeArray()
+        a.AddRange(l)
+        while a.Count > n do
+          let v = (choose (Statistics.uniformDiscrete (0, a.Count - 1))).Gen.DoApply(p).Retrieve.Value
+          a.RemoveAt(v) |> ignore
+        r (Some (a :> _ seq))
+      )
+      |> suchThat (Seq.forall (fun x -> l |> Seq.exists ((=) x)))
+
+  let someOf l =
+    choose (Statistics.uniformDiscrete (0, Seq.length l))
+    |> bind (fun x -> pick x l)
+
 type GenBuilder internal () =
   member __.Return(x) = Gen.constant x
   member __.ReturnFrom(g: Gen<_>) = g
