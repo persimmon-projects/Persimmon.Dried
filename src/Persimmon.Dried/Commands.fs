@@ -5,21 +5,28 @@ type Command<'Sut, 'State, 'Result> =
   abstract member NextState: 'State -> 'State
   abstract member PreCondition: 'State -> bool
   abstract member PostCondition: 'State * Choice<'Result, exn> -> Prop
+  abstract member StructuredFormatDisplay: string
+
+[<StructuredFormatDisplay("{StructuredFormatDisplay}")>]
+type private BoxedCommand<'Sut, 'State, 'Result>(command: Command<'Sut, 'State, 'Result>) =
+  member __.StructuredFormatDisplay = command.StructuredFormatDisplay
+  interface Command<'Sut, 'State, obj> with
+    member this.StructuredFormatDisplay = this.StructuredFormatDisplay
+    member __.Run(sut) = box(command.Run(sut))
+    member __.NextState(state) = command.NextState(state)
+    member __.PreCondition(state) = command.PreCondition(state)
+    member __.PostCondition(state, result) =
+      let result =
+        match result with
+        | Choice1Of2 r -> Choice1Of2 (unbox<'Result> r)
+        | Choice2Of2 e -> Choice2Of2 e
+      command.PostCondition(state, result)
 
 [<AutoOpen>]
 module CommandSyntax =
 
   type Command<'Sut, 'State, 'Result> with
-    member this.Boxed = { new Command<'Sut, 'State, obj> with
-      member __.Run(sut) = box(this.Run(sut))
-      member __.NextState(state) = this.NextState(state)
-      member __.PreCondition(state) = this.PreCondition(state)
-      member __.PostCondition(state, result) =
-        let result =
-          match result with
-          | Choice1Of2 r -> Choice1Of2 (unbox<'Result> r)
-          | Choice2Of2 e -> Choice2Of2 e
-        this.PostCondition(state, result) }
+    member this.Boxed = BoxedCommand(this) :> Command<'Sut, 'State, obj>
 
 module Command =
 
@@ -53,6 +60,8 @@ type SuccessCommand<'Sut, 'State, 'Result>() =
   abstract member Run: 'Sut -> 'Result
   abstract member NextState: 'State -> 'State
   abstract member PreCondition: 'State -> bool
+  abstract member StructuredFormatDisplay: string
+  default this.StructuredFormatDisplay = this.ToString()
   interface Command<'Sut, 'State, 'Result> with
     member this.PostCondition(state, result) =
       match result with
@@ -61,6 +70,7 @@ type SuccessCommand<'Sut, 'State, 'Result>() =
     member this.Run(sut) = this.Run(sut)
     member this.NextState(state) = this.NextState(state)
     member this.PreCondition(state) = this.PreCondition(state)
+    member this.StructuredFormatDisplay = this.StructuredFormatDisplay
 
 [<AbstractClass>]
 type UnitCommand<'Sut, 'State>() =
@@ -68,6 +78,8 @@ type UnitCommand<'Sut, 'State>() =
   abstract member Run: 'Sut -> Command.Unit
   abstract member NextState: 'State -> 'State
   abstract member PreCondition: 'State -> bool
+  abstract member StructuredFormatDisplay: string
+  default this.StructuredFormatDisplay = this.ToString()
   // compile error
   //interface Command<'Sut, 'State, unit> with
   interface Command<'Sut, 'State, Command.Unit> with
@@ -76,6 +88,7 @@ type UnitCommand<'Sut, 'State>() =
     member this.Run(sut) = this.Run(sut)
     member this.NextState(state) = this.NextState(state)
     member this.PreCondition(state) = this.PreCondition(state)
+    member this.StructuredFormatDisplay = this.StructuredFormatDisplay
 
 type NoOp<'Sut, 'State> = | NoOp
   with
@@ -84,6 +97,7 @@ type NoOp<'Sut, 'State> = | NoOp
       member __.NextState(state) = state
       member __.PreCondition(_) = true
       member __.PostCondition(_, _) = Prop.apply(true)
+      member this.StructuredFormatDisplay = sprintf "%A" NoOp
 
 module Commands =
 

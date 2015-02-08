@@ -26,6 +26,7 @@ type Counter(n0: int) =
 
 type Get private () =
   inherit SuccessCommand<Counter, int, int>()
+  override __.StructuredFormatDisplay = "Get"
   override __.Run(sut) = sut.Value
   override __.NextState(state) = state
   override __.PreCondition(state) = true
@@ -37,6 +38,7 @@ type Get private () =
 
 type Inc private () =
   inherit SuccessCommand<Counter, int, int>()
+  override __.StructuredFormatDisplay = "Inc"
   override __.Run(sut: Counter) = sut.Inc()
   override __.NextState(state) = state + 1
   override __.PreCondition(state) = true
@@ -48,6 +50,7 @@ type Inc private () =
 
 type Dec private () =
   inherit SuccessCommand<Counter, int, int>()
+  override __.StructuredFormatDisplay = "Dec"
   override __.Run(sut: Counter) = sut.Dec()
   override __.NextState(state) = state - 1
   override __.PreCondition(_) = true
