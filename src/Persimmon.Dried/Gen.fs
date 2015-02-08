@@ -218,6 +218,21 @@ module Gen =
   let variant n (g: Gen<_>) =
     gen (fun p -> r (g.Apply({ p with PrngState = Random.variantState n p.PrngState })))
 
+  let private chooseChar min max = choose (Statistics.uniformDiscrete (min, max)) |> map char
+  let numChar = chooseChar 48 57
+  let alphaLowerChar = chooseChar 97 122
+  let alphaUpperChar = chooseChar 65 90
+  let alphaChar = frequency [ (1, alphaUpperChar); (9, alphaLowerChar) ]
+  let alphaNumChar = frequency [ (1, numChar); (9, alphaChar) ]
+
+  let identifier =
+    alphaLowerChar
+    |> bind (fun c ->
+      listOf alphaNumChar
+      |> map (fun cs -> c :: cs))
+    |> suchThat (List.forall (fun c -> Char.IsLetter c || Char.IsDigit c))
+    |> map (fun cs -> String(Array.ofList cs))
+
 type GenBuilder internal () =
   member __.Return(x) = Gen.constant x
   member __.ReturnFrom(g: Gen<_>) = g
