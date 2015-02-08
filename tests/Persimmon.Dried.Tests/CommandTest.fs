@@ -33,8 +33,7 @@ type Get private () =
   override __.PostCondition(state, result) =
     let r = result = state
     Prop.apply r
-  static member Instance = Get()
-  static member Gen = Gen.constant Get.Instance.Boxed
+  static member Instance = Get() :> Command<_, _, _>
 
 type Inc private () =
   inherit SuccessCommand<Counter, int, int>()
@@ -45,8 +44,7 @@ type Inc private () =
   override __.PostCondition(state, result) =
     let r = result = state + 1
     Prop.apply r
-  static member Instance = Inc()
-  static member Gen = Gen.constant Inc.Instance.Boxed
+  static member Instance = Inc() :> Command<_, _, _>
 
 type Dec private () =
   inherit SuccessCommand<Counter, int, int>()
@@ -57,15 +55,17 @@ type Dec private () =
   override __.PostCondition(state, result) =
     let r = result = state - 1
     Prop.apply r
-  static member Instance = Dec()
-  static member Gen = Gen.constant Dec.Instance.Boxed
+  static member Instance = Dec() :> Command<_, _, _>
 
 type TestCommands private () =
   static member Instance = TestCommands()
   interface Commands<Counter, int> with
     member x.CanCreateNewSut(_, _, _) = true
     member x.DestroySut(_) = ()
-    member x.GenCommand(_) = Gen.oneOf [ Get.Gen; Inc.Gen; Dec.Gen ]
+    member x.GenCommand(_) =
+      [ Get.Instance; Inc.Instance; Dec.Instance ]
+      |> List.map (Command.boxResult >> Gen.constant)
+      |> Gen.oneOf
     member x.GenInitialState = Gen.choose (Statistics.uniformDiscrete (0, 100))
     member x.InitialPreCondition(_) = true
     member x.NewSut(state) = Counter(state)

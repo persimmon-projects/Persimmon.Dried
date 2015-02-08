@@ -30,6 +30,8 @@ module CommandSyntax =
 
 module Command =
 
+  let boxResult (command: Command<_, _, _>) = command.Boxed
+
   let run sut (command: Command<_, _, _>) = command.Run(sut)
   let nextState state (command: Command<_, _, _>) = command.NextState(state)
   let preCondition state (command: Command<_, _, _>) = command.PreCondition(state)
