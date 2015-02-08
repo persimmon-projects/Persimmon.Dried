@@ -296,13 +296,16 @@ module internal PropImpl =
         member __.Apply(prms) =
           match r with
           | Done _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
-          | Error(_, es, x::_, _) ->
+          | Error(_, [], [], _) ->
+            let e = System.Exception("Persimmon.TestResult is error, but exn list and NotPassedCasue are empty.")
+            { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] }
+          | Error(_, [], x::_, _) ->
             match x with
             | Violated msg -> { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
             | Skipped s ->
               { Status = PropStatus.Skipped s; Args = []; Labels = Set.empty; Collected = [] }
-          | Error(_, es, _, _) ->
-            { Status = Exception (List.head es); Args = []; Labels = Set.empty; Collected = [] } }
+          | Error(_, e::_, _, _) ->
+            { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] } }
 
 type PropApply =
   | PropApply
