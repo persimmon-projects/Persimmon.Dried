@@ -156,7 +156,7 @@ module private Impl =
 
     let merge r1 r2 =
       let { Status = st1; Succeeded = s1; Discarded = d1; FreqMap = fm1; Time = _ } = r1
-      let { Status = st2; Succeeded = s2; Discarded = d2; FreqMap = fm2; Time = _ } = r1
+      let { Status = st2; Succeeded = s2; Discarded = d2; FreqMap = fm2; Time = _ } = r2
       if st1 <> Passed && st1 <> Exhausted then
         { Status = st1; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
       elif st2 <> Passed && st2 <> Exhausted then
