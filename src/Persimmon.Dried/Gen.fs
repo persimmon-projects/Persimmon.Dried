@@ -125,10 +125,11 @@ module Gen =
 
   let sequence (gs: Gen<_> list) = 
     gen (fun p ->
-      gs
-      |> List.fold (fun rs g ->
-        g.Gen.DoApply(p).Bind(fun r ->
-          rs.Map(fun x -> r :: x))) (r (Some [])))
+      ((r (Some []), p), gs)
+      ||> List.fold (fun (rs, p) g ->
+        let r = g.Gen.DoApply(p).Bind(fun r -> rs.Map(fun x -> r :: x))
+        (r, { p with PrngState = p.PrngState.Next64Bits() |> snd }))
+      |> fst)
     |> map List.rev
 
   // frequency function is a port of https://github.com/fsharp/FsCheck/blob/f90b83ee2396d00a21b507ee6a09b72ff62f75f1/src/FsCheck/Gen.fs#L142
