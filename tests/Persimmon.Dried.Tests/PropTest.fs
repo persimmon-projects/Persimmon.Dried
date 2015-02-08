@@ -2,10 +2,11 @@
 
 open Persimmon
 open Persimmon.Dried
+open UseTestNameByReflection
 
 module PropTest =
 
-  let ``==> undecided`` = property "==> undecided" {
+  let ``==> undecided`` = property {
     apply (Prop.forAll Arb.prop (fun p1 ->
       let g = [ Prop.falsified.Value; Prop.undecided.Value ] |> List.map Gen.constant |> Gen.oneOf
       let a = { Arb.prop with Gen = g }
@@ -24,7 +25,7 @@ module PropTest =
       |> List.map Gen.constant |> Gen.oneOf
     let a1 = { Gen = g1; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
     let a2 = { Arb.prop with Gen = g2 }
-    property "==> true" {
+    property {
       apply (Prop.forAll (a1, a2) (fun p1 p2 ->
         let p = p2 ==> p1
         p == p1.Value
@@ -40,18 +41,18 @@ module PropTest =
       | n when n > 0 -> true
       | n when (n &&& 1) = 0 -> failwith "exception"
       | _ -> loopForever.Value
-    property "==> short circuit" {
+    property {
       apply (Prop.forAll Arb.int (fun n ->
         n > 0 ==> lazy (positiveDomain n)))
     }
 
   let propException (): Prop = failwith "exception"
 
-  let ``==> exception`` = property "==> exception" {
+  let ``==> exception`` = property {
     apply (Prop.passed.Value ==> lazy (propException ()) == Prop.exnNull.Value)
   }
 
-  let ``==> skip`` = property "==> skip" {
+  let ``==> skip`` = property {
     apply (Prop.passed.Value ==> lazy (Prop.skip "==> skip test") == Prop.skipWithoutMessage.Value)
   }
 
@@ -66,25 +67,25 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".&. commutativity" {
+    property {
       apply (Prop.forAll (a, a) (fun p1 p2 -> (p1 .&. lazy p2) == (p2 .&. lazy p1)))
     }
 
-  let ``.&. exception`` = property ".&. exception" {
+  let ``.&. exception`` = property {
     apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p .&. lazy (propException ()) == Prop.exnNull.Value))
   }
 
-  let ``.&. exception2`` = property ".&. exception2" {
+  let ``.&. exception2`` = property {
     apply (Prop.passed.Value .&. lazy (propException ()) == Prop.exnNull.Value)
   }
 
-  let ``.&. skip`` = property ".&. skip" {
+  let ``.&. skip`` = property {
     apply (Prop.forAll Arb.prop (fun p ->
       p .&. lazy (Prop.skip ".&. skip test") == Prop.skipWithoutMessage.Value))
   }
 
-  let ``.&. skip 2`` = property ".&. skip 2" {
+  let ``.&. skip 2`` = property {
     apply (Prop.passed.Value .&. lazy (Prop.skip ".&. skip test 2") == Prop.skipWithoutMessage.Value)
   }
 
@@ -100,7 +101,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".&. identity" {
+    property {
       apply (Prop.forAll a (fun p -> (p .&. Prop.proved) == p))
     }
 
@@ -115,7 +116,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".&. false" {
+    property {
       apply (Prop.forAll a (fun p ->
         let q = p .&. Prop.falsified
         (q == Prop.falsified.Value) .|. lazy ((q == Prop.exnNull.Value) .&. lazy (p == Prop.exnNull.Value))))
@@ -124,11 +125,11 @@ module PropTest =
   let ``.&. undecided`` =
     let g = [ Prop.proved.Value; Prop.passed.Value; Prop.undecided.Value ] |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".&. undecided" {
+    property {
       apply (Prop.forAll a (fun p -> (p .&. Prop.undecided) == Prop.undecided.Value))
     }
 
-  let ``.&. right prio`` = property ".&. right prio" {
+  let ``.&. right prio`` = property {
     apply (Prop.forAll (Arb.int, Arb.genParameters) (fun sz prms ->
       let p =
         (Prop.proved.Value |> Prop.map (PropResult.label "RHS"))
@@ -148,16 +149,16 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".|. commutativity" {
+    property {
       apply (Prop.forAll (a, a) (fun p1 p2 -> (p1 .|. lazy p2) == (p2 .|. lazy p1)))
     }
 
-  let ``.|. exception`` = property ".|. exception" {
+  let ``.|. exception`` = property {
     apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p .|. lazy (propException ()) == Prop.exnNull.Value))
   }
 
-  let ``.|. skip`` = property ".|. skip" {
+  let ``.|. skip`` = property {
     apply (Prop.forAll Arb.prop (fun p ->
       p .|. lazy (Prop.skip ".|. skip test") == Prop.skipWithoutMessage.Value))
   }
@@ -174,7 +175,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".|. identity" {
+    property {
       apply (Prop.forAll a (fun p -> (p .|. Prop.falsified) == p))
     }
 
@@ -188,7 +189,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property ".|. true" {
+    property {
       apply (Prop.forAll a (fun p -> (p .|. Prop.falsified) == p))
     }
 
@@ -204,16 +205,16 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property "++ commutativity" {
+    property {
       apply (Prop.forAll (a, a) (fun p1 p2 -> (p1 ++ lazy p2) == (p2 ++ lazy p1)))
     }
 
-  let ``++ exception`` = property "++ exception" {
+  let ``++ exception`` = property {
     apply (Prop.forAll Arb.nonSkippedProp (fun p ->
       p ++ lazy (propException ()) == Prop.exnNull.Value))
   }
 
-  let ``++ skip`` = property "++ skip" {
+  let ``++ skip`` = property {
     apply (Prop.forAll Arb.prop (fun p ->
       p ++ lazy (Prop.skip "++ skip test") == Prop.skipWithoutMessage.Value))
   }
@@ -229,7 +230,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property "++ identity 1" {
+    property {
       apply (Prop.forAll a (fun p -> (p ++ Prop.proved) == p))
     }
 
@@ -244,7 +245,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property "++ identity 2" {
+    property {
       apply (Prop.forAll a (fun p -> (p ++ Prop.undecided) == p))
     }
 
@@ -258,51 +259,51 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property "++ false" {
+    property {
     apply (Prop.forAll a (fun p -> p ++ Prop.falsified == Prop.falsified.Value))
   }
 
   module Result =
 
-    let undecided = property "undecided" {
+    let undecided = property {
       apply (Prop.forAll Arb.genParameters (fun prms ->
         Prop.undecided.Value.Apply(prms).Status = Undecided))
     }
 
-    let falsified = property "falsified" {
+    let falsified = property {
       apply (Prop.forAll Arb.genParameters (fun prms ->
         Prop.falsified.Value.Apply(prms).Status = False))
     }
 
-    let proved = property "proved" {
+    let proved = property {
       apply (Prop.forAll Arb.genParameters (fun prms ->
         Prop.proved.Value.Apply(prms).Status = Proof))
     }
 
-    let passed = property "passed" {
+    let passed = property {
       apply (Prop.forAll Arb.genParameters (fun prms ->
         Prop.passed.Value.Apply(prms).Status = True))
     }
 
-    let exn = property "exn" {
+    let exn = property {
       apply (Prop.forAll (Arb.genParameters, Arb.exn) (fun prms e ->
         (Prop.exn e).Apply(prms).Status = Exception e))
     }
 
-    let skipped = property "skipped" {
+    let skipped = property {
       apply (Prop.forAll Arb.genParameters (fun prms ->
         (Prop.skip "skipped test").Apply(prms).Status = Skipped "skipped test"))
     }
 
   let all =
     let a = Arb.nonEmptyList { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
-    property "all" {
+    property {
       apply (Prop.forAll a Prop.all)
     }
 
   let atLeastOne =
     let a = Arb.nonEmptyList { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
-    property "atLeastOne" {
+    property {
       apply (Prop.forAll a Prop.atLeastOne)
     }
 
@@ -313,7 +314,7 @@ module PropTest =
           let s: string = null
           s.Length)
       |> Prop.apply
-    property "raises" {
+    property {
       apply raiseExn
     }
 
@@ -328,7 +329,7 @@ module PropTest =
       ]
       |> List.map Gen.constant |> Gen.oneOf
     let a = { Arb.prop with Gen = g }
-    property "sizedProp" {
+    property {
     apply (Prop.forAll a (fun p -> p == Prop.sizedProp (fun _ -> p)))
   }
 
@@ -336,7 +337,7 @@ module PropTest =
     let g = [ Gen.constant 1; Gen.fail ] |> List.map Gen.constant |> Gen.oneOf
     let gs = Gen.listOf g
     let a = { Gen = gs; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyList }
-    property "someFailing" {
+    property {
       apply (Prop.forAll a (fun gs ->
         Prop.someFailing gs .|. lazy (gs |> List.forall (Gen.sample >> Option.isSome))))
     }
@@ -345,12 +346,12 @@ module PropTest =
     let g = [ Gen.constant 1; Gen.fail ] |> List.map Gen.constant |> Gen.oneOf
     let gs = Gen.listOf g
     let a = { Gen = gs; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyList }
-    property "noneFailing" {
+    property {
       apply (Prop.forAll a (fun gs ->
         Prop.noneFailing gs .|. lazy (gs |> List.exists (Gen.sample >> Option.isNone))))
     }
 
-  let ``chek some prop`` = property "check some prop" {
+  let ``chek some prop`` = property {
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a + b = b + a))
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a * b = b * a))
   }
