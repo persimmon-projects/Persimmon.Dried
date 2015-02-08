@@ -5,7 +5,7 @@ type Shrink<'T> =
 
 module Shrink =
 
-  let rec interleave xs ys =
+  let rec private interleave xs ys =
     if Seq.isEmpty xs then ys
     elif Seq.isEmpty ys then xs
     else seq {
