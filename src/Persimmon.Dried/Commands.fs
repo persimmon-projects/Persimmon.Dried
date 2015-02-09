@@ -120,15 +120,16 @@ module Commands =
   )
 
   let runSeqCmds (sut: 'Sut) (s0: 'State) (cs: Commands<'Sut, 'State, 'Result>) =
-    ((Prop.proved.Value, s0, []), cs)
-    ||> List.fold (fun (p, s, rs) c ->
+    (cs, (Prop.proved.Value, s0, []))
+    ||> List.foldBack (fun c (p, s, rs) ->
       let r, pf = Command.runPC sut c
       (p .&. lazy (pf s), c.NextState(s), r :: rs))
-    |> fun (p, s, rs) -> (p, s, List.rev rs)
 
-  let rec private scan (f: _ -> _ -> _) = function
-  | [] -> []
-  | y::ys -> f y ys :: scan (fun x xs -> f x (y::xs)) ys
+  let rec private scan (f: _ -> _ -> _) xs =
+    let rec inner acc f = function
+    | [] -> acc
+    | y::ys -> inner (f y ys :: acc) (fun x xs -> f x (y::xs)) ys
+    inner [] f xs
 
   let runParCmds (sut: 'Sut) (s: 'State) (pcmds: Commands<_, _, 'Result> list) =
     let memo = Dictionary<'State * Commands<'Sut, 'State, 'Result> list, 'State list>()
@@ -141,11 +142,8 @@ module Commands =
       | (_, cs :: []) ->
         [
           cs
-          |> List.rev
-          |> Seq.skip 1
-          |> Seq.toList
-          |> List.rev
-          |> List.fold (fun  s0 c -> c.NextState(s0)) s
+          |> Seq.truncate (List.length cs - 1)
+          |> Seq.fold (fun  s0 c -> c.NextState(s0)) s
         ]
       | _ ->
         let inits = css |> scan (fun cs x -> ((List.head cs).NextState(s), (List.tail cs) :: x))
@@ -164,10 +162,8 @@ module Commands =
         else
           let rs =
             cs
-            |> List.rev
-            |> Seq.skip 1
+            |> Seq.truncate (List.length cs - 1)
             |> Seq.toList
-            |> List.rev
             |> List.map (Command.runPC sut >> fst)
           let r, pf = Command.runPC sut (Seq.last cs)
           (Prop.atLeastOne (endStates |> List.map pf), List.zip cs (List.rev (r :: List.rev rs)))
@@ -213,7 +209,7 @@ module Commands =
       ||> List.fold (fun g () -> gen {
         let! s0, cs = g
         let! c = commands.GenCommand(s0).SuchThat(fun x -> x.PreCondition(s0))
-        return (c.NextState(s0), List.rev (c :: List.rev cs))
+        return (c.NextState(s0), List.foldBack (fun x xs -> x :: xs) cs [c])
       })
 
     let rec cmdsPrecond (s: 'State) (cmds: Commands<_, _, _>) =
