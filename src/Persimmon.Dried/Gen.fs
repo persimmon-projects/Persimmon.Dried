@@ -239,9 +239,11 @@ module Gen =
       gen (fun p ->
         let a = ResizeArray()
         a.AddRange(l)
+        let mutable p = p
         while a.Count > n do
           let v = (choose (Statistics.uniformDiscrete (0, a.Count - 1))).Gen.DoApply(p).Retrieve.Value
           a.RemoveAt(v) |> ignore
+          p <- { p with PrngState = p.PrngState.Next64Bits() |> snd }
         r (Some (a :> _ seq))
       )
       |> suchThat (Seq.forall (fun x -> l |> Seq.exists ((=) x)))
