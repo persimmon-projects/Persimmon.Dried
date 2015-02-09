@@ -145,12 +145,16 @@ module Gen =
     let tot = Seq.sumBy fst xs
     Statistics.uniformDiscrete (1, tot)
     |> choose
-    |> bind (fun n -> pick n xs) 
+    |> bind (fun n -> pick n xs)
+    |> suchThat (fun x -> xs |> Seq.exists (fun (_, g) -> g.Gen.SieveCopy(x)))
 
   let tuple2 g = bind (fun x -> map (fun y -> (x, y)) g) g
   let tuple3 g = bind (fun x -> bind (fun y -> map (fun z -> (x, y, z)) g) g) g
 
-  let listOfLength n g = List.init n (fun _ -> g) |> sequence
+  let listOfLength n g =
+    List.init n (fun _ -> g)
+    |> sequence
+    |> suchThat (fun c -> c |> List.forall (g.Gen.SieveCopy))
   let arrayOfLength n g = listOfLength n g |> map List.toArray
   let seqOfLength n g = listOfLength n g |> map List.toSeq
 
