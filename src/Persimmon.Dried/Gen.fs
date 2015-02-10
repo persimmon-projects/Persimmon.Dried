@@ -74,6 +74,8 @@ module Gen =
       PrngState = Utility.createRandomState ()
     }
 
+    let nextSeed prms = { prms with PrngState = prms.PrngState.Next64Bits() |> snd }
+
   let private gen (f: GenParameters -> R<'T>) =
     Gen({ new IGen<'T>() with member  __.DoApply(p) = f p })
 
@@ -85,8 +87,7 @@ module Gen =
 
   let bind (f: 'T -> Gen<'U>) (g: Gen<'T>) =
     gen (fun p -> g.Gen.DoApply(p).Bind(fun t ->
-      let _, s = p.PrngState.Next64Bits()
-      (f t).Gen.DoApply({ p with PrngState = s })))
+      (f t).Gen.DoApply(Parameters.nextSeed p)))
 
   let filter pred (g: Gen<_>) = suchThat pred g
 
@@ -128,7 +129,7 @@ module Gen =
       ((r (Some []), p), gs)
       ||> List.fold (fun (rs, p) g ->
         let r = g.Gen.DoApply(p).Bind(fun r -> rs.Map(fun x -> r :: x))
-        (r, { p with PrngState = p.PrngState.Next64Bits() |> snd }))
+        (r, Parameters.nextSeed p))
       |> fst)
     |> map List.rev
 
@@ -247,7 +248,7 @@ module Gen =
         while a.Count > n do
           let v = (choose (Statistics.uniformDiscrete (0, a.Count - 1))).Gen.DoApply(p).Retrieve.Value
           a.RemoveAt(v) |> ignore
-          p <- { p with PrngState = p.PrngState.Next64Bits() |> snd }
+          p <- Parameters.nextSeed p
         r (Some (a :> _ seq))
       )
       |> suchThat (Seq.forall (fun x -> l |> Seq.exists ((=) x)))

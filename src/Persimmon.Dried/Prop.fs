@@ -332,6 +332,7 @@ type PropModule internal () =
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.forAllNoShrink(g: Gen<_>, pp) = fun f -> apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
+    let prms = Gen.Parameters.nextSeed prms
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
     | Some x ->
@@ -345,16 +346,17 @@ type PropModule internal () =
 
   member __.forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
+    let prms = Gen.Parameters.nextSeed prms
     let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
 
-    let result x =
+    let result x prms =
       let p = secure (fun () -> f x)
       provedToTrue(p.Apply(prms))
 
-    let getFirstFailure (xs: _ seq) =
+    let getFirstFailure (xs: _ seq) prms =
       // Seq cannot be empty
       assert(not <| Seq.isEmpty xs)
-      let results = xs |> Seq.map (fun x -> (x, result x))
+      let results = xs |> Seq.map (fun x -> (x, result x prms))
       match results |> Seq.skipWhile (snd >> PropResult.isFailure >> not) with
       | xs when Seq.isEmpty xs -> Choice1Of2 (Seq.head results)
       | xs -> Choice2Of2 (Seq.head xs)
@@ -365,22 +367,23 @@ type PropModule internal () =
         { r1 with Args = { a1 with OrigArg = a0.OrigArg } :: ass }
       | _ -> r1
 
-    let rec shrinker x (r: PropResult) shrinks orig =
+    let rec shrinker x (r: PropResult) shrinks orig prms =
       let xs = shrink x |> Seq.filter gr.Sieve
       let res = r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = shrinks; OrigArg = orig; PrettyArg = pp x; PrettyOrigArg = pp orig }
       if Seq.isEmpty xs then res
       else
-        match getFirstFailure xs with
+        match getFirstFailure xs prms with
         | Choice1Of2 (_, _) -> res
-        | Choice2Of2(x2, r2) -> shrinker x2 (replOrig r r2) (shrinks + 1) orig
+        | Choice2Of2(x2, r2) -> shrinker x2 (replOrig r r2) (shrinks + 1) orig (Gen.Parameters.nextSeed prms)
 
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
     | Some x ->
-      let r = result x
+      let r = result x prms
+      let prms = Gen.Parameters.nextSeed prms
       if not <| PropResult.isFailure r then
         r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
-      else shrinker x r 0 x)
+      else shrinker x r 0 x prms)
 
   member inline this.forAll(arb: Arbitrary<_>) = fun f ->
     this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
@@ -388,6 +391,7 @@ type PropModule internal () =
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.exists(g: Gen<_>, pp) = fun f -> apply (fun prms ->
     let gr = g.Gen.DoApply(prms)
+    let prms = Gen.Parameters.nextSeed prms
     match gr.Retrieve with
     | None -> undecided.Value.Apply(prms)
     | Some x ->
