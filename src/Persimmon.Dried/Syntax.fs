@@ -9,6 +9,7 @@ module Syntax =
     member __.apply b = PropImpl.applyBool b
     member __.map f g = PropImpl.map f g
     member __.bind f g = PropImpl.bind f g
+    member __.contramap f g = PropImpl.contramap f g
     member __.combine f g1 g2 = PropImpl.combine f g1 g2
     member __.provedToTrue r = PropImpl.provedToTrue r
     member __.undecided = PropImpl.undecided

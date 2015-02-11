@@ -179,6 +179,9 @@ module internal PropImpl =
   let bind (f: _ -> Prop) (p: Prop) =
     apply (fun prms -> (p.Apply(prms) |> f).Apply({ prms with PrngState = prms.PrngState.Next64Bits () |> snd }))
 
+  let contramap f (p: Prop) = { new Prop() with
+    member __.Apply(prms) = p.Apply(f prms) }
+
   let combine f p1 p2 =
     p1 |> bind (fun r1 ->
     p2 |> bind (fun r2 ->
