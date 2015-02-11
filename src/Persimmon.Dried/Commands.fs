@@ -126,10 +126,10 @@ module Commands =
       (p .&. lazy (pf s), c.NextState(s), r :: rs))
 
   let rec private scan (f: _ -> _ -> _) xs =
-    let rec inner acc f = function
-    | [] -> acc
-    | y::ys -> inner (f y ys :: acc) (fun x xs -> f x (y::xs)) ys
-    inner [] f xs
+    let rec inner k f = function
+    | [] -> k []
+    | y::ys -> inner (k << (fun xs -> f y ys :: xs)) (fun x xs -> f x (y::xs)) ys
+    inner id f xs
 
   let runParCmds (sut: 'Sut) (s: 'State) (pcmds: Commands<_, _, 'Result> list) =
     let memo = Dictionary<'State * Commands<'Sut, 'State, 'Result> list, 'State list>()
