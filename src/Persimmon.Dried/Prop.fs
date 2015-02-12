@@ -230,7 +230,7 @@ module internal PropImpl =
     let (==) (g1: Gen<_>) (g2: Gen<_>) = apply (fun prms ->
       match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
       | (None, None) -> proved.Value.Apply(prms)
-      | (Some r1, Some r2) when r1.Equals(r2) -> proved.Value.Apply(prms)
+      | (Some r1, Some r2) when r1 = r2 -> proved.Value.Apply(prms)
       | _ -> falsified.Value.Apply(prms))
 
 //    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) pp =
