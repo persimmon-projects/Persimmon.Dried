@@ -228,24 +228,13 @@ module internal PropImpl =
 
   module Gen =
     let (==) (g1: Gen<_>) (g2: Gen<_>) = apply (fun prms ->
-      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
-      | (None, None) -> proved.Value.Apply(prms)
-      | (Some r1, Some r2) when r1 = r2 -> proved.Value.Apply(prms)
-      | _ -> falsified.Value.Apply(prms))
-
-//    let rec notEqual (g1: Gen<_>) (g2: Gen<_>) (s: Shrink<_>) pp =
-//      forAll g1 (fun r -> forAll g2 (fun x -> notEqual x r s pp) s pp) s pp
+      if g1.Apply(prms) = g2.Apply(prms) then proved.Value.Apply(prms)
+      else falsified.Value.Apply(prms)
+    )
 
     let (!==) (g1:Gen<_>) (g2: Gen<_>) = apply (fun prms ->
-      match g1.Gen.DoApply(prms).Retrieve, g2.Gen.DoApply(prms).Retrieve with
-      | (None, None) -> falsified.Value.Apply(prms)
-      | (Some r1, Some r2) when r1 = r2 -> falsified.Value.Apply(prms)
-      | _ -> proved.Value.Apply(prms))
-
-  open Gen
-
-  let someFailing (gs: Gen<_> seq) = gs |> Seq.map ((==) fail) |> atLeastOne
-  let noneFailing (gs: Gen<_> seq) = gs |> Seq.map ((!==) fail) |> all
+      if g1.Apply(prms) = g2.Apply(prms) then falsified.Value.Apply(prms)
+      else proved.Value.Apply(prms))
 
   let raises<'T, 'U when 'T :> exn> (x: Lazy<'U>) =
     try
@@ -334,23 +323,18 @@ type PropModule internal () =
 
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.forAllNoShrink(g: Gen<_>, pp) = fun f -> apply (fun prms ->
-    let gr = g.Gen.DoApply(prms)
+    let x = g.Apply(prms)
     let prms = Gen.Parameters.nextSeed prms
-    match gr.Retrieve with
-    | None -> undecided.Value.Apply(prms)
-    | Some x ->
-      let p = secure (fun () -> f x)
-      let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
-      provedToTrue(p.Apply(prms))
-      |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x })
+    let p = secure (fun () -> f x)
+    provedToTrue(p.Apply(prms))
+    |> PropResult.addArg { Label = ""; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x })
 
   member inline this.forAllNoShrink(arb: NonShrinkerArbitrary<_>) = fun f ->
     this.forAllNoShrink(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
 
   member __.forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
-    let gr = g.Gen.DoApply(prms)
+    let x = g.Apply(prms)
     let prms = Gen.Parameters.nextSeed prms
-    let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
 
     let result x prms =
       let p = secure (fun () -> f x)
@@ -371,42 +355,35 @@ type PropModule internal () =
       | _ -> r1
 
     let rec shrinker x (r: PropResult) shrinks orig prms =
-      let xs = shrink x |> Seq.filter gr.Sieve
-      let res = r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = shrinks; OrigArg = orig; PrettyArg = pp x; PrettyOrigArg = pp orig }
+      let xs = shrink x
+      let res = r |> PropResult.addArg { Label = ""; Arg = x; Shrinks = shrinks; OrigArg = orig; PrettyArg = pp x; PrettyOrigArg = pp orig }
       if Seq.isEmpty xs then res
       else
         match getFirstFailure xs prms with
         | Choice1Of2 (_, _) -> res
         | Choice2Of2(x2, r2) -> shrinker x2 (replOrig r r2) (shrinks + 1) orig (Gen.Parameters.nextSeed prms)
 
-    match gr.Retrieve with
-    | None -> undecided.Value.Apply(prms)
-    | Some x ->
-      let r = result x prms
-      let prms = Gen.Parameters.nextSeed prms
-      if not <| PropResult.isFailure r then
-        r |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
-      else shrinker x r 0 x prms)
+    let r = result x prms
+    let prms = Gen.Parameters.nextSeed prms
+    if not <| PropResult.isFailure r then
+      r |> PropResult.addArg { Label = ""; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
+    else shrinker x r 0 x prms)
 
   member inline this.forAll(arb: Arbitrary<_>) = fun f ->
     this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
 
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.exists(g: Gen<_>, pp) = fun f -> apply (fun prms ->
-    let gr = g.Gen.DoApply(prms)
+    let x = g.Apply(prms)
     let prms = Gen.Parameters.nextSeed prms
-    match gr.Retrieve with
-    | None -> undecided.Value.Apply(prms)
-    | Some x ->
-      let p = secure (fun () -> f x)
-      let labels = gr.Labels |> Seq.fold (sprintf "%s,%s") ""
-      let r =
-        p.Apply(prms)
-        |> PropResult.addArg { Label = labels; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
-      match r.Status with
-      | True -> { r with Status = Proof }
-      | False -> { r with Status = Undecided }
-      | _ -> r)
+    let p = secure (fun () -> f x)
+    let r =
+      p.Apply(prms)
+      |> PropResult.addArg { Label = ""; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
+    match r.Status with
+    | True -> { r with Status = Proof }
+    | False -> { r with Status = Undecided }
+    | _ -> r)
 
   member inline this.exists (arb: NonShrinkerArbitrary<_>) = fun f ->
     this.exists(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)

@@ -208,7 +208,7 @@ module Commands =
       (Gen.constant (s, []), l)
       ||> List.fold (fun g () -> gen {
         let! s0, cs = g
-        let! c = commands.GenCommand(s0).SuchThat(fun x -> x.PreCondition(s0))
+        let! c = commands.GenCommand(s0) |> Gen.suchThat (fun x -> x.PreCondition(s0))
         return (c.NextState(s0), List.foldBack (fun x xs -> x :: xs) cs [c])
       })
 
@@ -242,7 +242,7 @@ module Commands =
       return { S = s0; SeqCmds = seqCmds; ParCmds = parCmds }
     }
 
-    g.SuchThat(actionsPrecond)
+    g |> Gen.suchThat actionsPrecond
 
   let property threadCount maxParComb (commands: Commands<'Sut, 'State>) =
     let suts = Dictionary<obj, 'State * 'Sut option>()

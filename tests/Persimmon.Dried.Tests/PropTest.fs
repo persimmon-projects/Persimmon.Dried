@@ -333,24 +333,6 @@ module PropTest =
     apply (Prop.forAll a (fun p -> p == Prop.sizedProp (fun _ -> p)))
   }
 
-  let someFailing =
-    let g = [ Gen.constant 1; Gen.fail ] |> List.map Gen.constant |> Gen.oneOf
-    let gs = Gen.listOf g
-    let a = { Gen = gs; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyList }
-    property {
-      apply (Prop.forAll a (fun gs ->
-        Prop.someFailing gs .|. lazy (gs |> List.forall (Gen.sample >> Option.isSome))))
-    }
-
-  let noneFailing =
-    let g = [ Gen.constant 1; Gen.fail ] |> List.map Gen.constant |> Gen.oneOf
-    let gs = Gen.listOf g
-    let a = { Gen = gs; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyList }
-    property {
-      apply (Prop.forAll a (fun gs ->
-        Prop.noneFailing gs .|. lazy (gs |> List.exists (Gen.sample >> Option.isNone))))
-    }
-
   let ``chek some prop`` = property {
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a + b = b + a))
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a * b = b * a))

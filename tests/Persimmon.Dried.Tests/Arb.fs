@@ -51,3 +51,9 @@ module Arb =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyExn
   }
+
+  let gen a = {
+    Gen = a.Gen |> Gen.map Gen.constant
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }

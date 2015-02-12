@@ -2,6 +2,7 @@
 
 open System.Reflection
 open System.Runtime.InteropServices
+open System.Runtime.CompilerServices
 
 [<assembly: AssemblyTitle("Persimmon.Dried")>]
 [<assembly: AssemblyProduct("Persimmon.Dried")>]
@@ -10,5 +11,7 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyVersion("1.0.0")>]
 [<assembly: AssemblyFileVersion("1.0.0")>]
 [<assembly: AssemblyInformationalVersion("1.0.0-beta2")>]
+
+[<assembly: InternalsVisibleTo("Persimmon.Dried.Tests")>]
 
 do ()

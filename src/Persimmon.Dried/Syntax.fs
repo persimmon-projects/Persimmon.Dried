@@ -48,8 +48,6 @@ module Syntax =
       this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6) (f t))
     member inline this.forAll(a1, a2, a3, a4, a5, a6, a7) = fun f ->
       this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6, a7) (f t))
-    member __.someFailing gs = PropImpl.someFailing gs
-    member __.noneFailing gs = PropImpl.noneFailing gs
     member __.raises<'T, 'U when 'T :> exn> x = PropImpl.raises<'T, 'U> x
     member __.within maximumMs wrappedProp = PropImpl.within maximumMs wrappedProp
     member __.collect(f: _ -> #Prop) = fun t -> PropImpl.collectF f t
