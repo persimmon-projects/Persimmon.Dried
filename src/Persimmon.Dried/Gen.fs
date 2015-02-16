@@ -120,7 +120,7 @@ module Gen =
     |> choose
     |> map (fun n -> Seq.nth n xs)
 
-  let oneOf gens = elements gens |> bind id
+  let oneOf gens = elements gens |> bind id |> suchThat (fun x -> gens |> Seq.exists (fun g -> g.Gen.SieveCopy(x)))
 
   let option (g: Gen<_>) = oneOf ([ map Some g; constant None])
 
