@@ -58,7 +58,7 @@ type Gen<'T> internal (igen: IGen<'T>) =
         res.Copy(res.Result, s = fun (x: 'T) -> res.Sieve(x) && f x)
       override __.SieveCopy(x) =
         match x with
-        | :? 'T as x -> igen.SieveCopy(x)
+        | :? 'T as x -> igen.SieveCopy(x) && f x
         | _ -> false
     }
     Gen(gen)
