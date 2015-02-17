@@ -113,23 +113,22 @@ module private Impl =
     let iterations = ceil (float prms.MinSuccessfulTests / float prms.Workers)
     let sizeStep = float (prms.MaxSize - prms.MinSize) / (iterations * float prms.Workers)
     let stop = ref false
-    let genPrms = { Gen.Parameters.Default with PrngState = prms.PrngState }
 
     let workerFun workerIdx =
       let mutable n = 0  // passed tests
       let mutable d = 0  // discarded tests
       let mutable res: Option<Result> = None
       let mutable fm = FreqMap.empty<obj list>
-      let mutable rng = genPrms.PrngState
+      let mutable rng = prms.PrngState
       while not !stop && Option.isNone res && float n < iterations do
-        let size = (float prms.MinSize) + (sizeStep * float (workerIdx + (prms.Workers * (n + d))))
+        let size = float prms.MinSize + (sizeStep * float (workerIdx + (prms.Workers * (n + d))))
         let propRes = p.Apply({ Size = round size |> int; PrngState = rng })
         fm <- if List.isEmpty propRes.Collected then fm else  FreqMap.add propRes.Collected fm
         match propRes.Status with
         | Undecided ->
           d <- d + 1
           prms.Callback.OnPropEval("", workerIdx, n, d)
-          if n + d > prms.MinSuccessfulTests && 1 + prms.Workers * int prms.MaxDiscardRatio * n < d then
+          if n + d > prms.MinSuccessfulTests && 1.0f + float32 prms.Workers * prms.MaxDiscardRatio * float32 n < float32 d then
             res <- Some { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
         | True ->
           n <- n + 1
@@ -162,7 +161,7 @@ module private Impl =
       elif st2 <> Passed && st2 <> Exhausted then
         { Status = st2; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
       else
-        if s1 + s2 >= prms.MinSuccessfulTests && int prms.MaxDiscardRatio * (s1 + s2) >= (d1 + d2) then
+        if s1 + s2 >= prms.MinSuccessfulTests && prms.MaxDiscardRatio * float32 (s1 + s2) >= float32 (d1 + d2) then
           { Status = Passed; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
         else
           { Status = Exhausted; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
