@@ -2,7 +2,16 @@
 
 open Persimmon
 open Persimmon.Dried
-open ServiceStack.Redis
+open StackExchange.Redis
+open CloudStructures
+open System.Runtime.CompilerServices
+
+[<Extension>]
+type AsyncBuilderExtensions() =
+  [<Extension>]
+  static member Source(_: AsyncBuilder, t) = Async.AwaitTask t
+  [<Extension>]
+  static member Source(_: AsyncBuilder, s) = Async.Parallel(Seq.map Async.AwaitTask s)
 
 type State = {
   Contents: Map<string, string>
@@ -10,20 +19,36 @@ type State = {
   Connected: bool
 }
 
-type Client(host: string, port: int) =
-  let mutable client = new RedisClient(host, port)
-  let mutable isConnected = true
-  member __.IsConnected = isConnected
-  member __.Get<'T>(key) = client.Get<'T>(key)
-  member __.FlushDb() = client.FlushDb()
+type Client(host: string, port: int, options: string) =
+  let connectionString = sprintf "%s:%d,%s" host port options
+  let mutable settings = RedisSettings(connectionString)
+  member __.IsConnected = settings.GetConnection().IsConnected
+  member __.Get<'T>(key: string) =
+    async {
+      let! v = RedisString<'T>(settings, RedisKey.op_Implicit(key)).Get()
+      return if v.HasValue then Some v.Value else None
+    }
+    |> Async.RunSynchronously
+  member __.FlushDb() =
+    settings.GetConnection().GetServer(host, port).FlushDatabase()
   member __.Quit() =
-    client.Dispose()
-    isConnected <- false
-  member this.ReConnect() =
-    if not isConnected then client <- new RedisClient(host, port)
-  member __.Del(keys: _ []) = client.Del(keys)
-  member __.Set(key, value: 'T) = client.Set(key, value)
-  member __.DbSize = client.DbSize
+    __.ReConnect()
+    while not __.IsConnected do Async.Sleep(200) |> Async.RunSynchronously
+    settings.GetConnection().Dispose()
+  member __.ReConnect() =
+    if not <| settings.GetConnection().IsConnected then settings <- RedisSettings(connectionString)
+  member __.Del<'T>(keys: string []) =
+    async {
+      let! results = keys |> Array.map (fun key -> RedisString<_>(settings, RedisKey.op_Implicit(key)).Delete())
+      return Array.sumBy (fun x -> System.Convert.ToInt64(x: bool)) results
+    }
+    |> Async.RunSynchronously
+  member __.Set(key: string, value: 'T) =
+    async {
+      return! RedisString<'T>(settings, RedisKey.op_Implicit(key)).Set(value)
+    }
+    |> Async.RunSynchronously
+  member __.DbSize = settings.GetConnection().GetServer(host, port).DatabaseSize()
 
 type ToggleConnected private () =
   member __.StructuredFormatDisplay = "ToggleConnected"
@@ -57,10 +82,7 @@ with
       | _ -> false
       |> Prop.apply
     member __.PreCondition(state) = state.Connected
-    member this.Run(sut) =
-      match sut.Get<string>(this.Key) with
-      | null -> None
-      | v -> Some (v)
+    member this.Run(sut) = sut.Get<string>(this.Key)
 
 type Del = {
   Keys: string seq
@@ -216,7 +238,7 @@ type CommandsRedis() =
       Connected = true
     }
     member __.InitialPreCondition(state) = state.Connected
-    member __.NewSut(_) = Client("localhost", 6379)
+    member __.NewSut(_) = Client("localhost", 6379, "allowAdmin=true")
 
 module CommandsRedisTest =
 
