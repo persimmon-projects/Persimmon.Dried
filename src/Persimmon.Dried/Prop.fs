@@ -177,7 +177,7 @@ module internal PropImpl =
   let map f (p: Prop) = apply (p.Apply >> f)
 
   let bind (f: _ -> Prop) (p: Prop) =
-    apply (fun prms -> (p.Apply(prms) |> f).Apply({ prms with PrngState = prms.PrngState.Next64Bits () |> snd }))
+    apply (fun prms -> (p.Apply(prms) |> f).Apply(Gen.Parameters.nextSeed prms))
 
   let contramap f (p: Prop) = { new Prop() with
     member __.Apply(prms) = p.Apply(f prms) }
