@@ -2,6 +2,7 @@
 // このコードブロックは生成された HTML ドキュメントでは省略されます。ドキュメントで
 // 見せたくない補助的なものを定義するために使います。
 #I "../../../src/Persimmon.Dried/bin/Release"
+#r "FsRandom"
 
 (**
 <div class="blog-post">
@@ -54,14 +55,14 @@ F# インタラクティブ上にこの定義をロードして、起動して�
 let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleReporter 1 }
 
 (*** define-output: revRevIsOriginal ***)
-Runner.run prms ``reverse and reverse is original`` 
+Runner.run prms ``reverse and reverse is original``
 
 (*** include-output: revRevIsOriginal ***)
 
 (**
 
 性質が失敗したとき、 Persimmon.Dried は判例を表示します。
-例えば, 
+例えば,
 
 *)
 
@@ -76,7 +77,7 @@ let ``failure example`` = Prop.forAll (Arb.list Arb.int) (fun xs ->
 *)
 
 (*** define-output: failureExample ***)
-Runner.run prms ``failure example`` 
+Runner.run prms ``failure example``
 
 (*** include-output: failureExample ***)
 
@@ -89,8 +90,10 @@ Persimmon.Console を使って性質を確認する
 
 *)
 
+open FsRandom
+
 let ``binding example`` = property "binding example" {
-  apply (``reverse and reverse is original``)
+  apply ``reverse and reverse is original``
 }
 
 (**
