@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Commands - Persimmon.Dried</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="persimmon-projects">
+
+    <script type="text/javascript" src="/Persimmon.Dried/content/tips.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="/Persimmon.Dried/content/style.css" />
+    <link type="text/css" rel="stylesheet" href="/Persimmon.Dried/content/font.css" />
+    <link rel="shortcut icon" href="/Persimmon.Dried/images/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="icon" href="/Persimmon.Dried/images/favicon.ico" type="image/vnd.microsoft.icon" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="blog-header">
+        <h2 class="blog-title"><a href="/Persimmon.Dried/index.html">Persimmon.Dried</a></h2>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-9 blog-main" id="main">
+          
+
+
+
+<h1>Commands</h1>
+<div class="xmldoc">
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="persimmon-dried-commands-actions-3.html">Actions<'Sut, 'State, 'Result></a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="persimmon-dried-commands-commands-3.html">Commands<'Sut, 'State, 'Result></a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+            property threadCount maxParComb commands
+          </code>
+          <div class="tip" id="31">
+            <strong>Signature:</strong> threadCount:int -&gt; maxParComb:int -&gt; commands:Commands&lt;&#39;Sut,&#39;State&gt; -&gt; Prop<br />
+                          <strong>Type parameters:</strong> 'Sut, 'State          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L247-247" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '32', 32)" onmouseover="showTip(event, '32', 32)">
+            propertyWithDefault commands
+          </code>
+          <div class="tip" id="32">
+            <strong>Signature:</strong> commands:Commands&lt;&#39;?36745,&#39;?36746&gt; -&gt; Prop<br />
+                          <strong>Type parameters:</strong> '?36745, '?36746          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L288-288" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
+            runParCmds sut s pcmds
+          </code>
+          <div class="tip" id="33">
+            <strong>Signature:</strong> sut:&#39;Sut -&gt; s:&#39;State -&gt; pcmds:Commands&lt;&#39;Sut,&#39;State,&#39;Result&gt; list -&gt; Prop * (Command&lt;&#39;Sut,&#39;State,&#39;Result&gt; * Choice&lt;string,exn&gt;) list list<br />
+                          <strong>Type parameters:</strong> 'Sut, 'State, 'Result          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L134-134" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+            runSeqCmds sut s0 cs
+          </code>
+          <div class="tip" id="34">
+            <strong>Signature:</strong> sut:&#39;Sut -&gt; s0:&#39;State -&gt; cs:Commands&lt;&#39;Sut,&#39;State,&#39;Result&gt; -&gt; Prop * &#39;State * Choice&lt;string,exn&gt; list<br />
+                          <strong>Type parameters:</strong> 'Sut, 'State, 'Result          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L122-122" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
+            shrinkActions 
+          </code>
+          <div class="tip" id="35">
+            <strong>Signature:</strong> Shrink&lt;Actions&lt;&#39;Sut,&#39;State,&#39;Result&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'Sut, 'State, 'Result          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L116-116" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="col-sm-3 blog-sidebar" id="menu">
+          <div class="sidebar-module sidebar-module-inset">
+            <a href="/Persimmon.Dried/index.html">
+              <img src="/Persimmon.Dried/images/logo.png" style="width:150px;margin:10px" />
+            </a>
+          </div>
+
+          <div class="sidebar-module">
+            <h4>Persimmon.Dried</h4>
+            <ul class="list-unstyled">
+              <li><a href="https://www.nuget.org/packages/Persimmon.Dried/">Get Library via NuGet</a></li>
+              <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE">License (MIT)</a></li>
+              <!--
+              <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+              -->
+            </ul>
+          </div>
+
+          <div class="sidebar-module">
+            <h4>Tutorial</h4>
+            <ul class="list-unstyled">
+              <li><a href="/Persimmon.Dried/GettingStarted.html">Getting Started</a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-module">
+            <h4>Reference</h4>
+            <ul class="list-unstyled">
+              <li><a href="/Persimmon.Dried/reference/index.html">API Reference</a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-module">
+            <h4>Related projects</h4>
+            <ul class="list-unstyled">
+              <li><a href="http://persimmon-projects.github.io/Persimmon/">Persimmon</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/persimmon-projects/Persimmon.Dried"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+  </body>
+</html>

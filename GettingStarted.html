@@ -38,26 +38,29 @@
 
 <p>Run the command below:</p>
 
-<table class="pre"><tr><td><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion</pre></td></tr></table>
+<table class="pre"><tr><td><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion
+</pre></td></tr></table>
 
 <h2>The first step</h2>
 
 <p>open an fsx file and start with:</p>
 
 <pre class="fssnip">
-<span class="prep">#r</span> <span class="s">&quot;</span><span class="s">Persimmon</span><span class="s">&quot;</span>
-<span class="prep">#r</span> <span class="s">&quot;</span><span class="s">Persimmon</span><span class="s">.</span><span class="s">Dried</span><span class="s">&quot;</span>
+<span class="prep">#r</span> <span class="s">&quot;Persimmon&quot;</span>
+<span class="prep">#r</span> <span class="s">&quot;Persimmon.Dried&quot;</span>
 
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Persimmon</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Persimmon</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">Dried</span></pre>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Persimmon</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">Dried</span>
+</pre>
 
 
 <p>You can write the properties by using <code>Prop.forAll</code>, <code>Arbitrary</code> instances and function:</p>
 
 <pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="i">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="i">list</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="i">xs</span> <span class="k">-&gt;</span>
-  <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="i">rev</span> (<span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="i">rev</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="i">xs</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">xs</span>
-)</pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="i">xs</span> <span class="k">-&gt;</span>
+  <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">rev</span> (<span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="f">rev</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="i">xs</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">xs</span>
+)
+</pre>
 
 
 <h2>Checking property</h2>
@@ -65,36 +68,38 @@
 <p>We load this definition in F# interactive and then invoke.</p>
 
 <pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">prms</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="i">Parameters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">Default</span> <span class="k">with</span> <span class="i">Callback</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="i">createConsoleReporter</span> <span class="n">1</span> }</pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">prms</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="t">Parameters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">Default</span> <span class="k">with</span> <span class="i">Callback</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="f">createConsoleReporter</span> <span class="n">1</span> }
+</pre>
 
 
 <pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span></pre>
+<span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span>
+</pre>
 
 
-<table class="pre"><tr><td><pre><code>+ OK, passed 100 tests.
-</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>+ OK, passed 100 tests.</code></pre></td></tr></table>
 
 <p>When a property fails, Persimmon.Dried displays a counterexample.
 For example, You define</p>
 
 <pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">``failure example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 30)" onmouseover="showTip(event, 'fs5', 30)" class="i">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 31)" onmouseover="showTip(event, 'fs6', 31)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="i">list</span> <span onmouseout="hideTip(event, 'fs6', 33)" onmouseover="showTip(event, 'fs6', 33)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 34)" onmouseover="showTip(event, 'fs8', 34)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 35)" onmouseover="showTip(event, 'fs9', 35)" class="i">xs</span> <span class="k">-&gt;</span>
-  <span onmouseout="hideTip(event, 'fs10', 36)" onmouseover="showTip(event, 'fs10', 36)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 37)" onmouseover="showTip(event, 'fs11', 37)" class="i">rev</span> <span onmouseout="hideTip(event, 'fs9', 38)" onmouseover="showTip(event, 'fs9', 38)" class="i">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 39)" onmouseover="showTip(event, 'fs9', 39)" class="i">xs</span>
-)</pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">``failure example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 30)" onmouseover="showTip(event, 'fs5', 30)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 31)" onmouseover="showTip(event, 'fs6', 31)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 33)" onmouseover="showTip(event, 'fs6', 33)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 34)" onmouseover="showTip(event, 'fs8', 34)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 35)" onmouseover="showTip(event, 'fs9', 35)" class="i">xs</span> <span class="k">-&gt;</span>
+  <span onmouseout="hideTip(event, 'fs10', 36)" onmouseover="showTip(event, 'fs10', 36)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 37)" onmouseover="showTip(event, 'fs11', 37)" class="f">rev</span> <span onmouseout="hideTip(event, 'fs9', 38)" onmouseover="showTip(event, 'fs9', 38)" class="i">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 39)" onmouseover="showTip(event, 'fs9', 39)" class="i">xs</span>
+)
+</pre>
 
 
 <p>and check property</p>
 
 <pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span></pre>
+<span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span>
+</pre>
 
 
-<table class="pre"><tr><td><pre><code>! Falsified after 4 passed tests.
+<table class="pre"><tr><td><pre><code>! Falsified after 5 passed tests.
 &gt; ARG_0: [ "0";  "-1"; ]
-&gt; ARG_0_ORIGINAL: [ "-1540355957";  "-688834870";  "-1420877898";  "1132287
-  534"; ]
-</code></pre></td></tr></table>
+&gt; ARG_0_ORIGINAL: [ "-1696467988";  "-865024411";  "1400794792";  "-1173275
+  210";  "-258086078"; ]</code></pre></td></tr></table>
 
 <h2>Checking properties by using Persimmon.Console</h2>
 
@@ -103,15 +108,17 @@ For example, You define</p>
 <pre class="fssnip">
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs19', 44)" onmouseover="showTip(event, 'fs19', 44)" class="i">FsRandom</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 45)" onmouseover="showTip(event, 'fs20', 45)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="i">property</span> <span class="s">&quot;</span><span class="s">binding</span><span class="s"> </span><span class="s">example</span><span class="s">&quot;</span> {
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 45)" onmouseover="showTip(event, 'fs20', 45)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="f">property</span> <span class="s">&quot;binding example&quot;</span> {
   <span onmouseout="hideTip(event, 'fs22', 47)" onmouseover="showTip(event, 'fs22', 47)" class="k">apply</span> <span onmouseout="hideTip(event, 'fs3', 48)" onmouseover="showTip(event, 'fs3', 48)" class="i">``reverse and reverse is original``</span>
-}</pre>
+}
+</pre>
 
 
 <p>Run the command below:</p>
 
 <table class="pre"><tr><td><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Console -OutputDirectory packages -ExcludeVersion
-.\packages\Persimmon.Console\tools\Persimmon.Console.exe &#39;input file path&#39;</pre></td></tr></table>
+.\packages\Persimmon.Console\tools\Persimmon.Console.exe &#39;input file path&#39;
+</pre></td></tr></table>
 
 </div>
 
@@ -167,9 +174,7 @@ For example, You define</p>
           <div class="sidebar-module">
             <h4>Reference</h4>
             <ul class="list-unstyled">
-              <!--
               <li><a href="/Persimmon.Dried/reference/index.html">API Reference</a></li>
-              -->
             </ul>
           </div>
 
