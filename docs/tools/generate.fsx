@@ -9,7 +9,7 @@ let info =
     "project-nuget", "https://www.nuget.org/packages/Persimmon.Dried/"]
 
 #I "../../packages/FSharp.Formatting/lib/net40"
-#I "../../packages/FSharp.Compiler.Service/lib/net40"
+#I "../../packages/FSharp.Compiler.Service/lib/net45"
 #I "../../packages/FSharpVSPowerTools.Core/lib/net45"
 #r "FSharpVSPowerTools.Core.dll"
 #r "FSharp.Compiler.Service.dll"
@@ -45,18 +45,23 @@ let layoutRoots = [
   formatting @@ "templates/reference"
 ]
 
-//let buildReference () =
-//  let outputDir = output @@ "reference"
-//  System.IO.Directory.CreateDirectory(outputDir) |> ignore
-//  for lib in referenceBinaries do
-//    MetadataFormat.Generate(
-//      __SOURCE_DIRECTORY__ @@  "../../src" @@ Path.GetFileNameWithoutExtension(lib) @@ "bin" @@ configuration @@ lib,
-//      outputDir,
-//      layoutRoots,
-//      parameters = ("root", root)::info,
-//      sourceRepo = githubLink @@ "tree/master",
-//      sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
-//      publicOnly = true)
+let buildReference () =
+  let libDirs = [
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta2/lib/net20/")
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.1/lib/net40/")
+  ]
+  let outputDir = output @@ "reference"
+  System.IO.Directory.CreateDirectory(outputDir) |> ignore
+  for lib in referenceBinaries do
+    MetadataFormat.Generate(
+      __SOURCE_DIRECTORY__ @@  "../../src" @@ Path.GetFileNameWithoutExtension(lib) @@ "bin" @@ configuration @@ lib,
+      outputDir,
+      layoutRoots,
+      parameters = ("root", root)::info,
+      libDirs = libDirs,
+      sourceRepo = githubLink @@ "tree/master",
+      sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
+      publicOnly = true)
 
 let buildDocumentation () =
   let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.AllDirectories)
@@ -67,4 +72,4 @@ let buildDocumentation () =
         layoutRoots = layoutRoots,  fsiEvaluator = new FsiEvaluator(), lineNumbers=false)
 
 buildDocumentation ()
-//buildReference ()
+buildReference ()
