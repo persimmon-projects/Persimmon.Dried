@@ -69,7 +69,7 @@
 
 
 <pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span> </pre>
+<span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span></pre>
 
 
 <table class="pre"><tr><td><pre><code>+ OK, passed 100 tests.
@@ -87,12 +87,12 @@
 <p>を定義し、性質を確認してみましょう。</p>
 
 <pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span> </pre>
+<span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="i">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="i">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span></pre>
 
 
 <table class="pre"><tr><td><pre><code>! Falsified after 3 passed tests.
 &gt; ARG_0: [ "0";  "1"; ]
-&gt; ARG_0_ORIGINAL: [ "-1735007448";  "107228534";  "1619754166"; ]
+&gt; ARG_0_ORIGINAL: [ "-1436308061";  "1661459813"; ]
 </code></pre></td></tr></table>
 
 <h2>Persimmon.Console を使って性質を確認する</h2>
@@ -100,8 +100,10 @@
 <p>プロジェクトを作成し、<code>property</code> コンピュテーション式を使ってテストを書きます。</p>
 
 <pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 44)" onmouseover="showTip(event, 'fs19', 44)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs20', 45)" onmouseover="showTip(event, 'fs20', 45)" class="i">property</span> <span class="s">&quot;</span><span class="s">binding</span><span class="s"> </span><span class="s">example</span><span class="s">&quot;</span> {
-  <span class="i">apply</span> (<span onmouseout="hideTip(event, 'fs3', 46)" onmouseover="showTip(event, 'fs3', 46)" class="i">``reverse and reverse is original``</span>)
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs19', 44)" onmouseover="showTip(event, 'fs19', 44)" class="i">FsRandom</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 45)" onmouseover="showTip(event, 'fs20', 45)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="i">property</span> <span class="s">&quot;</span><span class="s">binding</span><span class="s"> </span><span class="s">example</span><span class="s">&quot;</span> {
+  <span onmouseout="hideTip(event, 'fs22', 47)" onmouseover="showTip(event, 'fs22', 47)" class="k">apply</span> <span onmouseout="hideTip(event, 'fs3', 48)" onmouseover="showTip(event, 'fs3', 48)" class="i">``reverse and reverse is original``</span>
 }</pre>
 
 
@@ -125,13 +127,15 @@
 <div class="tip" id="fs11">val rev : list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.rev</div>
 <div class="tip" id="fs12">val prms : Runner.Parameters<br /><br />Full name: GettingStarted.prms</div>
 <div class="tip" id="fs13">module Runner<br /><br />from Persimmon.Dried</div>
-<div class="tip" id="fs14">Multiple items<br />module Parameters<br /><br />from Persimmon.Dried.Runner<br /><br />--------------------</div>
+<div class="tip" id="fs14">Multiple items<br />module Parameters<br /><br />from Persimmon.Dried.Runner<br /><br />--------------------<br />type Parameters =<br />&#160;&#160;{MinSuccessfulTests: int;<br />&#160;&#160;&#160;MinSize: int;<br />&#160;&#160;&#160;MaxSize: int;<br />&#160;&#160;&#160;PrngState: PrngState;<br />&#160;&#160;&#160;Workers: int;<br />&#160;&#160;&#160;Callback: TestCallback;<br />&#160;&#160;&#160;MaxDiscardRatio: float32;}<br /><br />Full name: Persimmon.Dried.Runner.Parameters</div>
 <div class="tip" id="fs15">val Default : Runner.Parameters<br /><br />Full name: Persimmon.Dried.Runner.Parameters.Default</div>
 <div class="tip" id="fs16">val createConsoleReporter : verbosity:int -&gt; Runner.TestCallback<br /><br />Full name: Persimmon.Dried.Runner.createConsoleReporter</div>
 <div class="tip" id="fs17">val run : prms:Runner.Parameters -&gt; p:Prop -&gt; unit<br /><br />Full name: Persimmon.Dried.Runner.run</div>
 <div class="tip" id="fs18">val ( failure example ) : Prop<br /><br />Full name: GettingStarted.( failure example )</div>
-<div class="tip" id="fs19">val ( binding example ) : obj<br /><br />Full name: GettingStarted.( binding example )</div>
-<div class="tip" id="fs20">val property : name:string -&gt; PropertiesBuilder<br /><br />Full name: Persimmon.Dried.Syntax.property</div>
+<div class="tip" id="fs19">namespace FsRandom</div>
+<div class="tip" id="fs20">val ( binding example ) : TestCase&lt;unit&gt;<br /><br />Full name: GettingStarted.( binding example )</div>
+<div class="tip" id="fs21">val property : name:string -&gt; PropertiesBuilder<br /><br />Full name: Persimmon.Dried.Syntax.property</div>
+<div class="tip" id="fs22">custom operation: apply (Prop)<br /><br />Calls PropertiesBuilder.Apply </div>
 
         </div>
         <div class="col-sm-3 blog-sidebar" id="menu">
