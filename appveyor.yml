@@ -16,4 +16,4 @@ configuration:
 
 test_script:
   - .\.nuget\NuGet.exe Install Persimmon.Console -Pre -OutputDirectory packages -ExcludeVersion
-  - ps: Start-Process -FilePath ".\packages\Persimmon.Console\tools\Persimmon.Console.exe" -ArgumentList ".\tests\Persimmon.Dried.Tests\bin\$env:configuration\Persimmon.Dried.Tests.dll"
+  - ps: .\packages\Persimmon.Console\tools\Persimmon.Console.exe .\tests\Persimmon.Dried.Tests\bin\$env:configuration\Persimmon.Dried.Tests.dll
