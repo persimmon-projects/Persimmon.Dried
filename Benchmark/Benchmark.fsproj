@@ -79,7 +79,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Persimmon">
-      <HintPath>..\packages\Persimmon.1.0.0-beta3\lib\net20\Persimmon.dll</HintPath>
+      <HintPath>..\packages\Persimmon.1.0.0-beta4\lib\net20\Persimmon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
