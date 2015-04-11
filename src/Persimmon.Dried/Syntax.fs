@@ -26,7 +26,7 @@ module Syntax =
     member __.secure p = PropImpl.secure p
     member inline this.forAllNoShrink(g1, g2) = fun f ->
       this.forAllNoShrink g1 (fun t -> this.forAllNoShrink g2 (f t))
-    member inline this.forAllNoShrink(g1, g2, g3) = fun f ->
+    member inline this.forAllNoShrink(g1, g2, g3: NonShrinkerArbitrary<_>) = fun f ->
       this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3) (f t))
     member inline this.forAllNoShrink(g1, g2, g3, g4) = fun f ->
       this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4) (f t))
