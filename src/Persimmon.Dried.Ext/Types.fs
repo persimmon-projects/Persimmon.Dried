@@ -23,4 +23,5 @@ type Property private (state: PropertiesState) =
       do! property.Run(fun () -> state)
       return Unit.Value
     }
+  member __.Run() = Runner.run state.RunnerParams (Prop.all state.Properties)
   static member op_Implicit(prop: Property) = prop.ToTestCase()
