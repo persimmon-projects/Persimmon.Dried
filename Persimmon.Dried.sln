@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{80
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Commands.Redis", "example\Commands.Redis\Commands.Redis.fsproj", "{A9B108A6-2DED-4CEF-8E1D-DEC809D33003}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried.Ext", "src\Persimmon.Dried.Ext\Persimmon.Dried.Ext.fsproj", "{3816EDFD-43CC-4ED7-9832-96E4A3E77EB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persimmon.Dried.CSharp.Tests", "tests\Persimmon.Dried.CSharp.Tests\Persimmon.Dried.CSharp.Tests.csproj", "{99C74965-06BC-41A0-9B0D-744DCF52B1AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,14 @@ Global
 		{A9B108A6-2DED-4CEF-8E1D-DEC809D33003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9B108A6-2DED-4CEF-8E1D-DEC809D33003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9B108A6-2DED-4CEF-8E1D-DEC809D33003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3816EDFD-43CC-4ED7-9832-96E4A3E77EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3816EDFD-43CC-4ED7-9832-96E4A3E77EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3816EDFD-43CC-4ED7-9832-96E4A3E77EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3816EDFD-43CC-4ED7-9832-96E4A3E77EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,6 +25,7 @@ module Arb =
     PrettyPrinter = fun () -> Pretty(fun _ -> "unit")
   }
 
+  [<CompiledName("Bool")>]
   let bool = {
     Gen = Gen.elements [ true; false ]
     Shrinker = Shrink.shrinkAny
@@ -34,36 +35,42 @@ module Arb =
   open FsRandom
   open System
 
+  [<CompiledName("Byte")>]
   let byte = {
     Gen = Gen.choose (Statistics.uniformDiscrete (int Byte.MinValue, int Byte.MaxValue)) |> Gen.map byte
     Shrinker = Shrink.shrinkByte
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("UInt16")>]
   let uint16 = {
     Gen = Gen.choose (Statistics.uniformDiscrete (int UInt16.MinValue, int UInt16.MaxValue)) |> Gen.map uint16
     Shrinker = Shrink.shrinkUInt16
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("SByte")>]
   let sbyte = {
     Gen = Gen.choose (Statistics.uniformDiscrete (int SByte.MinValue, int SByte.MaxValue)) |> Gen.map sbyte
     Shrinker = Shrink.shrinkSbyte
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Int16")>]
   let int16 = {
     Gen = Gen.choose (Statistics.uniformDiscrete (int Int16.MinValue, int Int16.MaxValue)) |> Gen.map int16
     Shrinker = Shrink.shrinkInt16
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Int")>]
   let int = {
     Gen = Gen.choose (Statistics.uniformDiscrete (Int32.MinValue, Int32.MaxValue))
     Shrinker = Shrink.shrinkInt
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Single")>]
   let float32 = {
     Gen = gen {
       let! s = Gen.choose (Statistics.uniformDiscrete (0, 1))
@@ -87,12 +94,14 @@ module Arb =
     PrettyPrinter = Pretty.prettyList
   }
 
+  [<CompiledName("Array")>]
   let array a = {
     Gen = Gen.arrayOf a.Gen
     Shrinker = Shrink.shrinkArray a.Shrinker
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Char")>]
   let char = {
     Gen = Gen.frequency
       [
@@ -105,12 +114,14 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("String")>]
   let string = {
     Gen = (array char).Gen |> Gen.map (fun xs -> String(xs))
     Shrinker = Shrink.shrinkString
     PrettyPrinter = Pretty.prettyString
   }
 
+  [<CompiledName("DateTime")>]
   let datetime fmt = {
     Gen = gen {
       //FIXME: use uint64 generator
@@ -128,6 +139,7 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Guid")>]
   let guid = {
     Gen = gen {
       let! a = int.Gen
