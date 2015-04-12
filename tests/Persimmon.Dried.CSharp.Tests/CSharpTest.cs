@@ -14,8 +14,7 @@ namespace Persimmon.Dried.CSharp.Tests
         {
             return Property.Default
                 .Add(Syntax.Prop.forAll(Arb.Int, i =>
-                    (i % 2 == 0).Require(new Lazy<bool>(() =>
-                        (i + 1) % 2 != 0))));
+                    (new Lazy<bool>(() => (i + 1) % 2 != 0)).When(i % 2 == 9)));
         }
     }
 }

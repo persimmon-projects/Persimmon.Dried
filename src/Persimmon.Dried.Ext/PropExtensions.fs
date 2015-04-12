@@ -7,13 +7,13 @@ open System.Runtime.CompilerServices
 type PropExtensions () =
 
   [<Extension>]
-  static member inline Or(p1: _, p2: Lazy<_>) = p1 .|. p2
+  static member inline Or(p1: _, p2: Func<_>) = p1 .|. Lazy(p2)
   [<Extension>]
-  static member inline And(p1: _, p2: Lazy<_>) = p1 .&. p2
+  static member inline And(p1: _, p2: Func<_>) = p1 .&. Lazy(p2)
   [<Extension>]
-  static member inline Append(p1: _, p2: Lazy<_>) = p1 ++ p2
+  static member inline Append(p1: _, p2: Func<_>) = p1 ++ Lazy(p2)
   [<Extension>]
-  static member inline Require(p1: _, p2: Lazy<_>) = p1 ==> p2
+  static member inline When(body: Lazy<_>, pred: _) = pred ==> body
   [<Extension>]
   static member inline Label(prop: _, label: string) = prop |@ label
 
