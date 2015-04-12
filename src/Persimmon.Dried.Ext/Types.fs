@@ -18,9 +18,9 @@ type Property private (state: PropertiesState) =
   member __.Callback(callback) = Property(property.Callback(state, callback))
   member __.MaxDiscardRatio(ratio) = Property(property.MaxDiscardRatio(state, ratio))
   member __.Add(prop) = Property(property.Apply(state, prop))
-  member __.Run() =
+  member __.ToTestCase() =
     test {
       do! property.Run(fun () -> state)
       return Unit.Value
     }
-  static member op_Implicit(prop: Property) = prop.Run()
+  static member op_Implicit(prop: Property) = prop.ToTestCase()
