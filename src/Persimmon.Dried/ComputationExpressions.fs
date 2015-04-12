@@ -12,9 +12,11 @@ type PropertiesState = {
 
 type PropertiesBuilder(name: string) =
   new() = PropertiesBuilder("")
-  member val RunnerParameters = Parameters.Default with get, set
-  member val PrettyParameters = Pretty.Parameters.Default with get, set
-  member this.Yield(()) = { RunnerParams = this.RunnerParameters; PrettyParams = this.PrettyParameters; Properties = Seq.empty }
+  member this.Yield(()) = {
+    RunnerParams = Parameters.Default
+    PrettyParams = Pretty.Parameters.Default
+    Properties = Seq.empty
+  }
   [<CustomOperation("verbosity")>]
   member __.Verbosity(s, v) =
     { s with PrettyParams = { Verbosity = v } }
