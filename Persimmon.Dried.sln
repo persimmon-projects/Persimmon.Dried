@@ -24,6 +24,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried.Ext", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persimmon.Dried.CSharp.Tests", "tests\Persimmon.Dried.CSharp.Tests\Persimmon.Dried.CSharp.Tests.csproj", "{99C74965-06BC-41A0-9B0D-744DCF52B1AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persimmon.Dried.CSharpExamples", "example\Persimmon.Dried.CSharpExamples\Persimmon.Dried.CSharpExamples.csproj", "{4FF41A61-6D27-44C8-8663-6E0F4DFF3896}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,11 +56,16 @@ Global
 		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99C74965-06BC-41A0-9B0D-744DCF52B1AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF41A61-6D27-44C8-8663-6E0F4DFF3896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF41A61-6D27-44C8-8663-6E0F4DFF3896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF41A61-6D27-44C8-8663-6E0F4DFF3896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF41A61-6D27-44C8-8663-6E0F4DFF3896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A9B108A6-2DED-4CEF-8E1D-DEC809D33003} = {8031CEB4-55FB-41F7-89D6-8FB82AB8BBF3}
+		{4FF41A61-6D27-44C8-8663-6E0F4DFF3896} = {8031CEB4-55FB-41F7-89D6-8FB82AB8BBF3}
 	EndGlobalSection
 EndGlobal
