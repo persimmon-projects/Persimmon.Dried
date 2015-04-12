@@ -18,6 +18,8 @@ type PropExtensions () =
   static member inline Label(prop: _, label: string) = prop |@ label
   [<Extension>]
   static member inline Classify(prop, c, ifTrue) = Prop.classify(c, ifTrue) prop
+  [<Extension>]
+  static member inline Collect(prop, t) = Prop.collect(t, prop)
 
 [<Extension>]
 type PropModuleExtensions () =
