@@ -16,6 +16,8 @@ type PropExtensions () =
   static member inline When(body: Lazy<_>, pred: _) = pred ==> body
   [<Extension>]
   static member inline Label(prop: _, label: string) = prop |@ label
+  [<Extension>]
+  static member inline Classify(prop, c, ifTrue) = Prop.classify(c, ifTrue) prop
 
 [<Extension>]
 type PropModuleExtensions () =
