@@ -92,7 +92,7 @@ module Result =
 
 module private Impl =
 
-  open System
+  open System.Diagnostics
 
   let assertParams prms =
     if prms.MinSuccessfulTests <= 0 then
@@ -166,7 +166,7 @@ module private Impl =
         else
           { Status = Exhausted; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
 
-    let start = DateTime.UtcNow.Ticks
+    let watch = Stopwatch.StartNew()
 
     let r =
       if prms.Workers < 2 then workerFun 0
@@ -184,7 +184,8 @@ module private Impl =
         finally
           stop := true
 
-    let timedRes = { r with Time = DateTime.UtcNow.Ticks - start }
+    watch.Stop()
+    let timedRes = { r with Time = watch.ElapsedMilliseconds }
     prms.Callback.OnTestResult("", timedRes)
     timedRes
 
