@@ -16,11 +16,13 @@ module FreqMap =
   let empty<'T> = FreqMap<'T>(Dictionary<obj, int>(), 0)
 
   let add t (m: FreqMap<_>) =
+    let d = Dictionary(m.Underlying)
     let n =
       match m.Underlying.TryGetValue(t) with
-      | true, n -> n + 1
+      | true, n ->
+        d.Remove(t) |> ignore
+        n + 1
       | false, _ -> 1
-    let d = Dictionary(m.Underlying)
     d.Add(t, n)
     FreqMap(d, m.Total + 1)
 
@@ -29,6 +31,7 @@ module FreqMap =
       match m.Underlying.TryGetValue(t) with
       | true, n ->
         let d = Dictionary(m.Underlying)
+        d.Remove(t) |> ignore
         d.Add(t, n - 1)
         d
       | false, _ -> Dictionary(m.Underlying)
