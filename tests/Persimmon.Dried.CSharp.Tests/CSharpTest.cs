@@ -13,7 +13,7 @@ namespace Persimmon.Dried.CSharp.Tests
         public TestCase<Unit> syntaxCheck()
         {
             return Property.Default
-                .Add(Syntax.Prop.forAll(Arb.Int, i =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, i =>
                     (new Lazy<bool>(() => (i + 1) % 2 != 0)).When(i % 2 == 9)));
         }
     }
