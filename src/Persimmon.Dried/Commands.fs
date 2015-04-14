@@ -189,17 +189,23 @@ module Commands =
   let private propAnd p1 p2 =
     p1 |> Prop.bind (fun r -> if PropResult.isSuccess r then Prop.secure p2 else Prop.apply(fun _ -> r))
 
-  let private runActions sut (ac: Actions<_, _, _>) =
-    let (p1, s, rs1) = runSeqCmds sut ac.S ac.SeqCmds
-    let l1 = sprintf "Initialstate = %A\nSeqcmds = %s" ac.S (prettyCmdsRes (List.zip ac.SeqCmds rs1))
-    if List.isEmpty ac.ParCmds then p1 |@ l1
-    else
-      let f () =
-        let (p2, rs2) = runParCmds sut s ac.ParCmds
-        let l2 = rs2 |> List.map prettyCmdsRes
-        let l2 = "(" + List.fold (fun acc c -> acc + "\n" + c) "" l2 + ")"
-        p2 |@ l1 |@ sprintf "Parcmds = (state = %A) %s" s l2
-      propAnd (p1 |@ l1) f
+  let private runActions sut (ac: Actions<_, _, _>) finalize =
+    try
+      let (p1, s, rs1) = runSeqCmds sut ac.S ac.SeqCmds
+      let l1 = sprintf "Initialstate = %A\nSeqcmds = %s" ac.S (prettyCmdsRes (List.zip ac.SeqCmds rs1))
+      if List.isEmpty ac.ParCmds then p1 |@ l1
+      else
+        let f () =
+          try
+            let (p2, rs2) = runParCmds sut s ac.ParCmds
+            let l2 = rs2 |> List.map prettyCmdsRes
+            let l2 = "(" + List.fold (fun acc c -> acc + "\n" + c) "" l2 + ")"
+            p2 |@ l1 |@ sprintf "Parcmds = (state = %A) %s" s l2
+          finally
+            finalize ()
+        propAnd (p1 |@ l1) f
+    finally
+      if List.isEmpty ac.ParCmds then finalize ()
 
   let private action threadCount maxParComb (commands: Commands<_, _>) =
 
@@ -265,18 +271,20 @@ module Commands =
         match sutId with
         | Some id ->
           let sut = commands.NewSut(ac.S)
+          let removeSut () =
+            lock(suts) (fun () ->
+            suts.Remove(id) |> ignore
+            commands.DestroySut(sut))
           let doRun =
             lock(suts) (fun () ->
               if suts.ContainsKey(id) then
                 suts.[id] <- (ac.S, Some sut)
                 true
               else false)
-          try
-            if doRun then runActions sut ac else Prop.undecided.Value
-          finally
-            lock(suts) (fun () ->
-            suts.Remove(id) |> ignore
-            commands.DestroySut(sut))
+          if doRun then runActions sut ac removeSut
+          else
+            removeSut ()
+            Prop.undecided.Value
         | None ->
           //printfn "NOT IMPL"
           Prop.undecided.Value
