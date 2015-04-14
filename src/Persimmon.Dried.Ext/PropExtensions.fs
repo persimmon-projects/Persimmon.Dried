@@ -98,13 +98,13 @@ type PropModuleExtensions () =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4, a5, a6, a7) (fun t2 t3 t4 t5 t6 t7 ->
       f.Invoke(t1, t2, t3, t4, t5,t6, t7)))
   [<Extension>]
-  static member collect(prop: PropModule, f: Func<_, #Prop>, t: Prop) = prop.collect f t
+  static member Collect(prop: PropModule, f: Func<_, #Prop>, t: Prop) = prop.collect f t
   [<Extension>]
-  static member collect(prop: PropModule, f: Func<_, #Prop>, t: bool) = prop.collect f t
+  static member Collect(prop: PropModule, f: Func<_, #Prop>, t: bool) = prop.collect f t
   [<Extension>]
-  static member secure(prop: PropModule, p: Func<_>) = prop.secure (fun () -> p.Invoke())
+  static member Secure(prop: PropModule, p: Func<_>) = prop.secure (fun () -> p.Invoke())
   [<Extension>]
-  static member sizedProp(prop: PropModule, f: Func<_, _>) = prop.sizedProp (fun i -> f.Invoke(i))
+  static member SizedProp(prop: PropModule, f: Func<_, _>) = prop.sizedProp (fun i -> f.Invoke(i))
   [<Extension>]
   static member ForAllNoShrink(prop: PropModule, g, f: Func<_, Prop>) =
     prop.forAllNoShrink g (fun t -> f.Invoke(t))

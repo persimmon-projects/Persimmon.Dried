@@ -6,22 +6,33 @@ module Syntax =
   type PropModule with
     member __.apply f = PropImpl.apply f
     member __.apply r = PropImpl.applyResult r
+    [<CompiledName("Apply")>]
     member __.apply b = PropImpl.applyBool b
     member __.map f g = PropImpl.map f g
     member __.bind f g = PropImpl.bind f g
     member __.contramap f g = PropImpl.contramap f g
     member __.combine f g1 g2 = PropImpl.combine f g1 g2
     member __.provedToTrue r = PropImpl.provedToTrue r
+    [<CompiledName("Undecied")>]
     member __.undecided = PropImpl.undecided
+    [<CompiledName("Falsified")>]
     member __.falsified = PropImpl.falsified
+    [<CompiledName("Proved")>]
     member __.proved = PropImpl.proved
+    [<CompiledName("Passed")>]
     member __.passed = PropImpl.passed
+    [<CompiledName("Exn")>]
     member __.exn e = PropImpl.exn e
+    [<CompiledName("ExnNull")>]
     member __.exnNull = lazy (PropImpl.exn null)
+    [<CompiledName("Skip")>]
     member __.skip s = PropImpl.skip s
+    [<CompiledName("Skip")>]
     member __.skipWithoutMessage = lazy (PropImpl.skip "")
     member __.sizedProp f = PropImpl.sizedProp f
+    [<CompiledName("All")>]
     member __.all ps = PropImpl.all ps
+    [<CompiledName("AtLeastOne")>]
     member __.atLeastOne ps = PropImpl.atLeastOne ps
     member __.secure p = PropImpl.secure p
     member inline this.forAllNoShrink(g1, g2) = fun f ->
@@ -48,6 +59,7 @@ module Syntax =
       this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6) (f t))
     member inline this.forAll(a1, a2, a3, a4, a5, a6, a7) = fun f ->
       this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6, a7) (f t))
+    [<CompiledName("Throws")>]
     member __.raises<'T, 'U when 'T :> exn> x = PropImpl.raises<'T, 'U> x
     member __.within maximumMs wrappedProp = PropImpl.within maximumMs wrappedProp
     member __.collect(f: _ -> #Prop) = fun t -> PropImpl.collectF f t
