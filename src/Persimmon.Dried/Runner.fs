@@ -106,7 +106,7 @@ module private Impl =
     elif prms.Workers <= 0 then
       invalidArg "Workers" "require: Workers > 0"
      
-  let check prms (p: Prop) =
+  let check name prms (p: Prop) =
 
     assertParams(prms)
 
@@ -186,17 +186,17 @@ module private Impl =
 
     watch.Stop()
     let timedRes = { r with Time = watch.ElapsedMilliseconds }
-    prms.Callback.OnTestResult("", timedRes)
+    prms.Callback.OnTestResult(name, timedRes)
     timedRes
 
-  let run prms p = check prms p |> ignore
+  let run name prms p = check name prms p |> ignore
 
   let mainRunner prms p =
-    if Result.isPassed <| check prms p then 0
+    if Result.isPassed <| check "" prms p then 0
     else -1
 
-let check prms p = Impl.check prms p
-let run prms p = Impl.run prms p
+let check prms p = Impl.check "" prms p
+let run name prms p = Impl.run name prms p
 let mainRunner prms p = Impl.mainRunner prms p
 
 let createConsoleReporter verbosity =

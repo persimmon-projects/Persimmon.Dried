@@ -57,29 +57,29 @@ namespace Persimmon.Dried.CSharpExamples
             //A simple example
             property
                 .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int), xs => xs.Reverse().Reverse().SequenceEqual(xs)))
-                .Run();
+                .Run("RevRev");
 
             property
                 .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int), xs => xs.Reverse().SequenceEqual(xs)))
-                .Run();
+                .Run("RevId");
 
             //--------Properties--------------
             property
                 .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Single), xs => xs.Reverse().Reverse().SequenceEqual(xs)))
-                .Run();
+                .Run("RevRevFloat");
 
             //conditional properties
             property
                 .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                         .When(xs.IsOrdered())))
-                .Run();
+                .Run("Insert");
 
             property
                 .Add(Syntax.Prop.ForAll(Arb.Int, a =>
                     new Lazy<bool>(() => 1 / a == 1 / a)
                         .When(a != 0)))
-                .Run();
+                .Run("DivByZero");
 
             //counting trivial cases
             property
@@ -87,7 +87,7 @@ namespace Persimmon.Dried.CSharpExamples
                     new Lazy<bool>(() =>xs.Insert(x).IsOrdered())
                         .When(xs.IsOrdered())
                         .Classify(xs.Count() == 0, "trivial")))
-                .Run();
+                .Run("InsertTrivial");
 
             //classifying test values
             property
@@ -96,7 +96,7 @@ namespace Persimmon.Dried.CSharpExamples
                     .When(xs.IsOrdered())
                     .Classify(new int[] { x }.Concat(xs).IsOrdered(), "at-head")
                     .Classify(xs.Concat(new int[] { x }).IsOrdered(), "at-tail")))
-                .Run();
+                .Run("InsertClassify");
 
             //collecting data values
             property
@@ -104,7 +104,7 @@ namespace Persimmon.Dried.CSharpExamples
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                     .When(xs.IsOrdered())
                     .Collect("length " + xs.Count().ToString())))
-                .Run();
+                .Run("InsertCollect");
 
             //combining observations
             property
@@ -114,7 +114,7 @@ namespace Persimmon.Dried.CSharpExamples
                         .Classify(new int[] { x }.Concat(xs).IsOrdered(), "at-head")
                         .Classify(xs.Concat(new int[] { x }).IsOrdered(), "at-tail")
                         .Collect("length " + xs.Count().ToString())))
-                .Run();
+                .Run("InsertCombined");
 
             //---labelling sub properties-----
             //hmm. Cannot express result = m + n once this way.
@@ -123,13 +123,13 @@ namespace Persimmon.Dried.CSharpExamples
                     (m + n >= m).Label("result > #1") //maybe add overload with label to ForAll?
                     .And(() => (m + n >= n).Label("result > #2"))
                     .And(() => (m + n < m + n).Label("result not sum"))))
-                .Run();
+                .Run("ComplexProp");
 
             property
                 .Add(Syntax.Prop.ForAll(Arb.Int, x =>
                     false.Label("Always false")
                     .And(() => Math.Abs(x) - x == 0))) //actually, And should start a new property, not just a new assertion...
-                .Run();
+                .Run("Label");
 
             //rest seem hard to express without real "And" and "Or" support
 
