@@ -10,4 +10,4 @@ let p1 = Prop.forAll (Arb.list Arb.int) (fun xs -> xs |> List.rev |> List.rev = 
 
 let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleReporter 1 }
 
-Runner.run prms p1
+Runner.run "ListRevRev" prms p1
