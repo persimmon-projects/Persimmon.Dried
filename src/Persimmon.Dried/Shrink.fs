@@ -21,6 +21,7 @@ module Shrink =
 
   let shrink (s: Shrink<_>) x = s.Shrink(x)
 
+  [<CompiledName("Any")>]
   let shrinkAny<'T> = apply (fun (_: 'T) -> Seq.empty)
 
   let rec private removeChunks n xs =
@@ -59,8 +60,10 @@ module Shrink =
     Seq.append (removeChunks (Seq.length xs) xs) (shrinkOne s xs)
     |> Seq.map v)
 
+  [<CompiledName("IEnumerable")>]
   let shrinkSeq s = shrinkContainer s id
   let shrinkList s = shrinkContainer s Seq.toList
+  [<CompiledName("Array")>]
   let shrinkArray s = shrinkContainer s Seq.toArray
 
   // FIXME
@@ -90,15 +93,24 @@ module Shrink =
       seq { yield 0L; yield! interleave ns (ns |> Seq.map (fun x -> -1L * x)) }
     |> Seq.map g
 
+  [<CompiledName("Byte")>]
   let shrinkByte = apply (shrinkUInt' uint64 byte)
+  [<CompiledName("UInt16")>]
   let shrinkUInt16 = apply (shrinkUInt' uint64 uint16)
+  [<CompiledName("UInt32")>]
   let shrinkUInt32 = apply (shrinkUInt' uint64 uint32)
+  [<CompiledName("ULong")>]
   let shrinkUInt64 = apply (shrinkUInt' uint64 id)
+  [<CompiledName("Sbyte")>]
   let shrinkSbyte = apply (shrinkInt' int64 sbyte)
+  [<CompiledName("Int16")>]
   let shrinkInt16 = apply (shrinkInt' int64 int16)
+  [<CompiledName("Int")>]
   let shrinkInt = apply (shrinkInt' int64 int)
+  [<CompiledName("Long")>]
   let shrinkInt64 = apply (shrinkInt' int64 id)
 
+  [<CompiledName("String")>]
   let shrinkString = apply (fun (s: string) ->
     shrink (shrinkArray shrinkAny) (s.ToCharArray())
     |> Seq.map(fun a -> System.String(a))

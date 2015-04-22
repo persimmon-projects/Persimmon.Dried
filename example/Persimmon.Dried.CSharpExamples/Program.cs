@@ -192,6 +192,6 @@ namespace Persimmon.Dried.CSharpExamples
                 .Select(i => Convert.ToInt64(i));
 
         public static Arbitrary<long> MyLongArb =
-            Arbitrary.Create(myLongGen, Shrink.shrinkInt64, PrettyModule.prettyAny);
+            Arbitrary.Create(myLongGen, Shrink.Long, PrettyModule.Any);
     }
 }

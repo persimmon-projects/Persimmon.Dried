@@ -64,12 +64,15 @@ module Pretty =
     loop 0
     builder.ToString()
 
+  [<CompiledName("Any")>]
   let prettyAny t = Pretty(fun _ -> sprintf "%A" t)
 
+  [<CompiledName("String")>]
   let prettyString t = Pretty(fun _ -> "\""+ escapeControlChars t + "\"")
 
   let prettyList l = Pretty(fun _ -> (l |> List.fold (sprintf "%s \"%A\"; ") "[") + "]")
 
+  [<CompiledName("Exception")>]
   let prettyExn (e: exn) = Pretty(fun prms ->
     let strs = e.ToString().Split([|"\r\n";"\r";"\n"|], StringSplitOptions.None)
     if prms.Verbosity <= 0 then [||]
@@ -77,12 +80,15 @@ module Pretty =
     else strs
     |> String.concat newLine)
 
+  [<CompiledName("Milliseconds")>]
   let prettyTime millis =
     let min = millis / (60L * 1000L)
     let sec = float (millis - (60L * 1000L * min)) / 1000.0
     if min <= 0L then sprintf "%.3f sec " sec
     else sprintf "%d min %.3f sec " min sec
 
+  [<CompiledName("DateTime")>]
   let prettyDateTime (fmt: string) (dt: DateTime) = Pretty(fun _ -> dt.ToString(fmt))
 
+  [<CompiledName("Guid")>]
   let prettyGuid (g: Guid) = Pretty(fun _ -> g.ToString())
