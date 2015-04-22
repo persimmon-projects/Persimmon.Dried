@@ -153,14 +153,15 @@ namespace Persimmon.Dried.CSharpExamples
 
             //generating recursive data types: not so common in C#?
 
-            // generating functions:
-            //Prop.ForAll((Func<int, int> f, Func<int, int> g, ICollection<int> a) => {
-            //                var l1 = a.Select(x => f(g(x)));
-            //                var l2 = a.Select(g).Select(f);
-            //                return l1.SequenceEqual(l2);
-            //            }).QuickCheck();
-
             var config = new Configuration { Callback = callback };
+
+            // generating functions:
+            Syntax.Prop.ForAll(Arb.Func(CoArbitrary.Int, Arb.Int), Arb.Func(CoArbitrary.Int, Arb.Int), Arb.ICollection(Arb.Int),
+                (f, g, a) => {
+                    var l1 = a.Select(x => f(g(x)));
+                    var l2 = a.Select(g).Select(f);
+                    return l1.SequenceEqual(l2);
+                }).Run(config);
 
             //generators support select, selectmany and where
             var gen = Arb.Int.Gen
@@ -175,8 +176,7 @@ namespace Persimmon.Dried.CSharpExamples
                 .Run(new Configuration { Name = "Configuration Demo", MaxSize = 500, Callback = config.Callback });
 
             Syntax.Prop.ForAll(Arb.IEnumerable(Arb.Int), Arb.IEnumerable(Arb.Int),
-                (IEnumerable<int> a, IEnumerable<int> b) =>
-                    a.Except(b).Count() <= a.Count())
+                (a, b) => a.Except(b).Count() <= a.Count())
                 .Run(config);
 
             Console.ReadKey();
