@@ -94,6 +94,13 @@ module Arb =
     PrettyPrinter = Pretty.prettyList
   }
 
+  [<CompiledName("IEnumerable")>]
+  let seq s = {
+    Gen = Gen.seqOf s.Gen
+    Shrinker = Shrink.shrinkSeq s.Shrinker
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   [<CompiledName("Array")>]
   let array a = {
     Gen = Gen.arrayOf a.Gen
