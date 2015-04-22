@@ -61,6 +61,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="app.config" />
+    <Compile Include="Configuration.fs" />
     <Compile Include="PropExtensions.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="GenExtensions.fs" />

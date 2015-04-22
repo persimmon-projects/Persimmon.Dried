@@ -36,6 +36,11 @@ type PropExtensions () =
   static member Classify(prop: bool, c, ifTrue) = Prop.classify(c, ifTrue) prop
   [<Extension>]
   static member Collect(prop, t) = Prop.collect(t, prop)
+  [<Extension>]
+  static member Run(prop) = Runner.run "" Runner.Parameters.Default prop
+  [<Extension>]
+  static member Run(prop, config: Configuration) =
+    Runner.run config.Name config.Parameter prop
 
 [<Extension>]
 type PropModuleExtensions () =
