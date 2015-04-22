@@ -12,6 +12,7 @@ module CoArbitrary =
     member __.Apply(_) = id
   }
 
+  [<CompiledName("Bool")>]
   let bool = { new CoArbitrary<bool> with
     member __.Apply(b) = if b then Gen.variant -1 else Gen.variant 0
   }
@@ -23,6 +24,7 @@ module CoArbitrary =
       | Some x -> Gen.variant -1 << apply x c
   }
 
+  [<CompiledName("Int")>]
   let int = { new CoArbitrary<int> with
     member __.Apply(n) = Gen.variant n
   }
