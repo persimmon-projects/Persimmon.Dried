@@ -28,9 +28,12 @@ module Gen =
 
   let inline apply p (gen: Gen<_>) = gen.Apply(p)
 
+  [<CompiledName("Constant")>]
   let constant x = gen (fun _ -> x)
 
   let sized (f: int -> Gen<'T>) = gen (fun p -> (f p.Size).Apply(p))
+
+  [<CompiledName("Size")>]
   let size = sized constant
 
   let resize s (g: Gen<_>) = gen (fun p -> g.Apply({ p with Size = s }))
@@ -71,20 +74,24 @@ module Gen =
   let bind (f: 'T -> Gen<'U>) (g: Gen<'T>) =
     gen (fun p -> g |> apply p |> f |> apply (Parameters.nextSeed p))
 
-  let filter pred (g: Gen<_>) = suchThat pred g
+  let inline filter pred (g: Gen<_>) = suchThat pred g
 
   let rec retryUntil (p: 'T -> bool) gen =
     bind (fun t -> if p t then constant t |> suchThat p else retryUntil p gen) gen
 
+  [<CompiledName("Sample")>]
   let sample (g: Gen<_>) = g.Apply(Parameters.Default)
 
+  [<CompiledName("Choose")>]
   let choose f = gen (fun p -> Random.next f p.PrngState |> fst)
 
+  [<CompiledName("Elements")>]
   let elements xs =
     Statistics.uniformDiscrete(0, Seq.length xs - 1)
     |> choose
     |> map (fun n -> Seq.nth n xs)
 
+  [<CompiledName("OneOf")>]
   let oneOf gens = elements gens |> bind id
 
   let option (g: Gen<_>) = oneOf ([ map Some g; constant None ])
@@ -99,6 +106,7 @@ module Gen =
   // frequency function is a port of https://github.com/fsharp/FsCheck/blob/f90b83ee2396d00a21b507ee6a09b72ff62f75f1/src/FsCheck/Gen.fs#L142
   // FsCheck is released under the terms of the Revised BSD License.
   // Copyright (c) 2008-2015 Kurt Schelfthout. All rights reserved.
+  [<CompiledName("Frequency")>]
   let frequency xs = 
     let rec pick n xs =
       if Seq.isEmpty xs then invalidArg "xs" "Gen.frequency require non-empty list."
@@ -111,7 +119,9 @@ module Gen =
     |> choose
     |> bind (fun n -> pick n xs)
 
+  [<CompiledName("Tuple2")>]
   let tuple2 g = bind (fun x -> map (fun y -> (x, y)) g) g
+  [<CompiledName("Tuple3")>]
   let tuple3 g = bind (fun x -> bind (fun y -> map (fun z -> (x, y, z)) g) g) g
 
   let listOfLength n g = List.init n (fun _ -> g) |> sequence
@@ -130,12 +140,14 @@ module Gen =
       |> choose
       |> bind (fun k -> listOfLength k g))
 
+  [<CompiledName("ArrayOf")>]
   let arrayOf g =
     sized (fun n ->
       Statistics.uniformDiscrete (0, n)
       |> choose
       |> bind (fun k -> arrayOfLength k g))
 
+  [<CompiledName("IEnumerableOf")>]
   let seqOf g =
     sized (fun n ->
       Statistics.uniformDiscrete (0, n)
@@ -176,12 +188,19 @@ module Gen =
     gen (fun p -> g.Apply({ p with PrngState = Random.variantState n p.PrngState }))
 
   let private chooseChar min max = choose (Statistics.uniformDiscrete (min, max)) |> map char
+
+  [<CompiledName("NumChar")>]
   let numChar = chooseChar 48 57
+  [<CompiledName("AlphaLowerChar")>]
   let alphaLowerChar = chooseChar 97 122
+  [<CompiledName("AlphaUpperChar")>]
   let alphaUpperChar = chooseChar 65 90
+  [<CompiledName("alphaChar")>]
   let alphaChar = frequency [ (1, alphaUpperChar); (9, alphaLowerChar) ]
+  [<CompiledName("AlphaNumChar")>]
   let alphaNumChar = frequency [ (1, numChar); (9, alphaChar) ]
 
+  [<CompiledName("Identifier")>]
   let identifier =
     alphaLowerChar
     |> bind (fun c ->
@@ -205,6 +224,7 @@ module Gen =
       )
       |> suchThat (Seq.forall (fun x -> l |> Seq.exists ((=) x)))
 
+  [<CompiledName("SomeOf")>]
   let someOf l =
     choose (Statistics.uniformDiscrete (0, Seq.length l))
     |> bind (fun x -> pick x l)

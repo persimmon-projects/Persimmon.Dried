@@ -63,6 +63,7 @@
     <Content Include="app.config" />
     <Compile Include="PropExtensions.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="GenExtensions.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">

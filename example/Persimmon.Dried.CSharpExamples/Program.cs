@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FsRandom;
+using Persimmon.Dried.Ext;
 
 // https://github.com/fsharp/FsCheck/blob/980fa9ec57d9899e1ef66edeaeb2bd52d7abb980/examples/FsCheck.CSharpExamples/Program.cs
 
@@ -135,35 +137,35 @@ namespace Persimmon.Dried.CSharpExamples
 
             //-------Test data generators-----------
             //can't be made generic, only in separate method?
-            //Func<int[],Gen<int>> chooseFromList = xs =>
-            //    from i in Gen.Choose(0,xs.Length-1)
-            //    select xs[i];
+            Func<int[], Gen<int>> chooseFromList = xs =>
+                Gen.Choose(StatisticsModule.UniformDiscrete(0, xs.Length - 1))
+                    .Select(i => xs[i]);
             
-            //var chooseBool = Gen.OneOf( Gen.Constant( true), Gen.Constant(false));
+            var chooseBool = Persimmon.Dried.Ext.Gen.OneOf( Gen.Constant( true), Gen.Constant(false));
 
-            ////no tuples in C# until BCL 4.0...can we do better now?
-            //var chooseBool2 = Gen.Frequency(
-            //    new WeightAndValue<Gen<bool>>(2, Gen.Constant(true)),
-            //    new WeightAndValue<Gen<bool>>(1, Gen.Constant(false)));
+            //no tuples in C# until BCL 4.0...can we do better now?
+            var chooseBool2 = Persimmon.Dried.Ext.Gen.Frequency(
+                Tuple.Create(2, Gen.Constant(true)),
+                Tuple.Create(1, Gen.Constant(false)));
 
-            ////the size of test data : see matrix method
+            //the size of test data : see matrix method
 
-            ////generating recursive data types: not so common in C#?
+            //generating recursive data types: not so common in C#?
 
-            //// generating functions:
+            // generating functions:
             //Prop.ForAll((Func<int, int> f, Func<int, int> g, ICollection<int> a) => {
             //                var l1 = a.Select(x => f(g(x)));
             //                var l2 = a.Select(g).Select(f);
             //                return l1.SequenceEqual(l2);
             //            }).QuickCheck();
 
-            ////generators support select, selectmany and where
-            //var gen = from x in Arb.Generate<int>()
-            //          from y in Gen.Choose(5, 10)
-            //          where x > 5
-            //          select new { Fst = x, Snd = y };
+            //generators support select, selectmany and where
+            var gen = Arb.Int.Gen
+                .Where(x => x > 5)
+                .SelectMany(x => Gen.Choose(StatisticsModule.UniformDiscrete(5, 10)
+                    .Select(y => new { Fst = x, Snd = y })));
 
-            ////registering default arbitrary instances
+            //registering default arbitrary instances
             //Arb.Register<MyArbitraries>();
 
             //Prop.ForAll<long>(l => l + 1 > l)
@@ -179,21 +181,14 @@ namespace Persimmon.Dried.CSharpExamples
             Console.ReadKey();
         }
 
-        //public static Gen<T> Matrix<T>(Gen<T> gen)
-        //{
-        //    return Gen.Sized(s => gen.Resize(Convert.ToInt32(Math.Sqrt(s))));
-        //}
+        public static Gen<T> Matrix<T>(Gen<T> gen)
+        {
+            return Persimmon.Dried.Ext.Gen.Sized(s => gen.Resize(Convert.ToInt32(Math.Sqrt(s))));
+        }
 
-        //public class ArbitraryLong : Arbitrary<long>
-        //{
-        //    public override Gen<long> Generator
-        //    {
-        //        get {
-        //            return Gen.Sized(s => Gen.Choose(-s, s))
-        //                .Select(i => Convert.ToInt64(i));
-        //        }
-        //    }
-        //}
+        public static Gen<long> MyLongGen =
+            Persimmon.Dried.Ext.Gen.Sized(s => Gen.Choose(StatisticsModule.UniformDiscrete(-s, s)))
+                .Select(i => Convert.ToInt64(i));
 
         //public class MyArbitraries
         //{
