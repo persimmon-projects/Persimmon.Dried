@@ -108,6 +108,48 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  let set s = {
+    Gen = Gen.listOf s.Gen |> Gen.map Seq.ofList
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  let map key value = {
+    Gen =
+      Gen.size
+      |> Gen.bind (fun n ->
+        Gen.listOfLength n key.Gen
+        |> Gen.bind (fun k ->
+          Gen.listOfLength n value.Gen
+          |> Gen.map (fun v -> List.zip k v |> Map.ofList)))
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  open System.Linq
+  open System.Collections.Generic
+
+  [<CompiledName("List")>]
+  let genericList xs = {
+    Gen = Gen.listOf xs.Gen |> Gen.map Enumerable.ToList
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  [<CompiledName("ICollection")>]
+  let icollection cs = {
+    Gen = (genericList cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  [<CompiledName("Dictionary")>]
+  let dict (key, value) = {
+    Gen = (map key value).Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   [<CompiledName("Char")>]
   let char = {
     Gen = Gen.frequency
@@ -145,6 +187,15 @@ module Arb =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
+
+  [<CompiledName("Func")>]
+  let systemFunc (c, a) =
+    let arb = func c a
+    {
+      Gen = arb.Gen |> Gen.map (fun f -> Func<_, _>(f))
+      Shrinker = Shrink.shrinkAny
+      PrettyPrinter = Pretty.prettyAny
+    }
 
   [<CompiledName("Guid")>]
   let guid = {
