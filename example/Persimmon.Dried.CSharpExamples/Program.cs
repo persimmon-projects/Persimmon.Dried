@@ -54,7 +54,8 @@ namespace Persimmon.Dried.CSharpExamples
         static void Main(string[] args)
         {
 
-            var property = Property.Default.Callback(Runner.createConsoleReporter(100));
+            var callback = Runner.createConsoleReporter(100);
+            var property = Property.Default.Callback(callback);
 
             //A simple example
             property
@@ -159,21 +160,24 @@ namespace Persimmon.Dried.CSharpExamples
             //                return l1.SequenceEqual(l2);
             //            }).QuickCheck();
 
+            var config = new Configuration { Callback = callback };
+
             //generators support select, selectmany and where
             var gen = Arb.Int.Gen
                 .Where(x => x > 5)
                 .SelectMany(x => Gen.Choose(StatisticsModule.UniformDiscrete(5, 10)
                     .Select(y => new { Fst = x, Snd = y })));
 
-            Syntax.Prop.ForAll(MyLongArb, l => l + 1 > l);
-            //    .QuickCheck();
+            Syntax.Prop.ForAll(MyLongArb, l => l + 1 > l)
+                .Run(config);
 
-            //Prop.ForAll<string>(s => true)
-            //    .Check(new Configuration { Name = "Configuration Demo", MaxNbOfTest = 500 });
+            Syntax.Prop.ForAll(Arb.String, s => true)
+                .Run(new Configuration { Name = "Configuration Demo", MaxSize = 500, Callback = config.Callback });
 
-            //Prop.ForAll((IEnumerable<int> a, IEnumerable<int> b) => 
-            //                a.Except(b).Count() <= a.Count())
-            //    .QuickCheck();
+            Syntax.Prop.ForAll(Arb.IEnumerable(Arb.Int), Arb.IEnumerable(Arb.Int),
+                (IEnumerable<int> a, IEnumerable<int> b) =>
+                    a.Except(b).Count() <= a.Count())
+                .Run(config);
 
             Console.ReadKey();
         }
@@ -189,18 +193,5 @@ namespace Persimmon.Dried.CSharpExamples
 
         public static Arbitrary<long> MyLongArb =
             Arbitrary.Create(myLongGen, Shrink.shrinkInt64, PrettyModule.prettyAny);
-
-        //public class MyArbitraries
-        //{
-        //    public static Arbitrary<long> Long() { return new ArbitraryLong(); }
-
-        //    public static Arbitrary<IEnumerable<T>> Enumerable<T>() {
-        //        return Arb.Default.Array<T>().Convert(x => (IEnumerable<T>)x, x => (T[])x);
-        //    }
-
-        //    public static Arbitrary<StringBuilder> StringBuilder() {
-        //        return Arb.Generate<string>().Select(x => new StringBuilder(x)).ToArbitrary();
-        //    }
-        //}
     }
 }
