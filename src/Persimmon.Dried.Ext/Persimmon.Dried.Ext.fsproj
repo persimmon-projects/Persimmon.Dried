@@ -64,6 +64,7 @@
     <Compile Include="PropExtensions.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="GenExtensions.fs" />
+    <Compile Include="ArbitraryExtensions.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">

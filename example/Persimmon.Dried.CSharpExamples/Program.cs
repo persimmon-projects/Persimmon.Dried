@@ -165,10 +165,7 @@ namespace Persimmon.Dried.CSharpExamples
                 .SelectMany(x => Gen.Choose(StatisticsModule.UniformDiscrete(5, 10)
                     .Select(y => new { Fst = x, Snd = y })));
 
-            //registering default arbitrary instances
-            //Arb.Register<MyArbitraries>();
-
-            //Prop.ForAll<long>(l => l + 1 > l)
+            Syntax.Prop.ForAll(MyLongArb, l => l + 1 > l);
             //    .QuickCheck();
 
             //Prop.ForAll<string>(s => true)
@@ -186,9 +183,12 @@ namespace Persimmon.Dried.CSharpExamples
             return Persimmon.Dried.Ext.Gen.Sized(s => gen.Resize(Convert.ToInt32(Math.Sqrt(s))));
         }
 
-        public static Gen<long> MyLongGen =
+        public static Gen<long> myLongGen =
             Persimmon.Dried.Ext.Gen.Sized(s => Gen.Choose(StatisticsModule.UniformDiscrete(-s, s)))
                 .Select(i => Convert.ToInt64(i));
+
+        public static Arbitrary<long> MyLongArb =
+            Arbitrary.Create(myLongGen, Shrink.shrinkInt64, PrettyModule.prettyAny);
 
         //public class MyArbitraries
         //{
