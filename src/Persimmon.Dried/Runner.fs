@@ -123,7 +123,11 @@ module private Impl =
       while not !stop && Option.isNone res && float n < iterations do
         let size = float prms.MinSize + (sizeStep * float (workerIdx + (prms.Workers * (n + d))))
         let propRes = p.Apply({ Size = round size |> int; PrngState = rng })
-        fm <- if List.isEmpty propRes.Collected then fm else  FreqMap.add propRes.Collected fm
+        fm <-
+          if List.isEmpty propRes.Collected then fm
+          else
+            let collected = propRes.Collected |> Seq.distinct |> Seq.toList
+            FreqMap.add collected fm
         match propRes.Status with
         | Undecided ->
           d <- d + 1
