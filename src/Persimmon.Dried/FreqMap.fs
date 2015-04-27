@@ -81,5 +81,6 @@ module FreqMap =
         for (xs, r) in ratios fm do
           if not <| List.isEmpty xs then
             let xs = xs |> List.filter ((<>) null)
-            yield sprintf "%d%% %s" (r * 100.0f |> round |> int) (xs |> Seq.map (fun x -> x.ToString()) |> String.concat ", ")
+            let name = xs |> Seq.map (fun x -> x.ToString()) |> String.concat ", "
+            if name <> "" then yield sprintf "%d%% %s" (r * 100.0f |> round |> int) name
       }))
