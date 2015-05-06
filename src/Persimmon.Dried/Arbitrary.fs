@@ -37,36 +37,57 @@ module Arb =
 
   [<CompiledName("Byte")>]
   let byte = {
-    Gen = Gen.choose (Statistics.uniformDiscrete (int Byte.MinValue, int Byte.MaxValue)) |> Gen.map byte
+    Gen = Gen.choose (ruint8)
     Shrinker = Shrink.shrinkByte
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("UInt16")>]
   let uint16 = {
-    Gen = Gen.choose (Statistics.uniformDiscrete (int UInt16.MinValue, int UInt16.MaxValue)) |> Gen.map uint16
+    Gen = Gen.choose (ruint16)
     Shrinker = Shrink.shrinkUInt16
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  [<CompiledName("UInt32")>]
+  let uint32 = {
+    Gen = Gen.choose (ruint32)
+    Shrinker = Shrink.shrinkUInt32
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  [<CompiledName("UInt64")>]
+  let uint64 = {
+    Gen = Gen.choose (ruint64)
+    Shrinker = Shrink.shrinkUInt64
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("SByte")>]
   let sbyte = {
-    Gen = Gen.choose (Statistics.uniformDiscrete (int SByte.MinValue, int SByte.MaxValue)) |> Gen.map sbyte
+    Gen = Gen.choose rint8
     Shrinker = Shrink.shrinkSbyte
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("Int16")>]
   let int16 = {
-    Gen = Gen.choose (Statistics.uniformDiscrete (int Int16.MinValue, int Int16.MaxValue)) |> Gen.map int16
+    Gen = Gen.choose rint16
     Shrinker = Shrink.shrinkInt16
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("Int")>]
   let int = {
-    Gen = Gen.choose (Statistics.uniformDiscrete (Int32.MinValue, Int32.MaxValue))
+    Gen = Gen.choose rint32
     Shrinker = Shrink.shrinkInt
+    PrettyPrinter = Pretty.prettyAny
+  }
+
+  [<CompiledName("Int64")>]
+  let int64 = {
+    Gen = Gen.choose rint64
+    Shrinker = Shrink.shrinkInt64
     PrettyPrinter = Pretty.prettyAny
   }
 
@@ -173,8 +194,7 @@ module Arb =
   [<CompiledName("DateTime")>]
   let datetime fmt = {
     Gen = gen {
-      //FIXME: use uint64 generator
-      let! l = int.Gen |> Gen.map int64
+      let! l = int64.Gen
       let d = DateTime.MinValue
       return DateTime(d.Ticks + l)
     }
