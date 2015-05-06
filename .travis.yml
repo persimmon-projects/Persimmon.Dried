@@ -1,17 +1,18 @@
-language: objective-c
+language: csharp
+sudo: false
 
 env:
   global:
     - CONFIGURATION="Release"
-  matrix:
-    - MONO_VERSION="3.10.0"
+mono:
+  - 3.12.0
+  - 3.10.0
+solution: Persimmon.Dried.sln
 
 install:
-  - wget "http://download.mono-project.com/archive/${MONO_VERSION}/macos-10-x86/MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg"
-  - sudo installer -pkg "MonoFramework-MDK-${MONO_VERSION}.macos10.xamarin.x86.pkg" -target /
+  - nuget install Persimmon.Console -Pre -OutputDirectory packages -ExcludeVersion
 
 script:
   - xbuild ./Persimmon.Dried.sln /p:Configuration=${CONFIGURATION}
-  - mono --runtime=v4.0 ./.nuget/NuGet.exe Install Persimmon.Console -Pre -OutputDirectory packages -ExcludeVersion
   - mono --runtime=v4.0 ./packages/Persimmon.Console/tools/Persimmon.Console.exe --parallel ./tests/Persimmon.Dried.Tests/bin/${CONFIGURATION}/Persimmon.Dried.Tests.dll ./tests/Persimmon.Dried.CSharp.Tests/bin/${CONFIGURATION}/Persimmon.Dried.CSharp.Tests.dll
 
