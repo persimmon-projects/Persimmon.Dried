@@ -5,7 +5,7 @@ open System.Collections.Generic
 // key type of underlying is obj because 'T avoid equality constraint
 [<Sealed>]
 type FreqMap<'T>(underlying: Dictionary<obj, int>, total: int) =
-  
+
   member __.Total = total
   member internal __.Underlying = underlying
 

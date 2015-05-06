@@ -105,7 +105,7 @@ module private Impl =
       invalidArg "MaxSize" "require: MinSize <= MaxSize"
     elif prms.Workers <= 0 then
       invalidArg "Workers" "require: Workers > 0"
-     
+
   let check name prms (p: Prop) =
 
     assertParams(prms)

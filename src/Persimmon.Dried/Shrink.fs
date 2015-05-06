@@ -81,7 +81,7 @@ module Shrink =
     |> Seq.map g
 
   let private shrinkInt' f g n =
-    
+
     let n = f n
 
     let rec halfs n =

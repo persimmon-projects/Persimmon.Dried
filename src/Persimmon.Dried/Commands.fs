@@ -36,7 +36,7 @@ module Command =
   let nextState state (command: Command<_, _, _>) = command.NextState(state)
   let preCondition state (command: Command<_, _, _>) = command.PreCondition(state)
   let postCondition state result (command: Command<_, _, _>) = command.PostCondition(state, result)
-  
+
   let internal runPC sut (command: Command<'Sut, 'State, 'Result>) =
     let r =
       try
@@ -223,7 +223,7 @@ module Commands =
       | [] -> (s, true)
       | c::cs when c.PreCondition(s) -> cmdsPrecond (c.NextState(s)) cs
       | _ -> (s, false)
-      
+
     let actionsPrecond (ac: Actions<_, _, _>) =
       List.length ac.ParCmds <> 1 && ac.ParCmds |> List.forall(not << List.isEmpty) &&
       commands.InitialPreCondition(ac.S) &&

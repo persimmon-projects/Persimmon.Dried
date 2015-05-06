@@ -56,11 +56,11 @@ run <| Prop.forAll Arb.int prop_LabelBug
 type Smart<'a> = | Smart of int * 'a with
   override x.ToString() = match x with Smart(_, a) -> sprintf "%A" a
   member x.Display = x.ToString()
-    
+
 let smartArb a = {
   Gen = a.Gen |> Gen.map (fun arb -> Smart(0, arb))
   Shrinker = Shrink.apply (fun (Smart(i, x)) ->
-    let ys = Seq.zip {0..Int32.MaxValue} (Shrink.shrink a.Shrinker x) |> Seq.map Smart 
+    let ys = Seq.zip {0..Int32.MaxValue} (Shrink.shrink a.Shrinker x) |> Seq.map Smart
     let i' = Math.Max(0,i-2)
     let rec interleave left right =
       match (left,right) with
@@ -80,8 +80,8 @@ let prop_RevUnit (x:char) = List.rev [x] = [x]
 
 let inline trivial b = Prop.classify(b, "trivial")
 
-let prop_RevApp (x:string) xs = 
-  List.rev (x::xs) = List.rev xs @ [x] 
+let prop_RevApp (x:string) xs =
+  List.rev (x::xs) = List.rev xs @ [x]
   |> trivial (xs = [])
   |> trivial (xs.Length = 1)
 
@@ -93,7 +93,7 @@ let prop_MaxLe (x:float) y = (x <= y) ==> (lazy (max  x y = y))
 //functions that return properties.
 //Prop.forAll (Arb.bool, Arb.int, Arb.char, Arb.int)
 //  (fun b y x z -> if b then (fun q -> y + 1 = z + int q) else (fun q -> q = 10.0)
-//  |> Prop.forAll Arb.float32) 
+//  |> Prop.forAll Arb.float32)
 //|> run
 
 //arrays
@@ -132,12 +132,12 @@ let tuple3 = {
 run <| Prop.forAll (Arb.int, Arb.int, Arb.int, Arb.int, Arb.int, Arb.int, tuple3)
   (fun a b c d e f (g, h, i) -> a > b && b > c && d > e && f > g && e > f && h > i && a > i)
 
-type ADisc = 
-  | First of int 
+type ADisc =
+  | First of int
   | Second of char
   | Third of ADisc
   | Fourth of ADisc []
-    
+
 // TODO: avoid stackoverflow
 //let aDiscArb =
 //  let first = Arb.int.Gen |> Gen.map First
@@ -163,7 +163,7 @@ type ADisc =
 type List<'a> = { list : 'a [] }
 
 //a recursive union type containing a record type
-type Tree<'a> = 
+type Tree<'a> =
   | Leaf of string
   | Branch of List<Tree<'a>>
 

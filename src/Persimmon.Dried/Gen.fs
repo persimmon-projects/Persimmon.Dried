@@ -9,7 +9,7 @@ type GenParameters = {
 }
 
 type Gen<'T> =
-  
+
   abstract member Apply: GenParameters -> 'T
 
 module Gen =
@@ -96,7 +96,7 @@ module Gen =
 
   let option (g: Gen<_>) = oneOf ([ map Some g; constant None ])
 
-  let sequence (gs: Gen<_> list) = 
+  let sequence (gs: Gen<_> list) =
     gen (fun p ->
       (([], p), gs)
       ||> List.fold (fun (rs, p) g -> (apply p g :: rs, Parameters.nextSeed p))
@@ -107,7 +107,7 @@ module Gen =
   // FsCheck is released under the terms of the Revised BSD License.
   // Copyright (c) 2008-2015 Kurt Schelfthout. All rights reserved.
   [<CompiledName("Frequency")>]
-  let frequency xs = 
+  let frequency xs =
     let rec pick n xs =
       if Seq.isEmpty xs then invalidArg "xs" "Gen.frequency require non-empty list."
       else

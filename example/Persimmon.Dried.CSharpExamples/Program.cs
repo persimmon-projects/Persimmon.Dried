@@ -29,7 +29,7 @@ namespace Persimmon.Dried.CSharpExamples
         public static bool IsOrdered<T>(this IEnumerable<T> source)
         {
             //by Jon Skeet
-            //I was too lazy to write it myself, and wondered whether a prettier 
+            //I was too lazy to write it myself, and wondered whether a prettier
             //solution might exist in C# than the one I had in mind.
             //Here's your answer...
             var comparer = Comparer<T>.Default;
@@ -141,7 +141,7 @@ namespace Persimmon.Dried.CSharpExamples
             Func<int[], Gen<int>> chooseFromList = xs =>
                 Gen.Choose(StatisticsModule.UniformDiscrete(0, xs.Length - 1))
                     .Select(i => xs[i]);
-            
+
             var chooseBool = Persimmon.Dried.Ext.Gen.OneOf( Gen.Constant( true), Gen.Constant(false));
 
             //no tuples in C# until BCL 4.0...can we do better now?

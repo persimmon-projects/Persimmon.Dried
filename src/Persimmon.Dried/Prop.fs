@@ -308,10 +308,10 @@ type PropApply =
   static member Instance(PropApply, r) = PropImpl.applyResult r
   static member Instance(PropApply, r) = PropImpl.Persimmon.applyAssertionResult r
   static member Instance(PropApply, r) = PropImpl.Persimmon.applyTestResult r
-  
+
 module PropTypeClass =
 
-  let inline instance (a:^a) (b:^b) =                                                      
+  let inline instance (a:^a) (b:^b) =
     ((^a or ^b) : (static member Instance: ^a * ^b -> Prop) (a, b))
 
 open System.ComponentModel
