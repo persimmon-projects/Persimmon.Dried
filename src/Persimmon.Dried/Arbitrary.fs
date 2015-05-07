@@ -16,6 +16,14 @@ with
     PrettyPrinter = this.PrettyPrinter
   }
 
+[<AutoOpen>]
+module ArbitrarySyntax =
+
+  type GenBuilder with
+    member inline __.Source(arb: Arbitrary<_>) = arb.Gen
+    member inline __.Source(arb: NonShrinkerArbitrary<_>) = arb.Gen
+    member inline __.Source(gen: Gen<_>) = gen
+
 [<RequireQualifiedAccess>]
 module Arb =
 
@@ -194,7 +202,7 @@ module Arb =
   [<CompiledName("DateTime")>]
   let datetime fmt = {
     Gen = gen {
-      let! l = int64.Gen
+      let! l = int64
       let d = DateTime.MinValue
       return DateTime(d.Ticks + l)
     }
@@ -220,17 +228,17 @@ module Arb =
   [<CompiledName("Guid")>]
   let guid = {
     Gen = gen {
-      let! a = int.Gen
-      let! b = int16.Gen
-      let! c = int16.Gen
-      let! d = byte.Gen
-      let! e = byte.Gen
-      let! f = byte.Gen
-      let! g = byte.Gen
-      let! h = byte.Gen
-      let! i = byte.Gen
-      let! j = byte.Gen
-      let! k = byte.Gen
+      let! a = int
+      let! b = int16
+      let! c = int16
+      let! d = byte
+      let! e = byte
+      let! f = byte
+      let! g = byte
+      let! h = byte
+      let! i = byte
+      let! j = byte
+      let! k = byte
       return Guid(a, b, c, d, e, f, g, h, i, j, k)
     }
     Shrinker = Shrink.shrinkAny

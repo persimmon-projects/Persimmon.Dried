@@ -113,9 +113,9 @@ type ARecord = {
 
 let aRecordArb = {
   Gen = gen {
-    let! x = Arb.int.Gen
-    let! y = Arb.int.Gen
-    let! name = Arb.string.Gen
+    let! x = Arb.int
+    let! y = Arb.int
+    let! name = Arb.string
     return { XPos = x; YPos = y; Name = name }
   }
   Shrinker = Shrink.shrinkAny
@@ -224,10 +224,10 @@ type RecordStuff<'a> = {
 
 let bigSize = { prms with MinSize = 100; MaxSize = 100 }
 
-let recordStuffArb a = {
+let recordStuffArb (a: Arbitrary<_>) = {
   Gen = gen {
-    let! yes = Arb.bool.Gen
-    let! name = a.Gen
+    let! yes = Arb.bool
+    let! name = a
     let! nogIets =
       Arb.int.Gen
       |> Gen.bind (fun n ->
@@ -242,13 +242,13 @@ let recordStuffArb a = {
 Runner.run "" bigSize (Prop.forAll (recordStuffArb Arb.string) (fun s -> s.Yes))
 
 type Recursive<'a> = Void | Leaf of 'a | Branch of Recursive<'a> * 'a * Recursive<'a>
-let rec recursiveArb a =
+let rec recursiveArb (a: Arbitrary<_>): Arbitrary<_> =
   let v = Gen.constant Void
   let leaf = a.Gen |> Gen.map Leaf
   let branch = gen {
-    let! l = (recursiveArb a).Gen
-    let! c = a.Gen
-    let! r = (recursiveArb a).Gen
+    let! l = recursiveArb a
+    let! c = a
+    let! r = recursiveArb a
     return Branch(l, c, r)
   }
   {
@@ -270,10 +270,10 @@ let simpleArb =
   let v3 = Gen.constant Void
   let leaf = Arb.int.Gen |> Gen.map Leaf
   let leaf2 = gen {
-    let! s = Arb.string.Gen
-    let! i = Arb.int.Gen
-    let! c = Arb.char.Gen
-    let! f = Arb.float32.Gen
+    let! s = Arb.string
+    let! i = Arb.int
+    let! c = Arb.char
+    let! f = Arb.float32
     return Leaf2(s, i, c, f)
   }
   {
