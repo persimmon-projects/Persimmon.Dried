@@ -151,7 +151,7 @@ module Arb =
   open System.Collections.Generic
 
   [<CompiledName("List")>]
-  let genericList xs = {
+  let resizeArray xs = {
     Gen = Gen.listOf xs.Gen |> Gen.map Enumerable.ToList
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
@@ -159,7 +159,7 @@ module Arb =
 
   [<CompiledName("ICollection")>]
   let icollection cs = {
-    Gen = (genericList cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
+    Gen = (resizeArray cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
