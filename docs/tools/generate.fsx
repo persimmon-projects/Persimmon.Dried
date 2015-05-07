@@ -47,8 +47,8 @@ let layoutRoots = [
 
 let buildReference () =
   let libDirs = [
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta2/lib/net20/")
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.1/lib/net40/")
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta5/lib/net20/")
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.3/lib/net40/")
   ]
   let outputDir = output @@ "reference"
   System.IO.Directory.CreateDirectory(outputDir) |> ignore
