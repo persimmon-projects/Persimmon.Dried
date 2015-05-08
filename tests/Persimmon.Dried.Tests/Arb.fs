@@ -5,7 +5,9 @@ open Persimmon.Dried
 module Arb =
 
   let prop =
-    let undecidedOrPassed = Prop.forAll Arb.bool (fun b -> b ==> lazy true)
+    let undecidedOrPassed =
+      Prop.forAll Arb.bool (fun b -> b ==> lazy true)
+      :> Prop
     {
       Gen =
         Gen.frequency [
@@ -22,7 +24,9 @@ module Arb =
     }
 
   let nonSkippedProp =
-    let undecidedOrPassed = Prop.forAll Arb.bool (fun b -> b ==> lazy true)
+    let undecidedOrPassed =
+      Prop.forAll Arb.bool (fun b -> b ==> lazy true)
+      :> Prop
     {
       Gen =
         Gen.frequency [

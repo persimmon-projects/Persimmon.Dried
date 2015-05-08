@@ -162,6 +162,13 @@ type Prop internal () =
 
   override __.ToString() = "Prop"
 
+type Prop<'T> (sample: 'T, prop: Prop) =
+  inherit Prop()
+  override __.Apply(prms) = prop.Apply(prms)
+  member __.Sample = sample
+  member this.Snoc(v) = Prop<_>((sample, v), this)
+  member this.Map(f) = Prop<_>(f sample, this)
+
 module internal PropImpl =
 
   open PropResult
@@ -203,7 +210,7 @@ module internal PropImpl =
 
   let applyBool b = if b then proved.Value else falsified.Value
 
-  let sizedProp (f: int -> Prop) =
+  let sizedProp (f: int -> #Prop) =
     apply (fun prms -> provedToTrue ((f prms.Size).Apply(prms)))
 
   let all (ps: Prop seq) =
@@ -303,6 +310,7 @@ module internal PropImpl =
 type PropApply =
   | PropApply
   static member Instance(PropApply, p: Prop) = p
+  static member Instance(PropApply, p: Prop<_>) = p :> Prop
   static member Instance(PropApply, f) = PropImpl.apply f
   static member Instance(PropApply, b) = PropImpl.applyBool b
   static member Instance(PropApply, r) = PropImpl.applyResult r
@@ -330,7 +338,8 @@ type PropModule internal () =
     |> PropResult.addArg { Label = ""; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x })
 
   member inline this.forAllNoShrink(arb: NonShrinkerArbitrary<_>) = fun f ->
-    this.forAllNoShrink(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
+    let prop = this.forAllNoShrink(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
+    Prop<_>(Gen.sample arb.Gen, prop)
 
   member __.forAllShrink (g: Gen<_>) (shrink: _ -> _ seq) (f: _ -> _) pp = apply (fun prms ->
     let x = g.Apply(prms)
@@ -370,7 +379,8 @@ type PropModule internal () =
     else shrinker x r 0 x prms)
 
   member inline this.forAll(arb: Arbitrary<_>) = fun f ->
-    this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
+    let prop =this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
+    Prop<_>(Gen.sample arb.Gen, prop)
 
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.exists(g: Gen<_>, pp) = fun f -> apply (fun prms ->

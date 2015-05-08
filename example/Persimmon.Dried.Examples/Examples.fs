@@ -12,7 +12,7 @@ open Persimmon.Dried
 // https://github.com/fsharp/FsCheck/blob/6c71e953aa2b6152cd117357a2d3430e03f51bfb/examples/FsCheck.Examples/Examples.fs
 
 let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleReporter 100 }
-let run p = Runner.run "" prms p
+let run (p: #Prop) = Runner.run "" prms p
 
 type TestEnum =
   | First = 0
@@ -185,12 +185,15 @@ let private idempotent f x = let y = f x in f y = y
 run <| Prop.forAll Arb.string (idempotent (fun (x : string) -> x.ToUpper()))
 
 //-----property combinators------------------
-let inline private withPositiveInteger (p : int -> 'a) = fun n -> n <> 0 ==> lazy (p (abs n))
+let inline private withPositiveInteger (p : int -> 'a) =
+  fun n -> n <> 0 ==> lazy (p (abs n))
 
-let testProp = withPositiveInteger (fun x -> x > 0 |> Prop.classify(true, "bla"))
+let testProp = withPositiveInteger (fun x -> x > 0 |> Prop.classify(true, "bla") |> Prop.generic)
 run <| Prop.forAll Arb.int testProp
 
-let testProp2 = withPositiveInteger ( fun x -> Prop.forAll Arb.int <| withPositiveInteger (fun y -> Prop.apply (x + y > 0)))
+let testProp2 =
+  withPositiveInteger (fun x ->
+    Prop.forAll Arb.int <| withPositiveInteger (fun y -> Prop.apply (x + y > 0) |> Prop.generic))
 run <| Prop.forAll Arb.int testProp2
 
 let blah (s:string) = if s = "" then raise (new System.Exception("foo")) else s.Length > 3

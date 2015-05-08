@@ -214,3 +214,11 @@ module GenTest =
       Prop.forAll (Arb.func CoArbitrary.int (Arb.gen Arb.int), Arb.func CoArbitrary.int (Arb.gen Arb.int), Arb.gen Arb.int) (fun f g m ->
         (m >>= f) >>= g == (m >>= (fun x -> f x >>= g))))
   }
+
+  let ``return sample`` = test {
+    let revrevOrig xs = xs |> List.rev |> List.rev = xs
+    let! xs = property {
+      applyReturn (Prop.forAll (Arb.list Arb.int) revrevOrig)
+    }
+    do! assertPred (revrevOrig xs)
+  }

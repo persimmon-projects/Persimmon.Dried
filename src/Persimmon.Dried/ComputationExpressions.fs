@@ -4,18 +4,20 @@ open System.Diagnostics
 open Persimmon
 open Runner
 
-type PropertiesState = {
+type PropertiesState<'T> = {
   RunnerParams: Parameters
   PrettyParams: PrettyParameters
   Properties: Prop seq
+  Sample: 'T
 }
 
 type PropertiesBuilder(name: string) =
   new() = PropertiesBuilder("")
-  member this.Yield(()) = {
+  member __.Yield(()) = {
     RunnerParams = Parameters.Default
     PrettyParams = Pretty.Parameters.Default
     Properties = Seq.empty
+    Sample = ()
   }
   [<CustomOperation("verbosity")>]
   member __.Verbosity(s, v) =
@@ -44,6 +46,14 @@ type PropertiesBuilder(name: string) =
   [<CustomOperation("apply")>]
   member __.Apply(s, p) =
     { s with Properties = seq { yield! s.Properties; yield p } }
+  [<CustomOperation("applyReturn")>]
+  member __.ApplyReturn(s, p: Prop<'T>) =
+    {
+      RunnerParams = s.RunnerParams
+      PrettyParams = s.PrettyParams
+      Properties = seq { yield! s.Properties; yield p :> Prop }
+      Sample = p.Sample
+    }
   member __.Delay(f: unit -> _) = f
   member __.Run(f) =
     try
@@ -55,7 +65,7 @@ type PropertiesBuilder(name: string) =
         watch.Stop()
         match res.Status with
         | Proved _ | Passed ->
-          Done(meta, NonEmptyList.singleton (AssertionResult.Passed()), watch.Elapsed)
+          Done(meta, NonEmptyList.singleton (AssertionResult.Passed s.Sample), watch.Elapsed)
         | Skipped s ->
           Done(meta, NonEmptyList.singleton (AssertionResult.NotPassed (NotPassedCause.Skipped s)), watch.Elapsed)
         | Failed _

@@ -6,7 +6,7 @@ open UseTestNameByReflection
 type Unit private () =
   static member Value = Unit()
 
-type Property private (state: PropertiesState) =
+type Property private (state: PropertiesState<_>) =
   let property = property
   static member Default = Property(property.Yield())
   member __.Verbosity(value) = Property(property.Verbosity(state, value))

@@ -106,7 +106,7 @@ module private Impl =
     elif prms.Workers <= 0 then
       invalidArg "Workers" "require: Workers > 0"
 
-  let check name prms (p: Prop) =
+  let check name prms (p: #Prop) =
 
     assertParams(prms)
 
@@ -199,9 +199,9 @@ module private Impl =
     if Result.isPassed <| check "" prms p then 0
     else -1
 
-let check prms p = Impl.check "" prms p
-let run name prms p = Impl.run name prms p
-let mainRunner prms p = Impl.mainRunner prms p
+let check prms (p: #Prop) = Impl.check "" prms p
+let run name prms (p: #Prop) = Impl.run name prms p
+let mainRunner prms (p: #Prop) = Impl.mainRunner prms p
 
 let createConsoleReporter verbosity =
   let prettyPrms = { Verbosity = verbosity }
