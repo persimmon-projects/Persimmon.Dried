@@ -41,6 +41,8 @@ type PropExtensions () =
   [<Extension>]
   static member Run(prop, config: Configuration) =
     Runner.run config.Name config.Parameter prop
+  [<Extension>]
+  static member Skip(_: Prop, reason) = Prop.skip reason
 
 [<Extension>]
 type PropModuleExtensions () =
