@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <dependencies>
+      <dependency id="Persimmon.Dried" version="$version$" />
+      <dependency id="FSharp.Core" version="3.1.2.1" />
+    </dependencies>
+    <title>$title$</title>
+    <authors>bleis-tift, Gab-km, pocketberserker</authors>
+    <owners>bleis-tift, Gab-km, pocketberserker</owners>
+    <licenseUrl>https://github.com/persimmon-projects/Persimmon.Dried/tree/$version$/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/persimmon-projects/Persimmon.Dried/$version$/docs/files/images/logo.png</iconUrl>
+    <projectUrl>https://github.com/persimmon-projects/Persimmon.Dried</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Persimmon.Dried.Ext is Persimmon.Dried extensions for C#.</description>
+    <tags>c# test testing</tags>
+  </metadata>
+</package>
