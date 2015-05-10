@@ -1,5 +1,7 @@
 # Persimmon.Dried
 
+[![License][license-image]][license-url]
+
 Persimmon.Dried is a port of [scalacheck](https://github.com/rickynils/scalacheck) for Persimmon.
 
 ## Build status
@@ -18,3 +20,5 @@ Persimmon.Dried is a port of [scalacheck](https://github.com/rickynils/scalachec
 * [Japanese](http://persimmon-projects.github.io/Persimmon.Dried/ja/)
 * [API Reference(English only)](http://persimmon-projects.github.io/Persimmon.Dried/reference/)
 
+[license-url]: https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE
+[license-image]: https://img.shields.io/github/license/persimmon-projects/Persimmon.Dried.svg
