@@ -163,13 +163,13 @@ module Gen =
       let _, y = x.Next64Bits()
       if b then y else x
 
-    let chop n = n % 2
+    let chop n = n % 2L
 
-    let even n = n % 2 = 0
+    let even n = n % 2L = 0L
 
     let chip finished n s = boolVariant (even n) s |> boolVariant finished
 
-    let stop n = n <= 1
+    let stop n = n <= 1L
 
     let rec bigNatVariant n g =
       if stop n then chip true n g
@@ -180,8 +180,8 @@ module Gen =
       else bigNatVariant n g
 
     let variantState n (g: PrngState) =
-      if n >= 1 then natVariant (n - 1) (boolVariant false g)
-      elif n = 0 then natVariant 0 (boolVariant true g)
+      if n >= 1L then natVariant (n - 1L) (boolVariant false g)
+      elif n = 0L then natVariant 0L (boolVariant true g)
       else bigNatVariant -n (boolVariant true g)
 
   let variant n (g: Gen<_>) =
