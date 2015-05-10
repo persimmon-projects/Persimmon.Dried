@@ -245,26 +245,27 @@ let recordStuffArb (a: Arbitrary<_>) = {
 Runner.run "" bigSize (Prop.forAll (recordStuffArb Arb.string) (fun s -> s.Yes))
 
 type Recursive<'a> = Void | Leaf of 'a | Branch of Recursive<'a> * 'a * Recursive<'a>
+let recursiveGen, recursiveGenRef = Gen.createGenForwardedToRef<Recursive<_>> ()
 let rec recursiveArb (a: Arbitrary<_>): Arbitrary<_> =
   let v = Gen.constant Void
   let leaf = a.Gen |> Gen.map Leaf
   let branch = gen {
-    let! l = recursiveArb a
+    let! l = recursiveGen
     let! c = a
-    let! r = recursiveArb a
+    let! r = recursiveGen
     return Branch(l, c, r)
   }
+  recursiveGenRef := Gen.oneOf [ v; leaf; branch ]
   {
-    Gen = Gen.oneOf [ v; leaf; branch ]
+    Gen = recursiveGen
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
 
-// TODO: avoid stackoverflow
-//Runner.run "" bigSize (Prop.forAll (recursiveArb Arb.string) (fun s ->
-//  match s with
-//  | Branch _ -> false
-//  | _ -> true))
+Runner.run "" bigSize (Prop.forAll (recursiveArb Arb.string) (fun s ->
+  match s with
+  | Branch _ -> false
+  | _ -> true))
 
 type Simple = Void | Void2 | Void3 | Leaf of int | Leaf2 of string * int * char * float32
 let simpleArb =

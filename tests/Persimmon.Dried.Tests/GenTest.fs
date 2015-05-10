@@ -222,3 +222,30 @@ module GenTest =
     }
     do! assertPred (revrevOrig xs)
   }
+
+   type Tree =
+     | Node of Tree * Tree
+     | Leaf of int
+
+  let ``avoid stack overflow`` =
+
+    let tree, treeRef = createGenForwardedToRef ()
+    let treeArb = {
+      Gen = tree
+      Shrinker = Shrink.shrinkAny
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    let leaf = Arb.int.Gen |> Gen.map Leaf
+    let node =
+      gen {
+        let! l = tree
+        let! r = tree
+        return Node(l, r)
+      }
+
+    treeRef := Gen.oneOf [ leaf; node ]
+
+    property {
+      apply (Prop.forAll treeArb (fun _ -> true))
+    }

@@ -224,6 +224,11 @@ module Gen =
       )
       |> suchThat (Seq.forall (fun x -> l |> Seq.exists ((=) x)))
 
+  let createGenForwardedToRef<'T> () =
+    let refGen = ref (constant Unchecked.defaultof<'T>)
+    let fwdGen = gen (fun p -> (!refGen).Apply(p))
+    (fwdGen, refGen)
+
   [<CompiledName("SomeOf")>]
   let someOf l =
     choose (Statistics.uniformDiscrete (0, Seq.length l))
