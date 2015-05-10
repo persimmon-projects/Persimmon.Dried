@@ -8,6 +8,11 @@ module CoArbitrary =
 
   let apply a (c: CoArbitrary<_>) = c.Apply(a)
 
+  let contramap (f: 'U -> 'T) (c: CoArbitrary<'T>) =
+    { new CoArbitrary<'U> with
+      member __.Apply(a) = c.Apply(f a)
+    }
+
   let unit = { new CoArbitrary<unit> with
     member __.Apply(_) = id
   }
