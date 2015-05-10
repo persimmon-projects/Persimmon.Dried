@@ -1,5 +1,7 @@
 ﻿namespace Persimmon.Dried
 
+open System.Collections.Concurrent
+
 type Command<'Sut, 'State, 'Result> =
   abstract member Run: 'Sut -> 'Result
   abstract member NextState: 'State -> 'State
@@ -251,7 +253,7 @@ module Commands =
     g |> Gen.suchThat actionsPrecond
 
   let property threadCount maxParComb (commands: Commands<'Sut, 'State>) =
-    let suts = Dictionary<obj, 'State * 'Sut option>()
+    let suts = ConcurrentDictionary<obj, 'State * 'Sut option>()
     let arb = {
       Gen = action threadCount maxParComb commands
       Shrinker = shrinkActions
@@ -260,21 +262,19 @@ module Commands =
     Prop.forAll arb (fun ac ->
       try
         let sutId =
-          lock(suts) (fun () ->
-            let initSuts = [ for (state, o) in suts.Values do match o with None -> yield state | _ -> () ]
-            let runningSuts = [ for (_, o) in suts.Values do match o with Some sut -> yield sut | None -> () ]
-            if commands.CanCreateNewSut(ac.S, initSuts, runningSuts) then
-              let sutId = obj()
-              suts.Add(sutId, (ac.S, None))
-              Some sutId
-            else None)
+          let initSuts = [ for (state, o) in suts.Values do match o with None -> yield state | _ -> () ]
+          let runningSuts = [ for (_, o) in suts.Values do match o with Some sut -> yield sut | None -> () ]
+          if commands.CanCreateNewSut(ac.S, initSuts, runningSuts) then
+            let sutId = obj()
+            suts.GetOrAdd(sutId, (ac.S, None)) |> ignore
+            Some sutId
+          else None
         match sutId with
         | Some id ->
           let sut = commands.NewSut(ac.S)
           let removeSut () =
-            lock(suts) (fun () ->
-            suts.Remove(id) |> ignore
-            commands.DestroySut(sut))
+            suts.TryRemove(id) |> ignore
+            commands.DestroySut(sut)
           let doRun =
             lock(suts) (fun () ->
               if suts.ContainsKey(id) then
