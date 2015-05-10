@@ -260,3 +260,33 @@ module Arb =
     Shrinker = Shrink.shrinkChoice at.Shrinker au.Shrinker
     PrettyPrinter = Pretty.prettyAny
   }
+
+  // port from FsCheck
+
+(*--------------------------------------------------------------------------*\
+**  FsCheck                                                                 **
+**  Copyright (c) 2008-2015 Kurt Schelfthout and contributors.              **  
+**  All rights reserved.                                                    **
+**  https://github.com/kurtschelfthout/FsCheck                              **
+**                                                                          **
+**  This software is released under the terms of the Revised BSD License.   **
+**  See the file License.txt for the full text.                             **
+\*--------------------------------------------------------------------------*)
+
+  let private fraction (a:int) (b:int) (c:int) =
+    double a + double b / (abs (double c) + 1.0)
+
+  let float = {
+    Gen =
+      Gen.frequency [
+        (6, gen {
+          let! a = int
+          let! b = int
+          let! c = int
+          return fraction a b c
+        })
+        (1, Gen.elements [ Double.NaN; Double.NegativeInfinity; Double.PositiveInfinity])
+        (1, Gen.elements [ Double.MaxValue; Double.MinValue; Double.Epsilon])]
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
