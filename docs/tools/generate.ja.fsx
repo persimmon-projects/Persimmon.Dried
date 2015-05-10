@@ -1,4 +1,4 @@
-let referenceBinaries = [ "Persimmon.Dried.dll" ]
+let referenceBinaries = [ "Persimmon.Dried.dll"; "Persimmon.Dried.Ext.dll" ]
 let website = "/Persimmon.Dried/ja"
 let info =
   [ "project-name", "Persimmon.Dried"
@@ -25,11 +25,13 @@ let (@@) path1 path2 = Path.Combine(path1, path2)
 
 #if Release
 let root = website
+let configuration = "Release"
 #else
 let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../output/ja")
+let configuration = "Debug"
 #endif
 
-let bin = __SOURCE_DIRECTORY__ @@ "../../bin"
+let bin = __SOURCE_DIRECTORY__ @@ "../../src/Persimmon.Dried.Ext/bin" @@ configuration
 let content = __SOURCE_DIRECTORY__ @@ "../content/ja"
 let output = __SOURCE_DIRECTORY__ @@ "../output/ja"
 let files = __SOURCE_DIRECTORY__ @@ "../files"

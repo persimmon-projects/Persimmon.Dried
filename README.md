@@ -12,7 +12,8 @@ Persimmon.Dried is a port of [scalacheck](https://github.com/rickynils/scalachec
 
 ## NuGet page link
 
-* Persimmon.Dried [![NuGet Status](http://img.shields.io/nuget/v/Persimmon.Dried.svg?style=flat)](https://www.nuget.org/packages/Persimmon.Dried/)
+* Persimmon.Dried [![NuGet Status](http://img.shields.io/nuget/v/Persimmon.Dried.svg)](https://www.nuget.org/packages/Persimmon.Dried/)
+* Persimmon.Dried.Ext [![NuGet Status](http://img.shields.io/nuget/v/Persimmon.Dried.Ext.svg)](https://www.nuget.org/packages/Persimmon.Dried/)
 
 ## Documentation
 

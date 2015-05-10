@@ -1,4 +1,4 @@
-let referenceBinaries = [ "Persimmon.Dried.dll" ]
+let referenceBinaries = [ "Persimmon.Dried.dll"; "Persimmon.Dried.Ext.dll" ]
 let website = "/Persimmon.Dried"
 let githubLink = "https://github.com/persimmon-projects/Persimmon.Dried"
 let info =
@@ -31,7 +31,7 @@ let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../output")
 let configuration = "Debug"
 #endif
 
-let bin = __SOURCE_DIRECTORY__ @@ "../../src/Persimmon.Dried/bin" @@ configuration
+let bin = __SOURCE_DIRECTORY__ @@ "../../src/Persimmon.Dried.Ext/bin" @@ configuration
 let content = __SOURCE_DIRECTORY__ @@ "../content"
 let output = __SOURCE_DIRECTORY__ @@ "../output"
 let files = __SOURCE_DIRECTORY__ @@ "../files"
@@ -47,21 +47,20 @@ let layoutRoots = [
 
 let buildReference () =
   let libDirs = [
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta5/lib/net20/")
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta6/lib/net20/")
     Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.3/lib/net40/")
   ]
   let outputDir = output @@ "reference"
   System.IO.Directory.CreateDirectory(outputDir) |> ignore
-  for lib in referenceBinaries do
-    MetadataFormat.Generate(
-      __SOURCE_DIRECTORY__ @@  "../../src" @@ Path.GetFileNameWithoutExtension(lib) @@ "bin" @@ configuration @@ lib,
-      outputDir,
-      layoutRoots,
-      parameters = ("root", root)::info,
-      libDirs = libDirs,
-      sourceRepo = githubLink @@ "tree/master",
-      sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
-      publicOnly = true)
+  MetadataFormat.Generate(
+    referenceBinaries |> List.map (fun lib -> __SOURCE_DIRECTORY__ @@  "../../src" @@ Path.GetFileNameWithoutExtension(lib) @@ "bin" @@ configuration @@ lib),
+    outputDir,
+    layoutRoots,
+    parameters = ("root", root)::info,
+    libDirs = libDirs,
+    sourceRepo = githubLink @@ "tree/master",
+    sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ ".." @@ "src",
+    publicOnly = true)
 
 let buildDocumentation () =
   let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.AllDirectories)
