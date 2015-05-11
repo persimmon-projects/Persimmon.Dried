@@ -38,7 +38,7 @@
 
 <p>Run the command below:</p>
 
-<table class="pre"><tr><td><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion
+<table class="pre"><tr><td class="snippet"><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion
 </pre></td></tr></table>
 
 <h2>The first step</h2>
@@ -77,7 +77,7 @@
 </pre>
 
 
-<table class="pre"><tr><td><pre><code>+ OK, passed 100 tests.</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 
 <p>When a property fails, Persimmon.Dried displays a counterexample.
 For example, You define</p>
@@ -96,9 +96,7 @@ For example, You define</p>
 </pre>
 
 
-<table class="pre"><tr><td><pre><code>! Falsified after 4 passed tests.
-&gt; ARG_0: [ "0";  "-1"; ]
-&gt; ARG_0_ORIGINAL: [ "956117759";  "-1844608640"; ]</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 
 <h2>Checking properties by using Persimmon.Console</h2>
 
@@ -115,21 +113,21 @@ For example, You define</p>
 
 <p>Run the command below:</p>
 
-<table class="pre"><tr><td><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Console -OutputDirectory packages -ExcludeVersion
-.\packages\Persimmon.Console\tools\Persimmon.Console.exe &#39;input file path&#39;
+<table class="pre"><tr><td class="snippet"><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Console -OutputDirectory packages -ExcludeVersion
+.\packages\Persimmon.Console\tools\Persimmon.Console.exe 'input file path'
 </pre></td></tr></table>
 
 </div>
 
 <div class="tip" id="fs1">namespace Persimmon</div>
 <div class="tip" id="fs2">namespace Persimmon.Dried</div>
-<div class="tip" id="fs3">val ( reverse and reverse is original ) : Prop<br /><br />Full name: GettingStarted.( reverse and reverse is original )</div>
-<div class="tip" id="fs4">Multiple items<br />val Prop : PropModule<br /><br />Full name: Persimmon.Dried.Syntax.Prop<br /><br />--------------------<br />type Prop =<br />&#160;&#160;private new : unit -&gt; Prop<br />&#160;&#160;abstract member Apply : GenParameters -&gt; PropResult<br />&#160;&#160;override ToString : unit -&gt; string<br /><br />Full name: Persimmon.Dried.Prop</div>
-<div class="tip" id="fs5">member PropModule.forAll : arb:Arbitrary&lt;&#39;a0&gt; -&gt; ((&#39;a0 -&gt; &#39;a1) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; * a6:Arbitrary&lt;&#39;a5&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5 -&gt; &#39;a6) -&gt; Prop) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; * a6:Arbitrary&lt;&#39;a5&gt; * a7:Arbitrary&lt;&#39;a6&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5 -&gt; &#39;a6 -&gt; &#39;a7) -&gt; Prop) (requires member Instance)</div>
+<div class="tip" id="fs3">val ( reverse and reverse is original ) : Prop&lt;int32 list&gt;<br /><br />Full name: GettingStarted.( reverse and reverse is original )</div>
+<div class="tip" id="fs4">Multiple items<br />val Prop : PropModule<br /><br />Full name: Persimmon.Dried.Syntax.Prop<br /><br />--------------------<br />type Prop =<br />&#160;&#160;private new : unit -&gt; Prop<br />&#160;&#160;abstract member Apply : GenParameters -&gt; PropResult<br />&#160;&#160;override ToString : unit -&gt; string<br /><br />Full name: Persimmon.Dried.Prop<br /><br />--------------------<br />type Prop&lt;&#39;T&gt; =<br />&#160;&#160;inherit Prop<br />&#160;&#160;new : sample:&#39;T * prop:Prop -&gt; Prop&lt;&#39;T&gt;<br />&#160;&#160;override Apply : prms:GenParameters -&gt; PropResult<br />&#160;&#160;member Map : f:(&#39;T -&gt; &#39;a1) -&gt; Prop&lt;&#39;a1&gt;<br />&#160;&#160;member Snoc : v:&#39;a1 -&gt; Prop&lt;&#39;T * &#39;a1&gt;<br />&#160;&#160;member Sample : &#39;T<br /><br />Full name: Persimmon.Dried.Prop&lt;_&gt;<br /><br />--------------------<br />new : sample:&#39;T * prop:Prop -&gt; Prop&lt;&#39;T&gt;</div>
+<div class="tip" id="fs5">member PropModule.forAll : arb:Arbitrary&lt;&#39;a0&gt; -&gt; ((&#39;a0 -&gt; &#39;a1) -&gt; Prop&lt;&#39;a0&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2) -&gt; Prop&lt;&#39;a0 * &#39;a1&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3) -&gt; Prop&lt;&#39;a0 * &#39;a1 * &#39;a2&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4) -&gt; Prop&lt;&#39;a0 * &#39;a1 * &#39;a2 * &#39;a3&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5) -&gt; Prop&lt;&#39;a0 * &#39;a1 * &#39;a2 * &#39;a3 * &#39;a4&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; * a6:Arbitrary&lt;&#39;a5&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5 -&gt; &#39;a6) -&gt; Prop&lt;&#39;a0 * &#39;a1 * &#39;a2 * &#39;a3 * &#39;a4 * &#39;a5&gt;) (requires member Instance)<br />member PropModule.forAll : a1:Arbitrary&lt;&#39;a0&gt; * a2:Arbitrary&lt;&#39;a1&gt; * a3:Arbitrary&lt;&#39;a2&gt; * a4:Arbitrary&lt;&#39;a3&gt; * a5:Arbitrary&lt;&#39;a4&gt; * a6:Arbitrary&lt;&#39;a5&gt; * a7:Arbitrary&lt;&#39;a6&gt; -&gt; ((&#39;a0 -&gt; &#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;a4 -&gt; &#39;a5 -&gt; &#39;a6 -&gt; &#39;a7) -&gt; Prop&lt;&#39;a0 * &#39;a1 * &#39;a2 * &#39;a3 * &#39;a4 * &#39;a5 * &#39;a6&gt;) (requires member Instance)</div>
 <div class="tip" id="fs6">module Arb<br /><br />from Persimmon.Dried</div>
 <div class="tip" id="fs7">val list : a:Arbitrary&lt;&#39;a&gt; -&gt; Arbitrary&lt;&#39;a list&gt;<br /><br />Full name: Persimmon.Dried.Arb.list</div>
-<div class="tip" id="fs8">val int : Arbitrary&lt;int&gt;<br /><br />Full name: Persimmon.Dried.Arb.int</div>
-<div class="tip" id="fs9">val xs : int list</div>
+<div class="tip" id="fs8">val int : Arbitrary&lt;int32&gt;<br /><br />Full name: Persimmon.Dried.Arb.int</div>
+<div class="tip" id="fs9">val xs : int32 list</div>
 <div class="tip" id="fs10">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
 <div class="tip" id="fs11">val rev : list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.rev</div>
 <div class="tip" id="fs12">val prms : Runner.Parameters<br /><br />Full name: GettingStarted.prms</div>
@@ -137,8 +135,8 @@ For example, You define</p>
 <div class="tip" id="fs14">Multiple items<br />module Parameters<br /><br />from Persimmon.Dried.Runner<br /><br />--------------------<br />type Parameters =<br />&#160;&#160;{MinSuccessfulTests: int;<br />&#160;&#160;&#160;MinSize: int;<br />&#160;&#160;&#160;MaxSize: int;<br />&#160;&#160;&#160;PrngState: PrngState;<br />&#160;&#160;&#160;Workers: int;<br />&#160;&#160;&#160;Callback: TestCallback;<br />&#160;&#160;&#160;MaxDiscardRatio: float32;}<br /><br />Full name: Persimmon.Dried.Runner.Parameters</div>
 <div class="tip" id="fs15">val Default : Runner.Parameters<br /><br />Full name: Persimmon.Dried.Runner.Parameters.Default</div>
 <div class="tip" id="fs16">val createConsoleReporter : verbosity:int -&gt; Runner.TestCallback<br /><br />Full name: Persimmon.Dried.Runner.createConsoleReporter</div>
-<div class="tip" id="fs17">val run : prms:Runner.Parameters -&gt; p:Prop -&gt; unit<br /><br />Full name: Persimmon.Dried.Runner.run</div>
-<div class="tip" id="fs18">val ( failure example ) : Prop<br /><br />Full name: GettingStarted.( failure example )</div>
+<div class="tip" id="fs17">val run : name:string -&gt; prms:Runner.Parameters -&gt; p:#Prop -&gt; unit<br /><br />Full name: Persimmon.Dried.Runner.run</div>
+<div class="tip" id="fs18">val ( failure example ) : Prop&lt;int32 list&gt;<br /><br />Full name: GettingStarted.( failure example )</div>
 <div class="tip" id="fs19">namespace FsRandom</div>
 <div class="tip" id="fs20">val ( binding example ) : TestCase&lt;unit&gt;<br /><br />Full name: GettingStarted.( binding example )</div>
 <div class="tip" id="fs21">val property : name:string -&gt; PropertiesBuilder<br /><br />Full name: Persimmon.Dried.Syntax.property</div>
@@ -156,7 +154,7 @@ For example, You define</p>
             <h4>Persimmon.Dried</h4>
             <ul class="list-unstyled">
               <li><a href="https://www.nuget.org/packages/Persimmon.Dried/"><img src="http://img.shields.io/nuget/v/Persimmon.Dried.svg?style=flat" /></a></li>
-              <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE">License (MIT)</a></li>
+              <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE"><img src="https://img.shields.io/github/license/persimmon-projects/Persimmon.Dried.svg" /></a></li>
               <!--
               <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
               -->
