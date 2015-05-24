@@ -15,6 +15,7 @@ type Result = {
   Succeeded: int
   Discarded: int
   FreqMap: FreqMap<obj list>
+  CurrentPrngState: PrngState
   Time: int64
 }
 
@@ -64,11 +65,14 @@ module Result =
 
   open Pretty
   open Helper
+  open Nessos.FsPickler
+  open System
 
   let prettyTestRes res = Pretty(fun prms ->
     let labels ls =
       if Set.isEmpty ls then ""
       else "> Labels of failing property: " -/ (ls |> Set.map (fun x -> x.ToString()) |> String.concat newLine)
+    let state s = "> seed: " + PrngState.toBinaryString s
     let s =
       match res.Status with
       | Proved(args) -> "OK, proved property." -/ (PropArg.pretty args |> pretty prms)
@@ -78,14 +82,17 @@ module Result =
         "Falsified after " + string res.Succeeded + " passed tests."
           -/ labels l
           -/ (PropArg.pretty args |> pretty prms)
+          -/ state res.CurrentPrngState
       | Exhausted ->
         "Gave up after only "+ string res.Succeeded + " passed tests. " + string res.Discarded + " tests were discarded."
+          -/ state res.CurrentPrngState
       | PropException(args,e,l) ->
         "Exception raised on property evaluation."
           -/ labels l
           -/ (PropArg.pretty args |> pretty prms)
           -/ "> Exception: "
           + (prettyExn e |> pretty prms)
+          -/ state res.CurrentPrngState
     let t = if prms.Verbosity <= 1 then "" else "Elapsed time: " + prettyTime res.Time
     s -/ t -/ pretty prms (FreqMap.pretty res.FreqMap)
   )
@@ -133,42 +140,43 @@ module private Impl =
           d <- d + 1
           prms.Callback.OnPropEval("", workerIdx, n, d)
           if n + d > prms.MinSuccessfulTests && 1.0f + float32 prms.Workers * prms.MaxDiscardRatio * float32 n < float32 d then
-            res <- Some { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+            res <- Some { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
         | True ->
           n <- n + 1
           prms.Callback.OnPropEval("", workerIdx, n, d)
         | Proof ->
           n <- n + 1
-          res <- Some { Status = Proved propRes.Args; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+          res <- Some { Status = Proved propRes.Args; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
           stop := true
         | False ->
-          res <- Some { Status = Failed(propRes.Args, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+          res <- Some { Status = Failed(propRes.Args, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
           stop := true
         | Exception e ->
-          res <- Some { Status = PropException(propRes.Args, e, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+          res <- Some { Status = PropException(propRes.Args, e, propRes.Labels); Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
           stop := true
         | PropStatus.Skipped s ->
-          res <- Some { Status = Skipped s; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+          res <- Some { Status = Skipped s; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
           stop := true
         rng <- rng.Next64Bits() |> snd
       match res with
       | None ->
-        if prms.MaxDiscardRatio * float32 n > float32 d then { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
-        else { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; Time = 0L }
+        if prms.MaxDiscardRatio * float32 n > float32 d then
+          { Status = Passed; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
+        else { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
       | Some res -> res
 
     let merge r1 r2 =
-      let { Status = st1; Succeeded = s1; Discarded = d1; FreqMap = fm1; Time = _ } = r1
-      let { Status = st2; Succeeded = s2; Discarded = d2; FreqMap = fm2; Time = _ } = r2
+      let { Status = st1; Succeeded = s1; Discarded = d1; FreqMap = fm1; CurrentPrngState = se1; Time = _ } = r1
+      let { Status = st2; Succeeded = s2; Discarded = d2; FreqMap = fm2; CurrentPrngState = se2; Time = _ } = r2
       if st1 <> Passed && st1 <> Exhausted then
-        { Status = st1; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
+        { Status = st1; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; CurrentPrngState = se1; Time = 0L }
       elif st2 <> Passed && st2 <> Exhausted then
-        { Status = st2; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
+        { Status = st2; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; CurrentPrngState = se2; Time = 0L }
       else
         if s1 + s2 >= prms.MinSuccessfulTests && prms.MaxDiscardRatio * float32 (s1 + s2) >= float32 (d1 + d2) then
-          { Status = Passed; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
+          { Status = Passed; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; CurrentPrngState = se1; Time = 0L }
         else
-          { Status = Exhausted; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; Time = 0L }
+          { Status = Exhausted; Succeeded = s1 + s2; Discarded = d1 + d2; FreqMap = FreqMap.append fm1 fm2; CurrentPrngState = se2; Time = 0L }
 
     let watch = Stopwatch.StartNew()
 
@@ -179,7 +187,7 @@ module private Impl =
           let fs = [ 0 .. prms.Workers ] |> List.map (fun idx -> async {
             return workerFun idx
           })
-          let zeroRes = { Status = Passed; Succeeded = 0; Discarded = 0; FreqMap = FreqMap.empty; Time = 0L }
+          let zeroRes = { Status = Passed; Succeeded = 0; Discarded = 0; FreqMap = FreqMap.empty; CurrentPrngState = prms.PrngState; Time = 0L }
           async {
             let! l = Async.Parallel fs
             return Seq.fold merge zeroRes l
