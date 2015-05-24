@@ -49,6 +49,7 @@ let buildReference () =
   let libDirs = [
     Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0-beta6/lib/net20/")
     Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.3/lib/net40/")
+    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsPickler.1.2.2/lib/net40/")
   ]
   let outputDir = output @@ "reference"
   System.IO.Directory.CreateDirectory(outputDir) |> ignore
