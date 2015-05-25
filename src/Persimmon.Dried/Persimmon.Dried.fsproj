@@ -64,6 +64,9 @@
     <Compile Include="Gen.fs" />
     <Compile Include="Shrink.fs" />
     <Compile Include="Pretty.fs" />
+    <Compile Include="Func.fs" />
+    <Compile Include="Fun.fs" />
+    <Compile Include="ToFunc.fs" />
     <Compile Include="CoArbitrary.fs" />
     <Compile Include="Arbitrary.fs" />
     <Compile Include="Prop.fs" />
