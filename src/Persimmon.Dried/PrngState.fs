@@ -9,7 +9,8 @@ let ofBinary bin =
   binary.UnPickle<PrngState>(bin)
 
 let ofBinaryString (bin: string) =
-  Text.Encoding.ASCII.GetBytes(bin)
+  bin.Split([|'-'; ' '|])
+  |> Array.map (fun x -> Convert.ToByte(x, 16))
   |> ofBinary
 
 let toBinary (state: PrngState) =

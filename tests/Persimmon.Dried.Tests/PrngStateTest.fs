@@ -29,14 +29,19 @@ module SeedTest =
       | PropException(_, e, _) -> Exception e
     { Status = status; Args = []; Labels = Set.empty; Collected = [] }
 
-  let ``serialize and deserialize`` =
-    let p s =
-      let prms = { Runner.Parameters.Default with PrngState = s }
-      Prop.forAll Arb.int (fun i -> i >= 0)
-      |> Runner.check prms
-      |> toPropResult
-      |> Prop.apply
-    property {
-      apply (Prop.forAll arb (fun s ->
-        p (PrngState.toBinary s |> PrngState.ofBinary) == p s))
-    }
+  let prop s =
+    let prms = { Runner.Parameters.Default with PrngState = s }
+    Prop.forAll Arb.int (fun i -> i >= 0)
+    |> Runner.check prms
+    |> toPropResult
+    |> Prop.apply
+
+  let ``serialize and deserialize`` = property {
+    apply (Prop.forAll arb (fun s ->
+      prop (PrngState.toBinary s |> PrngState.ofBinary) == prop s))
+  }
+
+  let ``serialize and deserialize string`` = property {
+    apply (Prop.forAll arb (fun s ->
+      prop (PrngState.toBinaryString s |> PrngState.ofBinaryString) == prop s))
+  }
