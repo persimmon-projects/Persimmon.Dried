@@ -72,7 +72,7 @@ module Result =
     let labels ls =
       if Set.isEmpty ls then ""
       else "> Labels of failing property: " -/ (ls |> Set.map (fun x -> x.ToString()) |> String.concat newLine)
-    let state s = "> seed: " + PrngState.toBinaryString s
+    let state s = "> current random state: " + PrngState.toBinaryString s
     let s =
       match res.Status with
       | Proved(args) -> "OK, proved property." -/ (PropArg.pretty args |> pretty prms)
