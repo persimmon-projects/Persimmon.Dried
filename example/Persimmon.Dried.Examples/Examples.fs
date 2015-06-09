@@ -138,25 +138,25 @@ type ADisc =
   | Third of ADisc
   | Fourth of ADisc []
 
-// TODO: avoid stackoverflow
-//let aDiscArb =
-//  let first = Arb.int.Gen |> Gen.map First
-//  let second = Arb.char.Gen |> Gen.map Second
-//  let rec third () = gen () |> Gen.map Third
-//  and fourth () = Gen.arrayOf (gen ()) |> Gen.map Fourth
-//  and gen () = Gen.oneOf [ first; second; third (); fourth () ]
-//  {
-//    Gen = gen ()
-//    Shrinker = Shrink.shrinkAny
-//    PrettyPrinter = Pretty.prettyAny
-//  }
+let adiscGen, adiscGenRef = Gen.createGenForwardedToRef<ADisc> ()
+let aDiscArb =
+  let first = Arb.int.Gen |> Gen.map First
+  let second = Arb.char.Gen |> Gen.map Second
+  let third = adiscGen |> Gen.map Third
+  let fourth = Gen.arrayOf adiscGen |> Gen.map Fourth
+  adiscGenRef := Gen.oneOf [ first; second; third; fourth ]
+  {
+    Gen = adiscGen
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
 
-//run <| Prop.forAll aDiscArb (fun d ->
-//  match d with
-//  |First i -> i = 2
-//  | Second c -> true
-//  | Third _ -> true
-//  | Fourth _ -> raise <| InvalidOperationException())
+run <| Prop.forAll aDiscArb (fun d ->
+  match d with
+  | First i -> i = 2
+  | Second _ -> true
+  | Third _ -> true
+  | Fourth _ -> raise <| InvalidOperationException())
 
 //-----------ReflectArbitrary tests------------------------
 //a record type containing an array type
@@ -214,7 +214,7 @@ let prop_Exc =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
-  Prop.forAll (arb Arb.string) (fun s -> failwith "error"; true)
+  Prop.forAll (arb Arb.string) (fun _-> failwith "error"; true)
 Runner.run "prop_Exc" prms prop_Exc
 
 
