@@ -303,4 +303,36 @@ run (Prop.forAll (Arb.option Arb.int) (fun opt ->
 let prop_RevId' (xs:list<int>) (x:int) = if (xs.Length > 2) && (x > 10) then false else true
 run (Prop.forAll (Arb.list Arb.int, Arb.int) prop_RevId')
 
+type Ordering = | LT | EQ | GT
+
+let arbOrdering = {
+  Gen = Gen.oneOf ([LT; EQ; GT] |> List.map Gen.constant)
+  Shrinker = Shrink.shrinkAny
+  PrettyPrinter = Pretty.prettyAny
+}
+
+let coArbOrdering = { new CoArbitrary<Ordering> with
+  member __.Apply(t) =
+    match t with
+    | GT -> Gen.variant 0L
+    | EQ -> Gen.variant 1L
+    | LT -> Gen.variant 2L
+}
+
+printfn "set example1"
+(Arb.func coArbOrdering Arb.bool).Gen
+|> Gen.infinite Gen.Parameters.Default
+|> Seq.map (fun f -> [EQ; GT; LT] |> List.map (fun a -> (a, f a)))
+|> Seq.distinct
+|> Seq.take (2 * 2 * 2)
+|> Seq.iter (printfn "%A")
+
+printfn "set example1"
+(Arb.func coArbOrdering arbOrdering).Gen
+|> Gen.infinite Gen.Parameters.Default
+|> Seq.map (fun f -> [EQ; GT; LT] |> List.map (fun a -> (a, f a)))
+|> Seq.distinct
+|> Seq.take (3 * 3 * 3)
+|> Seq.iter (printfn "%A")
+
 Console.ReadKey() |> ignore

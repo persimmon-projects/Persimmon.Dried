@@ -234,6 +234,8 @@ module Gen =
     choose (Statistics.uniformDiscrete (0, Seq.length l))
     |> bind (fun x -> pick x l)
 
+  let infinite p (g: Gen<'T>) = Seq.unfold (fun p -> Some(g.Apply(p), Parameters.nextSeed p)) p
+
 type GenBuilder internal () =
   member __.Return(x) = Gen.constant x
   member __.ReturnFrom(g: Gen<_>) = g
