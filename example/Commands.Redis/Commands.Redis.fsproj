@@ -64,11 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CloudStructures">
-      <HintPath>..\..\packages\CloudStructures.1.0.0\lib\CloudStructures.dll</HintPath>
+      <HintPath>..\..\packages\CloudStructures.1.1.0\lib\CloudStructures.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.1.2.2\lib\net45\FsPickler.dll</HintPath>
+      <HintPath>..\..\packages\FsPickler.1.2.21\lib\net45\FsPickler.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsRandom">
@@ -76,7 +76,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Jil">
-      <HintPath>..\..\packages\Jil.2.7.2\lib\net45\Jil.dll</HintPath>
+      <HintPath>..\..\packages\Jil.2.10.0\lib\net45\Jil.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
@@ -84,7 +84,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Persimmon">
-      <HintPath>..\..\packages\Persimmon.1.0.0-beta6\lib\net20\Persimmon.dll</HintPath>
+      <HintPath>..\..\packages\Persimmon.1.0.0-beta8\lib\net20\Persimmon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sigil">
@@ -92,7 +92,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis">
-      <HintPath>..\..\packages\StackExchange.Redis.1.0.394\lib\net45\StackExchange.Redis.dll</HintPath>
+      <HintPath>..\..\packages\StackExchange.Redis.1.0.450\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -104,8 +104,9 @@
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

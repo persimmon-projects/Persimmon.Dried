@@ -74,7 +74,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.1.2.2\lib\net40\FsPickler.dll</HintPath>
+      <HintPath>..\..\packages\FsPickler.1.2.21\lib\net40\FsPickler.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsRandom">
@@ -83,7 +83,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Persimmon">
-      <HintPath>..\..\packages\Persimmon.1.0.0-beta6\lib\net20\Persimmon.dll</HintPath>
+      <HintPath>..\..\packages\Persimmon.1.0.0-beta8\lib\net20\Persimmon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -94,6 +94,8 @@
       <Project>{39471e01-a873-4ad4-baae-19c82118f467}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
