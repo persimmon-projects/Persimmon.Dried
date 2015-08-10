@@ -12,7 +12,7 @@ module SeedTest =
       Gen = Gen.oneOf [ Gen.constant Gen.Parameters.Default.PrngState ]
       Shrinker = Shrink.shrinkAny
       PrettyPrinter = fun s -> Pretty(fun _ ->
-        let xml = FsPickler.CreateXml()
+        let xml = FsPickler.CreateXmlSerializer()
         xml.PickleToString(s))
     }
     

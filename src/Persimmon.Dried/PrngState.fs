@@ -5,7 +5,7 @@ open FsRandom
 open Nessos.FsPickler
 
 let ofBinary bin =
-  let binary = FsPickler.CreateBinary()
+  let binary = FsPickler.CreateBinarySerializer()
   binary.UnPickle<PrngState>(bin)
 
 let ofBinaryString (bin: string) =
@@ -14,7 +14,7 @@ let ofBinaryString (bin: string) =
   |> ofBinary
 
 let toBinary (state: PrngState) =
-  let binary = FsPickler.CreateBinary()
+  let binary = FsPickler.CreateBinarySerializer()
   binary.Pickle state
 
 let toBinaryString (state: PrngState) =
