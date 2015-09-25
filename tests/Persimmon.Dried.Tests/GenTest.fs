@@ -207,11 +207,11 @@ module GenTest =
 
   let ``monad laws`` = property {
     apply ("first law" @|
-      Prop.forAll (Arb.func CoArbitrary.int (Arb.gen Arb.int), Arb.int) (fun f x ->
+      Prop.forAll (Arb.func CoArb.int (Arb.gen Arb.int), Arb.int) (fun f x ->
         (constant x) >>= f == f x))
     apply ("second law" @| Prop.forAll (Arb.gen Arb.int) (fun x -> x >>= constant == x))
     apply ("third law" @|
-      Prop.forAll (Arb.func CoArbitrary.int (Arb.gen Arb.int), Arb.func CoArbitrary.int (Arb.gen Arb.int), Arb.gen Arb.int) (fun f g m ->
+      Prop.forAll (Arb.func CoArb.int (Arb.gen Arb.int), Arb.func CoArb.int (Arb.gen Arb.int), Arb.gen Arb.int) (fun f g m ->
         (m >>= f) >>= g == (m >>= (fun x -> f x >>= g))))
   }
 

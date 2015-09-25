@@ -4,7 +4,7 @@ type CoArbitrary<'T> =
   abstract member Apply : 'T -> (Gen<'U> -> Gen<'U>)
 
 [<RequireQualifiedAccess>]
-module CoArbitrary =
+module CoArb =
 
   let apply a (c: CoArbitrary<_>) = c.Apply(a)
 

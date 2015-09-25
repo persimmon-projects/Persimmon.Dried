@@ -156,7 +156,7 @@ namespace Persimmon.Dried.CSharpExamples
             var config = new Configuration { Callback = callback };
 
             // generating functions:
-            Syntax.Prop.ForAll(Arb.Func(CoArbitrary.Int, Arb.Int), Arb.Func(CoArbitrary.Int, Arb.Int), Arb.ICollection(Arb.Int),
+            Syntax.Prop.ForAll(Arb.Func(CoArb.Int, Arb.Int), Arb.Func(CoArb.Int, Arb.Int), Arb.ICollection(Arb.Int),
                 (f, g, a) => {
                     var l1 = a.Select(x => f(g(x)));
                     var l2 = a.Select(g).Select(f);
