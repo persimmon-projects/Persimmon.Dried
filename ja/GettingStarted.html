@@ -38,63 +38,51 @@
 
 <p>以下のコマンドを実行しましょう。</p>
 
-<table class="pre"><tr><td class="snippet"><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion
-</pre></td></tr></table>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Dried -OutputDirectory tools -ExcludeVersion
+</code></pre></td></tr></table>
 
 <h2>はじめの一歩</h2>
 
 <p>fsx ファイルを開き、次のように始めます。</p>
 
-<pre class="fssnip">
-<span class="prep">#r</span> <span class="s">&quot;Persimmon&quot;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;Persimmon&quot;</span>
 <span class="prep">#r</span> <span class="s">&quot;Persimmon.Dried&quot;</span>
 
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Persimmon</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Persimmon</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">Dried</span>
-</pre>
-
+</code></pre>
 
 <p><code>Prop.forAll</code> 関数、 <code>Arbitrary</code> インスタンス、関数を使って性質を書けます。</p>
 
-<pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="i">xs</span> <span class="k">-&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="i">xs</span> <span class="k">-&gt;</span>
   <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="f">rev</span> (<span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="f">rev</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="i">xs</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">xs</span>
 )
-</pre>
-
+</code></pre>
 
 <h2>性質の確認</h2>
 
 <p>F# インタラクティブ上にこの定義をロードして、起動してみましょう。</p>
 
-<pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">prms</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="t">Parameters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">Default</span> <span class="k">with</span> <span class="i">Callback</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="f">createConsoleReporter</span> <span class="n">1</span> }
-</pre>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="i">prms</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="t">Parameters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs15', 21)" onmouseover="showTip(event, 'fs15', 21)" class="i">Default</span> <span class="k">with</span> <span class="i">Callback</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="f">createConsoleReporter</span> <span class="n">1</span> }
+</code></pre>
 
-
-<pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span>
-</pre>
-
+<pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">``reverse and reverse is original``</span>
+</code></pre>
 
 <table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 
 <p>性質が失敗したとき、 Persimmon.Dried は判例を表示します。
 例えば,</p>
 
-<pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">``failure example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 30)" onmouseover="showTip(event, 'fs5', 30)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 31)" onmouseover="showTip(event, 'fs6', 31)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 33)" onmouseover="showTip(event, 'fs6', 33)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 34)" onmouseover="showTip(event, 'fs8', 34)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 35)" onmouseover="showTip(event, 'fs9', 35)" class="i">xs</span> <span class="k">-&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="i">``failure example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 30)" onmouseover="showTip(event, 'fs5', 30)" class="f">forAll</span> (<span onmouseout="hideTip(event, 'fs6', 31)" onmouseover="showTip(event, 'fs6', 31)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="f">list</span> <span onmouseout="hideTip(event, 'fs6', 33)" onmouseover="showTip(event, 'fs6', 33)" class="t">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 34)" onmouseover="showTip(event, 'fs8', 34)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 35)" onmouseover="showTip(event, 'fs9', 35)" class="i">xs</span> <span class="k">-&gt;</span>
   <span onmouseout="hideTip(event, 'fs10', 36)" onmouseover="showTip(event, 'fs10', 36)" class="t">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs11', 37)" onmouseover="showTip(event, 'fs11', 37)" class="f">rev</span> <span onmouseout="hideTip(event, 'fs9', 38)" onmouseover="showTip(event, 'fs9', 38)" class="i">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 39)" onmouseover="showTip(event, 'fs9', 39)" class="i">xs</span>
 )
-</pre>
-
+</code></pre>
 
 <p>を定義し、性質を確認してみましょう。</p>
 
-<pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span>
-</pre>
-
+<pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs13', 40)" onmouseover="showTip(event, 'fs13', 40)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 41)" onmouseover="showTip(event, 'fs17', 41)" class="f">run</span> <span onmouseout="hideTip(event, 'fs12', 42)" onmouseover="showTip(event, 'fs12', 42)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="i">``failure example``</span>
+</code></pre>
 
 <table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 
@@ -102,20 +90,18 @@
 
 <p>プロジェクトを作成し、<code>property</code> コンピュテーション式を使ってテストを書きます。</p>
 
-<pre class="fssnip">
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs19', 44)" onmouseover="showTip(event, 'fs19', 44)" class="i">FsRandom</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs19', 44)" onmouseover="showTip(event, 'fs19', 44)" class="i">FsRandom</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 45)" onmouseover="showTip(event, 'fs20', 45)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="f">property</span> <span class="s">&quot;binding example&quot;</span> {
   <span onmouseout="hideTip(event, 'fs22', 47)" onmouseover="showTip(event, 'fs22', 47)" class="k">apply</span> <span onmouseout="hideTip(event, 'fs3', 48)" onmouseover="showTip(event, 'fs3', 48)" class="i">``reverse and reverse is original``</span>
 }
-</pre>
-
+</code></pre>
 
 <p>以下のコマンドを実行しましょう。</p>
 
-<table class="pre"><tr><td class="snippet"><pre lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Console -OutputDirectory packages -ExcludeVersion
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="powershell">.\.nuget\NuGet.exe Install Persimmon.Console -OutputDirectory packages -ExcludeVersion
 .\packages\Persimmon.Console\tools\Persimmon.Console.exe 'input file path'
-</pre></td></tr></table>
+</code></pre></td></tr></table>
 
 </div>
 
@@ -155,9 +141,7 @@
             <ul class="list-unstyled">
               <li><a href="https://www.nuget.org/packages/Persimmon.Dried/"><img src="http://img.shields.io/nuget/v/Persimmon.Dried.svg?style=flat" /></a></li>
               <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE"><img src="https://img.shields.io/github/license/persimmon-projects/Persimmon.Dried.svg" /></a></li>
-              <!--
               <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/RELEASE_NOTES.md">リリースノート</a></li>
-              -->
             </ul>
           </div>
 
@@ -179,6 +163,7 @@
             <h4>関連プロジェクト</h4>
             <ul class="list-unstyled">
               <li><a href="http://persimmon-projects.github.io/Persimmon/ja/">Persimmon</a></li>
+              <li><a href="https://github.com/persimmon-projects/FAKE.Persimmon">FAKE.Persimmon</a></li>
             </ul>
           </div>
         </div>
