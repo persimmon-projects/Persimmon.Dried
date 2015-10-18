@@ -55,7 +55,7 @@ F# インタラクティブ上にこの定義をロードして、起動して�
 let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleReporter 1 }
 
 (*** define-output: revRevIsOriginal ***)
-Runner.run prms ``reverse and reverse is original``
+Runner.run "" prms ``reverse and reverse is original``
 
 (*** include-output: revRevIsOriginal ***)
 
@@ -77,7 +77,7 @@ let ``failure example`` = Prop.forAll (Arb.list Arb.int) (fun xs ->
 *)
 
 (*** define-output: failureExample ***)
-Runner.run prms ``failure example``
+Runner.run "" prms ``failure example``
 
 (*** include-output: failureExample ***)
 
