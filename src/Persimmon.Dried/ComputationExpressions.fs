@@ -58,7 +58,7 @@ type PropertiesBuilder(name: string) =
   member __.Run(f) =
     try
       let s = f ()
-      let meta = { Name = name; Parameters = [] }
+      let meta = { Name = Some name; Parameters = [] }
       let body () =
         let watch = Stopwatch.StartNew()
         let res = s.Properties |> PropImpl.all |> check s.RunnerParams
@@ -77,4 +77,4 @@ type PropertiesBuilder(name: string) =
           Error(meta, [e], [v], watch.Elapsed)
       TestCase(meta, body)
     with e ->
-      TestCase.makeError name [] e
+      TestCase.makeError (Some name) [] e

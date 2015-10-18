@@ -4,7 +4,7 @@
     <id>$id$</id>
     <version>$version$</version>
     <dependencies>
-      <dependency id="Persimmon" version="$version$" />
+      <dependency id="Persimmon" version="1.0.0" />
       <dependency id="FsRandom" version="1.3.3" />
       <dependency id="FsPickler" version="1.5.2" />
     </dependencies>
