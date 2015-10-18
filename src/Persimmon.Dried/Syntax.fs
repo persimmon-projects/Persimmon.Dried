@@ -146,7 +146,7 @@ module Syntax =
   let inline (@|) s p = instance PropApply p |> Prop.map (fun r -> { r with Labels = Set.add s r.Labels })
   let inline (|@) p s = s @| p
 
-  let property name = PropertiesBuilder(name)
+  let property (name: string) = PropertiesBuilder(name)
 
   module UseTestNameByReflection =
     let property = PropertiesBuilder()

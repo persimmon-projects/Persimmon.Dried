@@ -11,8 +11,9 @@ type PropertiesState<'T> = {
   Sample: 'T
 }
 
-type PropertiesBuilder(name: string) =
-  new() = PropertiesBuilder("")
+type PropertiesBuilder private (name: string option) =
+  new() = PropertiesBuilder(None)
+  new(name: string) = PropertiesBuilder(Some name)
   member __.Yield(()) = {
     RunnerParams = Parameters.Default
     PrettyParams = Pretty.Parameters.Default
@@ -58,7 +59,7 @@ type PropertiesBuilder(name: string) =
   member __.Run(f) =
     try
       let s = f ()
-      let meta = { Name = Some name; Parameters = [] }
+      let meta = { Name = name; Parameters = [] }
       let body () =
         let watch = Stopwatch.StartNew()
         let res = s.Properties |> PropImpl.all |> check s.RunnerParams
@@ -77,4 +78,4 @@ type PropertiesBuilder(name: string) =
           Error(meta, [e], [v], watch.Elapsed)
       TestCase(meta, body)
     with e ->
-      TestCase.makeError (Some name) [] e
+      TestCase.makeError name [] e
