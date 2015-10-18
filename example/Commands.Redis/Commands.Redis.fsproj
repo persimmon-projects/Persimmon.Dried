@@ -64,11 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CloudStructures">
-      <HintPath>..\..\packages\CloudStructures.1.1.0\lib\CloudStructures.dll</HintPath>
+      <HintPath>..\..\packages\CloudStructures.1.2.0\lib\CloudStructures.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.1.4.0\lib\net45\FsPickler.dll</HintPath>
+      <HintPath>..\..\packages\FsPickler.1.5.2\lib\net45\FsPickler.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsRandom">
@@ -92,7 +92,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis">
-      <HintPath>..\..\packages\StackExchange.Redis.1.0.450\lib\net45\StackExchange.Redis.dll</HintPath>
+      <HintPath>..\..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
