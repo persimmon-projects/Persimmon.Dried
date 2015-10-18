@@ -55,7 +55,7 @@ We load this definition in F# interactive and then invoke.
 let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleReporter 1 }
 
 (*** define-output: revRevIsOriginal ***)
-Runner.run prms ``reverse and reverse is original``
+Runner.run "" prms ``reverse and reverse is original``
 
 (*** include-output: revRevIsOriginal ***)
 
@@ -77,7 +77,7 @@ and check property
 *)
 
 (*** define-output: failureExample ***)
-Runner.run prms ``failure example``
+Runner.run "" prms ``failure example``
 
 (*** include-output: failureExample ***)
 
