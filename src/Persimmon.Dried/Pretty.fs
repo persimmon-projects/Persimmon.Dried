@@ -5,7 +5,7 @@ open System
 [<Sealed>]
 type Pretty(p: PrettyParameters -> string) =
   member __.Apply(prms) = p prms
-  member __.Map(f: string -> string) = Pretty(fun prms -> f (p prms))
+  member __.Map(f: string -> string) = Pretty(f << p)
   member inline __.Select(f: Func<string, string>) = __.Map(fun x -> f.Invoke(x))
   member __.Bind(f: string -> Pretty) = Pretty(fun prms -> (f (p prms)).Apply(prms))
   member inline __.SelectMany(f: Func<string, Pretty>) = __.Bind(fun x -> f.Invoke(x))

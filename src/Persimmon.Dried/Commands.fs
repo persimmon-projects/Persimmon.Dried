@@ -141,7 +141,7 @@ module Commands =
       match memo.TryGetValue((s, css)), css with
       | ((true, states), _) -> states
       | (_, []) -> [s]
-      | (_, cs :: []) ->
+      | (_, [cs]) ->
         [
           cs
           |> Seq.truncate (List.length cs - 1)
@@ -212,7 +212,7 @@ module Commands =
   let private action threadCount maxParComb (commands: Commands<_, _>) =
 
     let sizedCmds (s: 'State) (sz: int) =
-      let l = List.init sz (fun _ -> ())
+      let l = List.init sz ignore
       (Gen.constant (s, []), l)
       ||> List.fold (fun g () -> gen {
         let! s0, cs = g

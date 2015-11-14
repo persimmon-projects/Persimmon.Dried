@@ -270,7 +270,7 @@ module internal PropImpl =
     let prop = f t
     prop.Apply(prms) |> PropResult.collect t)
 
-  let collect t (prop: Prop) = apply (fun prms -> prop.Apply(prms) |> PropResult.collect t)
+  let collect t (prop: Prop) = apply (prop.Apply >> PropResult.collect t)
 
   let classify c ifTrue (prop: Prop) : Prop = if c then collect ifTrue prop else collect () prop
 

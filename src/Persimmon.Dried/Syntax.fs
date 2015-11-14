@@ -36,28 +36,28 @@ module Syntax =
     member __.atLeastOne ps = PropImpl.atLeastOne ps
     member __.secure p = PropImpl.secure p
     member inline this.forAllNoShrink(g1, g2) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink g2 (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink g2))
         .Snoc(Gen.sample g2.Gen)
     member inline this.forAllNoShrink(g1, g2, g3: NonShrinkerArbitrary<_>) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3) (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink (g2, g3)))
         .Snoc(Gen.sample g2.Gen)
         .Snoc(Gen.sample g3.Gen)
         .Map(function (((a, b), c)) -> (a, b, c))
     member inline this.forAllNoShrink(g1, g2, g3, g4) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4) (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink (g2, g3, g4)))
         .Snoc(Gen.sample g2.Gen)
         .Snoc(Gen.sample g3.Gen)
         .Snoc(Gen.sample g4.Gen)
         .Map(function (((a, b), c), d) -> (a, b, c, d))
     member inline this.forAllNoShrink(g1, g2, g3, g4, g5) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4, g5) (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink (g2, g3, g4, g5)))
         .Snoc(Gen.sample g2.Gen)
         .Snoc(Gen.sample g3.Gen)
         .Snoc(Gen.sample g4.Gen)
         .Snoc(Gen.sample g5.Gen)
         .Map(function ((((a, b), c), d), e) -> (a, b, c, d, e))
     member inline this.forAllNoShrink(g1, g2, g3, g4, g5, g6) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4, g5, g6) (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink (g2, g3, g4, g5, g6)))
         .Snoc(Gen.sample g2.Gen)
         .Snoc(Gen.sample g3.Gen)
         .Snoc(Gen.sample g4.Gen)
@@ -65,7 +65,7 @@ module Syntax =
         .Snoc(Gen.sample g6.Gen)
         .Map(function (((((a, b), c), d), e), f) -> (a, b, c, d, e, f))
     member inline this.forAllNoShrink(g1, g2, g3, g4, g5, g6, g7) = fun f ->
-      (this.forAllNoShrink g1 (fun t -> this.forAllNoShrink (g2, g3, g4, g5, g6, g7) (f t)))
+      (this.forAllNoShrink g1 (f >> this.forAllNoShrink (g2, g3, g4, g5, g6, g7)))
         .Snoc(Gen.sample g2.Gen)
         .Snoc(Gen.sample g3.Gen)
         .Snoc(Gen.sample g4.Gen)
@@ -74,28 +74,28 @@ module Syntax =
         .Snoc(Gen.sample g7.Gen)
         .Map(function ((((((a, b), c), d), e), f), g) -> (a, b, c, d, e, f, g))
     member inline this.forAll(a1, a2) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll a2 (f t)))
+      (this.forAll a1 (f >> this.forAll a2))
         .Snoc(Gen.sample a2.Gen)
     member inline this.forAll(a1, a2, a3) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll (a2, a3) (f t)))
+      (this.forAll a1 (f >> this.forAll (a2, a3)))
         .Snoc(Gen.sample a2.Gen)
         .Snoc(Gen.sample a3.Gen)
         .Map(function (((a, b), c)) -> (a, b, c))
     member inline this.forAll(a1, a2, a3, a4) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll (a2, a3, a4) (f t)))
+      (this.forAll a1 (f >> this.forAll (a2, a3, a4)))
         .Snoc(Gen.sample a2.Gen)
         .Snoc(Gen.sample a3.Gen)
         .Snoc(Gen.sample a4.Gen)
         .Map(function (((a, b), c), d) -> (a, b, c, d))
     member inline this.forAll(a1, a2, a3, a4, a5) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5) (f t)))
+      (this.forAll a1 (f >> this.forAll (a2, a3, a4, a5)))
         .Snoc(Gen.sample a2.Gen)
         .Snoc(Gen.sample a3.Gen)
         .Snoc(Gen.sample a4.Gen)
         .Snoc(Gen.sample a5.Gen)
         .Map(function ((((a, b), c), d), e) -> (a, b, c, d, e))
     member inline this.forAll(a1, a2, a3, a4, a5, a6) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6) (f t)))
+      (this.forAll a1 (f >> this.forAll (a2, a3, a4, a5, a6)))
         .Snoc(Gen.sample a2.Gen)
         .Snoc(Gen.sample a3.Gen)
         .Snoc(Gen.sample a4.Gen)
@@ -103,7 +103,7 @@ module Syntax =
         .Snoc(Gen.sample a6.Gen)
         .Map(function (((((a, b), c), d), e), f) -> (a, b, c, d, e, f))
     member inline this.forAll(a1, a2, a3, a4, a5, a6, a7) = fun f ->
-      (this.forAll a1 (fun t -> this.forAll (a2, a3, a4, a5, a6, a7) (f t)))
+      (this.forAll a1 (f >> this.forAll (a2, a3, a4, a5, a6, a7)))
         .Snoc(Gen.sample a2.Gen)
         .Snoc(Gen.sample a3.Gen)
         .Snoc(Gen.sample a4.Gen)

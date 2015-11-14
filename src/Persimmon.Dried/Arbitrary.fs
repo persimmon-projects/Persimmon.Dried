@@ -265,7 +265,7 @@ module Arb =
 
 (*--------------------------------------------------------------------------*\
 **  FsCheck                                                                 **
-**  Copyright (c) 2008-2015 Kurt Schelfthout and contributors.              **  
+**  Copyright (c) 2008-2015 Kurt Schelfthout and contributors.              **
 **  All rights reserved.                                                    **
 **  https://github.com/kurtschelfthout/FsCheck                              **
 **                                                                          **

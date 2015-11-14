@@ -56,7 +56,7 @@ module Gen =
             p <- Parameters.nextSeed p
             x <- apply p g
           if n = 0 then None else Some x)
-    sized(fun n -> inner 0 (max 1 n))
+    sized(max 1 >> inner 0)
 
   let suchThat f (g: Gen<_>) = gen (fun p ->
     let mutable g2 = suchThatOption f g
