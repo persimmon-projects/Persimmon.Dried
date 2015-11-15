@@ -148,5 +148,7 @@ module Syntax =
 
   let property (name: string) = PropertiesBuilder(name)
 
+  let arbitrary = ArbitraryBuilder()
+
   module UseTestNameByReflection =
     let property = PropertiesBuilder()

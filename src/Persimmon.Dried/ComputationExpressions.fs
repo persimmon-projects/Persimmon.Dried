@@ -79,3 +79,33 @@ type PropertiesBuilder private (name: string option) =
       TestCase(meta, body)
     with e ->
       TestCase.makeError name [] e
+
+type ArbitraryBuilder internal () =
+  let returnAny g = {
+    Gen = g
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+  member __.Return(x) = x |> Gen.constant |> returnAny
+  member __.ReturnFrom(a: Arbitrary<_>) = a
+  member __.Bind(x, f: _ -> Arbitrary<_>) =
+    x.Gen
+    |> Gen.bind (f >> Gen.constant)
+    |> Gen.sample
+  member __.Source(g: Gen<_>) = returnAny g
+  member __.Source((g, s)) = {
+    Gen = g
+    Shrinker = s
+    PrettyPrinter = Pretty.prettyAny
+  }
+  member __.Source((g, p)) = {
+    Gen = g
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = p
+  }
+  member __.Source((g, s, p)) = {
+    Gen = g
+    Shrinker = s
+    PrettyPrinter = p
+  }
+  member __.Source(a: Arbitrary<_>) = a.Gen
