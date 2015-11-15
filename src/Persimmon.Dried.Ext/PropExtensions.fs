@@ -85,23 +85,23 @@ type PropModuleExtensions () =
   static member ForAll(prop: PropModule, a1, a2, f: Func<_, _, bool>) =
     prop.forAll a1 (fun t1 -> prop.forAll a2 (fun t2 -> f.Invoke(t1, t2)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3: Arbitrary<_>, f: Func<_, _, _, bool>) =
+  static member ForAll(prop: PropModule, a1, a2, a3: IArbitrary<_>, f: Func<_, _, _, bool>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3) (fun t2 t3 -> f.Invoke(t1, t2, t3)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3, a4: Arbitrary<_>, f: Func<_, _, _, _, bool>) =
+  static member ForAll(prop: PropModule, a1, a2, a3, a4: IArbitrary<_>, f: Func<_, _, _, _, bool>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4) (fun t2 t3 t4 -> f.Invoke(t1, t2, t3, t4)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3, a4, a5: Arbitrary<_>, f: Func<_, _, _, _, _, bool>) =
+  static member ForAll(prop: PropModule, a1, a2, a3, a4, a5: IArbitrary<_>, f: Func<_, _, _, _, _, bool>) =
     prop.forAll a1 (fun t1 ->prop.forAll (a2, a3, a4, a5) (fun t2 t3 t4 t5 ->
       f.Invoke(t1, t2, t3, t4, t5)))
   [<Extension>]
   static member ForAll
-    (prop: PropModule, a1, a2, a3, a4, a5, a6: Arbitrary<_>, f: Func<_, _, _, _, _, _, bool>) =
+    (prop: PropModule, a1, a2, a3, a4, a5, a6: IArbitrary<_>, f: Func<_, _, _, _, _, _, bool>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4, a5, a6) (fun t2 t3 t4 t5 t6 ->
       f.Invoke(t1, t2, t3, t4, t5, t6)))
   [<Extension>]
   static member ForAll
-    (prop: PropModule, a1, a2, a3, a4, a5, a6, a7: Arbitrary<_>, f: Func<_, _, _, _, _, _, _, bool>) =
+    (prop: PropModule, a1, a2, a3, a4, a5, a6, a7: IArbitrary<_>, f: Func<_, _, _, _, _, _, _, bool>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4, a5, a6, a7) (fun t2 t3 t4 t5 t6 t7 ->
       f.Invoke(t1, t2, t3, t4, t5,t6, t7)))
   [<Extension>]
@@ -150,22 +150,22 @@ type PropModuleExtensions () =
   static member ForAll(prop: PropModule, a1, a2, f: Func<_, _, Prop>) =
     prop.forAll a1 (fun t1 -> prop.forAll a2 (fun t2 -> f.Invoke(t1, t2)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3: Arbitrary<_>, f: Func<_, _, _, Prop>) =
+  static member ForAll(prop: PropModule, a1, a2, a3: IArbitrary<_>, f: Func<_, _, _, Prop>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3) (fun t2 t3 -> f.Invoke(t1, t2, t3)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3, a4: Arbitrary<_>, f: Func<_, _, _, _, Prop>) =
+  static member ForAll(prop: PropModule, a1, a2, a3, a4: IArbitrary<_>, f: Func<_, _, _, _, Prop>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4) (fun t2 t3 t4 -> f.Invoke(t1, t2, t3, t4)))
   [<Extension>]
-  static member ForAll(prop: PropModule, a1, a2, a3, a4, a5: Arbitrary<_>, f: Func<_, _, _, _, _, Prop>) =
+  static member ForAll(prop: PropModule, a1, a2, a3, a4, a5: IArbitrary<_>, f: Func<_, _, _, _, _, Prop>) =
     prop.forAll a1 (fun t1 ->prop.forAll (a2, a3, a4, a5) (fun t2 t3 t4 t5 ->
       f.Invoke(t1, t2, t3, t4, t5)))
   [<Extension>]
   static member ForAll
-    (prop: PropModule, a1, a2, a3, a4, a5, a6: Arbitrary<_>, f: Func<_, _, _, _, _, _, Prop>) =
+    (prop: PropModule, a1, a2, a3, a4, a5, a6: IArbitrary<_>, f: Func<_, _, _, _, _, _, Prop>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4, a5, a6) (fun t2 t3 t4 t5 t6 ->
       f.Invoke(t1, t2, t3, t4, t5, t6)))
   [<Extension>]
   static member ForAll
-    (prop: PropModule, a1, a2, a3, a4, a5, a6, a7: Arbitrary<_>, f: Func<_, _, _, _, _, _, _, Prop>) =
+    (prop: PropModule, a1, a2, a3, a4, a5, a6, a7: IArbitrary<_>, f: Func<_, _, _, _, _, _, _, Prop>) =
     prop.forAll a1 (fun t1 -> prop.forAll (a2, a3, a4, a5, a6, a7) (fun t2 t3 t4 t5 t6 t7 ->
       f.Invoke(t1, t2, t3, t4, t5,t6, t7)))

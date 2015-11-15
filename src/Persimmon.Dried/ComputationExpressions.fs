@@ -88,7 +88,7 @@ type ArbitraryBuilder internal () =
   }
   member __.Return(x) = x |> Gen.constant |> returnAny
   member __.ReturnFrom(a: Arbitrary<_>) = a
-  member __.Bind(x, f: _ -> Arbitrary<_>) =
+  member __.Bind(x: Arbitrary<_>, f: _ -> Arbitrary<_>) =
     x.Gen
     |> Gen.bind (f >> Gen.constant)
     |> Gen.sample
@@ -108,4 +108,3 @@ type ArbitraryBuilder internal () =
     Shrinker = s
     PrettyPrinter = p
   }
-  member __.Source(a: Arbitrary<_>) = a.Gen

@@ -186,7 +186,7 @@ module GenTest =
   }
 
   let suchThatArb = {
-    Gen = Arb.string.Gen |> suchThat ((<>) "") |> suchThat (fun s -> not <| s.Contains(","))
+    Gen = Arb.string.NonNull.Gen |> suchThat ((<>) "") |> suchThat (fun s -> not <| s.Contains(","))
     Shrinker = Shrink.shrinkString
     PrettyPrinter = Pretty.prettyString
   }

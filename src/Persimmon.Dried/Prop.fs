@@ -378,7 +378,7 @@ type PropModule internal () =
       r |> PropResult.addArg { Label = ""; Arg = x; Shrinks = 0; OrigArg = x; PrettyArg = pp x; PrettyOrigArg = pp x }
     else shrinker x r 0 x prms)
 
-  member inline this.forAll(arb: Arbitrary<_>) = fun f ->
+  member inline this.forAll(arb: IArbitrary<_>) = fun f ->
     let prop =this.forAllShrink arb.Gen (Shrink.shrink arb.Shrinker) (f >> PropTypeClass.instance PropApply) arb.PrettyPrinter
     Prop<_>(Gen.sample arb.Gen, prop)
 
@@ -398,7 +398,7 @@ type PropModule internal () =
   member inline this.exists (arb: NonShrinkerArbitrary<_>) = fun f ->
     this.exists(arb.Gen, arb.PrettyPrinter) (f >> PropTypeClass.instance PropApply)
 
-  member inline this.exists (arb: Arbitrary<_>) = fun f -> this.exists arb.NonShrinker f
+  member inline this.exists (arb: IArbitrary<_>) = fun f -> this.exists arb.NonShrinker f
 
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   member __.collect(t, prop) = PropImpl.collect t prop

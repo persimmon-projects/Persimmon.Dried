@@ -209,7 +209,7 @@ let inline private withNonEmptyString p =
 run (withNonEmptyString blah)
 
 let prop_Exc =
-  let arb a = {
+  let arb (a: IArbitrary<_>) = {
     Gen = Gen.resize 100 a.Gen
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
@@ -227,7 +227,7 @@ type RecordStuff<'a> = {
 
 let bigSize = { prms with MinSize = 100; MaxSize = 100 }
 
-let recordStuffArb (a: Arbitrary<_>) = {
+let recordStuffArb (a: IArbitrary<_>) = {
   Gen = gen {
     let! yes = Arb.bool
     let! name = a
@@ -246,7 +246,7 @@ Runner.run "" bigSize (Prop.forAll (recordStuffArb Arb.string) (fun s -> s.Yes))
 
 type Recursive<'a> = Void | Leaf of 'a | Branch of Recursive<'a> * 'a * Recursive<'a>
 let recursiveGen, recursiveGenRef = Gen.createGenForwardedToRef<Recursive<_>> ()
-let rec recursiveArb (a: Arbitrary<_>): Arbitrary<_> =
+let rec recursiveArb (a: IArbitrary<_>): Arbitrary<_> =
   let v = Gen.constant Void
   let leaf = a.Gen |> Gen.map Leaf
   let branch = gen {

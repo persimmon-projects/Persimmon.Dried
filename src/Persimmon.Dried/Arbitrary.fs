@@ -1,9 +1,23 @@
 ﻿namespace Persimmon.Dried
 
-type NonShrinkerArbitrary<'T> = {
+type NonShrinkerArbitrary<'T> =
+  abstract member Gen: Gen<'T>
+  abstract member PrettyPrinter: ('T -> Pretty)
+
+type private NonShrinkerArbitraryImpl<'T> = {
   Gen: Gen<'T>
   PrettyPrinter: 'T -> Pretty
 }
+with
+  interface NonShrinkerArbitrary<'T> with
+    member this.Gen = this.Gen
+    member this.PrettyPrinter = this.PrettyPrinter
+
+type IArbitrary<'T> =
+  abstract member Gen: Gen<'T>
+  abstract member Shrinker: Shrink<'T>
+  abstract member PrettyPrinter: ('T -> Pretty)
+  abstract member NonShrinker: NonShrinkerArbitrary<'T>
 
 type Arbitrary<'T> = {
   Gen: Gen<'T>
@@ -11,16 +25,39 @@ type Arbitrary<'T> = {
   PrettyPrinter: 'T -> Pretty
 }
 with
-  member this.NonShrinker: NonShrinkerArbitrary<'T> = {
-    Gen = this.Gen
-    PrettyPrinter = this.PrettyPrinter
-  }
+  member this.NonShrinker: NonShrinkerArbitrary<'T> =
+    {
+      NonShrinkerArbitraryImpl.Gen = this.Gen
+      PrettyPrinter = this.PrettyPrinter
+    }
+    :> NonShrinkerArbitrary<'T>
+  interface IArbitrary<'T> with
+    member this.Gen = this.Gen
+    member this.Shrinker = this.Shrinker
+    member this.PrettyPrinter = this.PrettyPrinter
+    member this.NonShrinker = this.NonShrinker
+
+type AllowNullArbitrary<'T when 'T : null>(arb: IArbitrary<'T>) =
+  member __.NonNull = arb
+  member __.Gen =
+    Gen.frequency [
+      (9, arb.Gen)
+      (1, Gen.constant null)
+    ]
+  member __.Shrinker = arb.Shrinker
+  member __.PrettyPrinter = arb.PrettyPrinter
+  member __.NonShrinker = arb.NonShrinker
+  interface IArbitrary<'T> with
+    member this.Gen = this.Gen
+    member this.Shrinker = this.Shrinker
+    member this.PrettyPrinter = this.PrettyPrinter
+    member this.NonShrinker = this.NonShrinker
 
 [<AutoOpen>]
 module ArbitrarySyntax =
 
   type GenBuilder with
-    member inline __.Source(arb: Arbitrary<_>) = arb.Gen
+    member inline __.Source(arb: IArbitrary<_>) = arb.Gen
     member inline __.Source(arb: NonShrinkerArbitrary<_>) = arb.Gen
     member inline __.Source(gen: Gen<_>) = gen
 
@@ -111,39 +148,45 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
-  let list a = {
+  let list (a: IArbitrary<_>) = {
     Gen = Gen.listOf a.Gen
     Shrinker = Shrink.shrinkList a.Shrinker
     PrettyPrinter = Pretty.prettyList
   }
 
-  let nonEmptyList a = {
+  let nonEmptyList (a: IArbitrary<_>) = {
     Gen = Gen.nonEmptyListOf a.Gen
     Shrinker = Shrink.shrinkList a.Shrinker
     PrettyPrinter = Pretty.prettyList
   }
 
   [<CompiledName("IEnumerable")>]
-  let seq s = {
-    Gen = Gen.seqOf s.Gen
-    Shrinker = Shrink.shrinkSeq s.Shrinker
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let seq (s: IArbitrary<_>) =
+    AllowNullArbitrary(
+      {
+        Gen = Gen.seqOf s.Gen
+        Shrinker = Shrink.shrinkSeq s.Shrinker
+        PrettyPrinter = Pretty.prettyAny
+      }
+    )
 
   [<CompiledName("Array")>]
-  let array a = {
-    Gen = Gen.arrayOf a.Gen
-    Shrinker = Shrink.shrinkArray a.Shrinker
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let array (a: IArbitrary<_>) =
+    AllowNullArbitrary(
+      {
+        Gen = Gen.arrayOf a.Gen
+        Shrinker = Shrink.shrinkArray a.Shrinker
+        PrettyPrinter = Pretty.prettyAny
+      }
+    )
 
-  let set s = {
+  let set (s: IArbitrary<_>) = {
     Gen = Gen.listOf s.Gen |> Gen.map Seq.ofList
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
 
-  let map key value = {
+  let map (key: IArbitrary<_>) (value: IArbitrary<_>) = {
     Gen =
       Gen.size
       |> Gen.bind (fun n ->
@@ -159,25 +202,34 @@ module Arb =
   open System.Collections.Generic
 
   [<CompiledName("List")>]
-  let resizeArray xs = {
-    Gen = Gen.listOf xs.Gen |> Gen.map Enumerable.ToList
-    Shrinker = Shrink.shrinkAny
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let resizeArray (xs: IArbitrary<_>) =
+    AllowNullArbitrary(
+      {
+        Gen = Gen.listOf xs.Gen |> Gen.map Enumerable.ToList
+        Shrinker = Shrink.shrinkAny
+        PrettyPrinter = Pretty.prettyAny
+      }
+    )
 
   [<CompiledName("ICollection")>]
-  let icollection cs = {
-    Gen = (resizeArray cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
-    Shrinker = Shrink.shrinkAny
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let icollection (cs: IArbitrary<_>) =
+    AllowNullArbitrary(
+      {
+        Gen = (resizeArray cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
+        Shrinker = Shrink.shrinkAny
+        PrettyPrinter = Pretty.prettyAny
+      }
+    )
 
   [<CompiledName("Dictionary")>]
-  let dict (key, value) = {
-    Gen = (map key value).Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
-    Shrinker = Shrink.shrinkAny
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let dict (key: IArbitrary<_>, value: IArbitrary<_>) =
+    AllowNullArbitrary(
+      {
+        Gen = (map key value).Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
+        Shrinker = Shrink.shrinkAny
+        PrettyPrinter = Pretty.prettyAny
+      }
+    )
 
   [<CompiledName("Char")>]
   let char = {
@@ -193,11 +245,14 @@ module Arb =
   }
 
   [<CompiledName("String")>]
-  let string = {
-    Gen = (array char).Gen |> Gen.map (fun xs -> String(xs))
-    Shrinker = Shrink.shrinkString
-    PrettyPrinter = Pretty.prettyString
-  }
+  let string =
+    AllowNullArbitrary(
+      {
+        Gen = (array char).Gen |> Gen.map (fun xs -> String(xs))
+        Shrinker = Shrink.shrinkString
+        PrettyPrinter = Pretty.prettyString
+      }
+    )
 
   [<CompiledName("DateTime")>]
   let datetime fmt = {
@@ -210,7 +265,7 @@ module Arb =
     PrettyPrinter = Pretty.prettyDateTime fmt
   }
 
-  let func (c: CoArbitrary<_>) (a: Arbitrary<_>) = {
+  let func (c: CoArbitrary<_>) (a: IArbitrary<_>) = {
     Gen = Gen.promote (fun x -> CoArb.apply x c a.Gen)
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
@@ -245,7 +300,7 @@ module Arb =
     PrettyPrinter = Pretty.prettyGuid
   }
 
-  let option (a: Arbitrary<_>) = {
+  let option (a: IArbitrary<_>) = {
     Gen = Gen.sized(fun n ->
       Gen.frequency [
         (n, Gen.resize (n / 2) a.Gen |> Gen.map Some)
@@ -255,7 +310,7 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
-  let choice (at: Arbitrary<_>) (au: Arbitrary<_>) = {
+  let choice (at: IArbitrary<_>) (au: IArbitrary<_>) = {
     Gen = Gen.oneOf [ Gen.map Choice1Of2 at.Gen; Gen.map Choice2Of2 au.Gen ]
     Shrinker = Shrink.shrinkChoice at.Shrinker au.Shrinker
     PrettyPrinter = Pretty.prettyAny
