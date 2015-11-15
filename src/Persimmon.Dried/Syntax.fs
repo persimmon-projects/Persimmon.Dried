@@ -150,5 +150,8 @@ module Syntax =
 
   let arbitrary = ArbitraryBuilder()
 
+  type GenBuilder with
+    member __.Source(a: Arbitrary<_>) = a.Gen
+
   module UseTestNameByReflection =
     let property = PropertiesBuilder()
