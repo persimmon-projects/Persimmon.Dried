@@ -316,6 +316,17 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Nullable")>]
+  let nullable (a: Arbitrary<_>) = {
+    Gen =
+      Gen.frequency [
+        (9, a.Gen |> Gen.map Nullable)
+        (1, Gen.constant (Nullable()))
+      ]
+    Shrinker = Shrink.shrinkAny
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   // port from FsCheck
 
 (*--------------------------------------------------------------------------*\

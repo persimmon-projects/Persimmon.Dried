@@ -1,5 +1,6 @@
 ﻿namespace Persimmon.Dried.Tests
 
+open System
 open Persimmon.Dried
 open UseTestNameByReflection
 
@@ -13,3 +14,10 @@ module ArbTest =
   let ``non null`` = property {
     apply (Prop.forAll Arb.string.NonNull ((<>) null))
   }
+
+  let ``nullable`` =
+    let nullable = Arb.nullable Arb.int
+    let nullOnly = { nullable with Gen = nullable.Gen |> Gen.suchThat (fun x -> not <| x.HasValue) }
+    property {
+      apply (Prop.forAll nullOnly ((=) (Nullable())))
+    }
