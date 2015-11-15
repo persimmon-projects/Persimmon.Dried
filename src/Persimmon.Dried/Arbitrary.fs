@@ -181,7 +181,7 @@ module Arb =
     )
 
   let set (s: IArbitrary<_>) = {
-    Gen = Gen.listOf s.Gen |> Gen.map Seq.ofList
+    Gen = Gen.listOf s.Gen |> Gen.map Set.ofList
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
