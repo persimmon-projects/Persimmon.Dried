@@ -320,7 +320,7 @@ module Arb =
   let nullable (a: Arbitrary<_>) = {
     Gen =
       Gen.frequency [
-        (9, a.Gen |> Gen.map Nullable)
+        (9, a.Gen |> Gen.map (fun x -> Nullable(x)))
         (1, Gen.constant (Nullable()))
       ]
     Shrinker = Shrink.shrinkAny
