@@ -60,10 +60,10 @@ module CoArb =
   }
 
   let list l = { new CoArbitrary<_ list> with
-    member __.Apply(c) =
+    member this.Apply(c) =
       match c with
       | [] -> Gen.variant 0L
-      | x::xs -> Gen.variant 1L << apply (x, xs) l }
+      | x::xs -> Gen.variant 1L << apply x l << (this.Apply(xs)) }
 
   let choice l r = { new CoArbitrary<Choice<_, _>> with
     member __.Apply(c) =
