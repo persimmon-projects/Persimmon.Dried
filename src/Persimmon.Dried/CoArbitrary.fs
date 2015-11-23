@@ -19,7 +19,7 @@ module CoArb =
 
   [<CompiledName("Bool")>]
   let bool = { new CoArbitrary<bool> with
-    member __.Apply(b) = if b then Gen.variant -1L else Gen.variant 0L
+    member __.Apply(b) = Gen.variant <| if b then 1L else 0L
   }
 
   [<CompiledName("Char")>]
