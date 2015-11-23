@@ -147,10 +147,24 @@ module Gen =
       |> choose
       |> bind (fun k -> arrayOfLength k g))
 
+  [<CompiledName("NonEmptyArrayOf")>]
+  let nonEmptyArrayOf g =
+    sized (fun n ->
+      Statistics.uniformDiscrete (1, max 1 n)
+      |> choose
+      |> bind (fun k -> arrayOfLength k g))
+
   [<CompiledName("IEnumerableOf")>]
   let seqOf g =
     sized (fun n ->
       Statistics.uniformDiscrete (0, n)
+      |> choose
+      |> bind (fun k -> seqOfLength k g))
+
+  [<CompiledName("NonEmptyIEnumerableOf")>]
+  let nonEmptySeqOf g =
+    sized (fun n ->
+      Statistics.uniformDiscrete (1, max 1 n)
       |> choose
       |> bind (fun k -> seqOfLength k g))
 

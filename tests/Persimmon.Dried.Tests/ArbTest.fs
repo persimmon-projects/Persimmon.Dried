@@ -7,7 +7,7 @@ open UseTestNameByReflection
 module ArbTest =
 
   let ``func`` = property {
-    apply (Prop.forAll (Arb.func CoArb.int Arb.int, Arb.nonEmptyList Arb.int) (fun f xs ->
+    apply (Prop.forAll (Arb.func CoArb.int Arb.int, Arb.list Arb.int |> Arb.nonEmpty) (fun f xs ->
       List.map f xs |> List.isEmpty |> not))
   }
 

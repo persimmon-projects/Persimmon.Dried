@@ -37,7 +37,8 @@ with
     member this.PrettyPrinter = this.PrettyPrinter
     member this.NonShrinker = this.NonShrinker
 
-type AllowNullArbitrary<'T when 'T : null>(arb: IArbitrary<'T>) =
+[<Sealed>]
+type AllowNullArbitrary<'T, 'U when 'T : null and 'U :> IArbitrary<'T>>(arb: 'U) =
   member __.NonNull = arb
   member __.Gen =
     Gen.frequency [
@@ -53,6 +54,26 @@ type AllowNullArbitrary<'T when 'T : null>(arb: IArbitrary<'T>) =
     member this.PrettyPrinter = this.PrettyPrinter
     member this.NonShrinker = this.NonShrinker
 
+[<Sealed>]
+type CollectionArbitrary<'T, 'U, 'V when 'U :> 'T seq and 'V :> IArbitrary<'U>>(nonEmpty: 'V, collection: Gen<'U>) =
+  new (nonEmpty: 'V, empty: 'U) =
+    let gen =
+      Gen.frequency [
+        (9, nonEmpty.Gen)
+        (1, Gen.constant empty)
+      ]
+    CollectionArbitrary(nonEmpty, gen)
+  member __.NonEmpty = nonEmpty
+  member __.Gen = collection
+  member __.Shrinker = nonEmpty.Shrinker
+  member __.PrettyPrinter = nonEmpty.PrettyPrinter
+  member __.NonShrinker = nonEmpty.NonShrinker
+  interface IArbitrary<'U> with
+    member this.Gen = this.Gen
+    member this.Shrinker = this.Shrinker
+    member this.PrettyPrinter = this.PrettyPrinter
+    member this.NonShrinker = this.NonShrinker
+
 [<AutoOpen>]
 module ArbitrarySyntax =
 
@@ -63,6 +84,12 @@ module ArbitrarySyntax =
 
 [<RequireQualifiedAccess>]
 module Arb =
+
+  [<CompiledName("NonNull")>]
+  let inline nonNull (a: AllowNullArbitrary<_, _>) = a.NonNull
+
+  [<CompiledName("NonEmpty")>]
+  let inline nonEmpty (a: CollectionArbitrary<_, _, _>) = a.NonEmpty
 
   let unit = {
     Gen = Gen.constant ()
@@ -148,12 +175,17 @@ module Arb =
     PrettyPrinter = Pretty.prettyAny
   }
 
-  let list (a: IArbitrary<_>) = {
-    Gen = Gen.listOf a.Gen
-    Shrinker = Shrink.shrinkList a.Shrinker
-    PrettyPrinter = Pretty.prettyList
-  }
+  let list (a: IArbitrary<_>) =
+    CollectionArbitrary(
+      {
+        Gen = Gen.nonEmptyListOf a.Gen
+        Shrinker = Shrink.shrinkList a.Shrinker
+        PrettyPrinter = Pretty.prettyList
+      },
+      Gen.listOf a.Gen
+    )
 
+  [<Obsolete("use Arb.list.NonEmpty")>]
   let nonEmptyList (a: IArbitrary<_>) = {
     Gen = Gen.nonEmptyListOf a.Gen
     Shrinker = Shrink.shrinkList a.Shrinker
@@ -163,72 +195,100 @@ module Arb =
   [<CompiledName("IEnumerable")>]
   let seq (s: IArbitrary<_>) =
     AllowNullArbitrary(
-      {
-        Gen = Gen.seqOf s.Gen
-        Shrinker = Shrink.shrinkSeq s.Shrinker
-        PrettyPrinter = Pretty.prettyAny
-      }
+      CollectionArbitrary(
+        {
+          Gen = Gen.nonEmptySeqOf s.Gen
+          Shrinker = Shrink.shrinkSeq s.Shrinker
+          PrettyPrinter = Pretty.prettyAny
+        },
+        Gen.seqOf s.Gen
+      )
     )
 
   [<CompiledName("Array")>]
   let array (a: IArbitrary<_>) =
     AllowNullArbitrary(
-      {
-        Gen = Gen.arrayOf a.Gen
-        Shrinker = Shrink.shrinkArray a.Shrinker
-        PrettyPrinter = Pretty.prettyAny
-      }
+      CollectionArbitrary(
+        {
+          Gen = Gen.nonEmptyArrayOf a.Gen
+          Shrinker = Shrink.shrinkArray a.Shrinker
+          PrettyPrinter = Pretty.prettyAny
+        },
+        Gen.arrayOf a.Gen
+      )
     )
 
-  let set (s: IArbitrary<_>) = {
-    Gen = Gen.listOf s.Gen |> Gen.map Set.ofList
-    Shrinker = Shrink.shrinkAny
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let set (s: IArbitrary<_>) =
+    CollectionArbitrary(
+      {
+        Gen = Gen.nonEmptyListOf s.Gen |> Gen.map Set.ofList
+        Shrinker = Shrink.shrinkAny
+        PrettyPrinter = Pretty.prettyAny
+      },
+      Gen.listOf s.Gen |> Gen.map Set.ofList
+    )
 
-  let map (key: IArbitrary<_>) (value: IArbitrary<_>) = {
-    Gen =
-      Gen.size
-      |> Gen.bind (fun n ->
-        Gen.listOfLength n key.Gen
-        |> Gen.bind (fun k ->
-          Gen.listOfLength n value.Gen
-          |> Gen.map (fun v -> List.zip k v |> Map.ofList)))
-    Shrinker = Shrink.shrinkAny
-    PrettyPrinter = Pretty.prettyAny
-  }
+  let map (key: IArbitrary<_>) (value: IArbitrary<_>) =
+    CollectionArbitrary(
+      {
+        Gen =
+          Gen.sized (fun n ->
+            Statistics.uniformDiscrete (1, max 1 n)
+            |> Gen.choose)
+          >>= (fun n ->
+            Gen.listOfLength n key.Gen
+            >>= (fun k ->
+              Gen.listOfLength n value.Gen
+              |> Gen.map (fun v -> List.zip k v |> Map.ofList)))
+        Shrinker = Shrink.shrinkAny
+        PrettyPrinter = Pretty.prettyAny
+      },
+      Map.empty
+    )
 
   open System.Linq
   open System.Collections.Generic
 
   [<CompiledName("List")>]
   let resizeArray (xs: IArbitrary<_>) =
+    let a = list xs
     AllowNullArbitrary(
-      {
-        Gen = Gen.listOf xs.Gen |> Gen.map Enumerable.ToList
-        Shrinker = Shrink.shrinkAny
-        PrettyPrinter = Pretty.prettyAny
-      }
+      CollectionArbitrary(
+        {
+          Gen = a.NonEmpty.Gen |> Gen.map Enumerable.ToList
+          Shrinker = Shrink.shrinkAny
+          PrettyPrinter = Pretty.prettyAny
+        },
+        a.Gen |> Gen.map Enumerable.ToList
+      )
     )
 
   [<CompiledName("ICollection")>]
   let icollection (cs: IArbitrary<_>) =
+    let a = resizeArray cs
     AllowNullArbitrary(
-      {
-        Gen = (resizeArray cs).Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
-        Shrinker = Shrink.shrinkAny
-        PrettyPrinter = Pretty.prettyAny
-      }
+      CollectionArbitrary(
+        {
+          Gen = a.NonNull.NonEmpty.Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
+          Shrinker = Shrink.shrinkAny
+          PrettyPrinter = Pretty.prettyAny
+        },
+        a.NonNull.Gen |> Gen.map (fun xs -> xs :> ICollection<_>)
+      )
     )
 
   [<CompiledName("Dictionary")>]
   let dict (key: IArbitrary<_>, value: IArbitrary<_>) =
+    let a = map key value
     AllowNullArbitrary(
-      {
-        Gen = (map key value).Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
-        Shrinker = Shrink.shrinkAny
-        PrettyPrinter = Pretty.prettyAny
-      }
+      CollectionArbitrary(
+        {
+          Gen = a.NonEmpty.Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
+          Shrinker = Shrink.shrinkAny
+          PrettyPrinter = Pretty.prettyAny
+        },
+        a.Gen |> Gen.map (fun m -> Dictionary<_,_>(m))
+      )
     )
 
   [<CompiledName("Char")>]
