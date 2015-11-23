@@ -140,6 +140,18 @@ module Gen =
       |> choose
       |> bind (fun k -> listOfLength k g))
 
+  let listOfMaxLength x g =
+    sized (fun n ->
+      Statistics.uniformDiscrete (0, min x n)
+      |> choose
+      |> bind (fun k -> listOfLength k g))
+
+  let listOfMinLength x g =
+    sized (fun n ->
+      Statistics.uniformDiscrete (x, max x n)
+      |> choose
+      |> bind (fun k -> listOfLength k g))
+
   [<CompiledName("ArrayOf")>]
   let arrayOf g =
     sized (fun n ->
@@ -154,6 +166,12 @@ module Gen =
       |> choose
       |> bind (fun k -> arrayOfLength k g))
 
+  [<CompiledName("ArrayOfMaxLength")>]
+  let arrayOfMaxLength x g = listOfMaxLength x g |> map List.toArray
+
+  [<CompiledName("ArrayOfMinLength")>]
+  let arrayOfMinLength x g = listOfMinLength x g |> map List.toArray
+
   [<CompiledName("IEnumerableOf")>]
   let seqOf g =
     sized (fun n ->
@@ -167,6 +185,12 @@ module Gen =
       Statistics.uniformDiscrete (1, max 1 n)
       |> choose
       |> bind (fun k -> seqOfLength k g))
+
+  [<CompiledName("IEnumerableOfMaxLength")>]
+  let seqOfMaxLength x g = listOfMaxLength x g |> map List.toSeq
+
+  [<CompiledName("IEnumerableOfMinLength")>]
+  let seqOfMinLength x g = listOfMinLength x g |> map List.toSeq
 
   let promote (f: _ -> Gen<_>) = gen (fun p a -> (f a).Apply(p))
 
