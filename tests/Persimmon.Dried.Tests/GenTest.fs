@@ -83,7 +83,7 @@ module GenTest =
 
   let `` nonEmptyListOf `` = property {
     apply (Prop.sizedProp (fun sz ->
-      Prop.forAll (Arb.nonEmptyList Arb.int) (fun l ->
+      Prop.forAll (Arb.list Arb.int |> Arb.nonEmpty) (fun l ->
         List.length l <= max 1 sz)))
   }
 

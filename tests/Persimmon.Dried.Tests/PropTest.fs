@@ -296,13 +296,17 @@ module PropTest =
     }
 
   let all =
-    let a = Arb.nonEmptyList { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
+    let a =
+      Arb.list { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
+      |> Arb.nonEmpty
     property {
       apply (Prop.forAll a Prop.all)
     }
 
   let atLeastOne =
-    let a = Arb.nonEmptyList { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
+    let a =
+      Arb.list { Gen = Gen.constant Prop.proved.Value; Shrinker = Shrink.shrinkAny; PrettyPrinter = Pretty.prettyAny }
+      |> Arb.nonEmpty
     property {
       apply (Prop.forAll a Prop.atLeastOne)
     }
