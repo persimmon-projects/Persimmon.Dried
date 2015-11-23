@@ -98,12 +98,12 @@ let prop_MaxLe (x:float) y = (x <= y) ==> (lazy (max  x y = y))
 
 //arrays
 let prop_RevRevArr (xs: int[]) = Array.rev (Array.rev xs) = xs
-run <| Prop.forAll (Arb.array Arb.int) prop_RevRevArr
+run <| Prop.forAll (Arb.array Arb.int |> Arb.nonNull) prop_RevRevArr
 
 let prop_RevRevArr2 (xs: int[][]) = xs.Rank = 1
-run <| Prop.forAll (Arb.array (Arb.array Arb.int)) prop_RevRevArr2
+run <| Prop.forAll (Arb.array (Arb.array Arb.int |> Arb.nonNull) |> Arb.nonNull) prop_RevRevArr2
 
-run <| Prop.forAll (Arb.array Arb.int) (fun arr -> Array.rev arr = arr)
+run <| Prop.forAll (Arb.array Arb.int |> Arb.nonNull) (fun arr -> Array.rev arr = arr)
 
 type ARecord = {
   XPos : int
@@ -115,7 +115,7 @@ let aRecordArb = {
   Gen = gen {
     let! x = Arb.int
     let! y = Arb.int
-    let! name = Arb.string
+    let! name = Arb.string.NonNull
     return { XPos = x; YPos = y; Name = name }
   }
   Shrinker = Shrink.shrinkAny
@@ -182,7 +182,7 @@ let revString (x : string) =
 let revRevString x = revString (revString x) = x
 
 let private idempotent f x = let y = f x in f y = y
-run <| Prop.forAll Arb.string (idempotent (fun (x : string) -> x.ToUpper()))
+run <| Prop.forAll Arb.string.NonNull (idempotent (fun (x : string) -> x.ToUpper()))
 
 //-----property combinators------------------
 let inline private withPositiveInteger (p : int -> 'a) =
@@ -214,7 +214,7 @@ let prop_Exc =
     Shrinker = Shrink.shrinkAny
     PrettyPrinter = Pretty.prettyAny
   }
-  Prop.forAll (arb Arb.string) (fun _-> failwith "error"; true)
+  Prop.forAll (arb Arb.string.NonNull) (fun _-> failwith "error"; true)
 Runner.run "prop_Exc" prms prop_Exc
 
 
@@ -233,7 +233,7 @@ let recordStuffArb (a: IArbitrary<_>) = {
     let! name = a
     let! nogIets =
       Arb.int.Gen
-      |> Gen.bind (fun n ->
+      >>= (fun n ->
         Arb.char.Gen
         |> Gen.map (fun c -> (n, c)))
       |> Gen.listOf
@@ -262,7 +262,7 @@ let rec recursiveArb (a: IArbitrary<_>): Arbitrary<_> =
     PrettyPrinter = Pretty.prettyAny
   }
 
-Runner.run "" bigSize (Prop.forAll (recursiveArb Arb.string) (fun s ->
+Runner.run "" bigSize (Prop.forAll (recursiveArb Arb.string.NonNull) (fun s ->
   match s with
   | Branch _ -> false
   | _ -> true))

@@ -59,21 +59,21 @@ namespace Persimmon.Dried.CSharpExamples
 
             //A simple example
             property
-                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int), xs => xs.Reverse().Reverse().SequenceEqual(xs)))
+                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int).NonNull, xs => xs.Reverse().Reverse().SequenceEqual(xs)))
                 .Run("RevRev");
 
             property
-                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int), xs => xs.Reverse().SequenceEqual(xs)))
+                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Int).NonNull, xs => xs.Reverse().SequenceEqual(xs)))
                 .Run("RevId");
 
             //--------Properties--------------
             property
-                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Single), xs => xs.Reverse().Reverse().SequenceEqual(xs)))
+                .Add(Syntax.Prop.ForAll(Arb.Array(Arb.Single).NonNull, xs => xs.Reverse().Reverse().SequenceEqual(xs)))
                 .Run("RevRevFloat");
 
             //conditional properties
             property
-                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int).NonNull, (x, xs) =>
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                         .When(xs.IsOrdered())))
                 .Run("Insert");
@@ -86,7 +86,7 @@ namespace Persimmon.Dried.CSharpExamples
 
             //counting trivial cases
             property
-                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int).NonNull, (x, xs) =>
                     new Lazy<bool>(() =>xs.Insert(x).IsOrdered())
                         .When(xs.IsOrdered())
                         .Classify(xs.Count() == 0, "trivial")))
@@ -94,7 +94,7 @@ namespace Persimmon.Dried.CSharpExamples
 
             //classifying test values
             property
-                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int).NonNull, (x, xs) =>
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                     .When(xs.IsOrdered())
                     .Classify(new int[] { x }.Concat(xs).IsOrdered(), "at-head")
@@ -103,7 +103,7 @@ namespace Persimmon.Dried.CSharpExamples
 
             //collecting data values
             property
-                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int).NonNull, (x, xs) =>
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                     .When(xs.IsOrdered())
                     .Collect("length " + xs.Count().ToString())))
@@ -111,7 +111,7 @@ namespace Persimmon.Dried.CSharpExamples
 
             //combining observations
             property
-                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int), (x, xs) =>
+                .Add(Syntax.Prop.ForAll(Arb.Int, Arb.Array(Arb.Int).NonNull, (x, xs) =>
                     new Lazy<bool>(() => xs.Insert(x).IsOrdered())
                         .When(xs.IsOrdered())
                         .Classify(new int[] { x }.Concat(xs).IsOrdered(), "at-head")
@@ -156,7 +156,7 @@ namespace Persimmon.Dried.CSharpExamples
             var config = new Configuration { Callback = callback };
 
             // generating functions:
-            Syntax.Prop.ForAll(Arb.Func(CoArb.Int, Arb.Int), Arb.Func(CoArb.Int, Arb.Int), Arb.ICollection(Arb.Int),
+            Syntax.Prop.ForAll(Arb.Func(CoArb.Int, Arb.Int), Arb.Func(CoArb.Int, Arb.Int), Arb.ICollection(Arb.Int).NonNull,
                 (f, g, a) => {
                     var l1 = a.Select(x => f(g(x)));
                     var l2 = a.Select(g).Select(f);
@@ -175,7 +175,7 @@ namespace Persimmon.Dried.CSharpExamples
             Syntax.Prop.ForAll(Arb.String, s => true)
                 .Run(new Configuration { Name = "Configuration Demo", MaxSize = 500, Callback = config.Callback });
 
-            Syntax.Prop.ForAll(Arb.IEnumerable(Arb.Int), Arb.IEnumerable(Arb.Int),
+            Syntax.Prop.ForAll(Arb.IEnumerable(Arb.Int).NonNull, Arb.IEnumerable(Arb.Int).NonNull,
                 (a, b) => a.Except(b).Count() <= a.Count())
                 .Run(config);
 
