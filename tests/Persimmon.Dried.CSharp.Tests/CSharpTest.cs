@@ -21,7 +21,8 @@ namespace Persimmon.Dried.CSharp.Tests
 
         public static Gen<Foo> genFoo =
             from x in Arb.Int.Gen
-            from y in Arb.Int.Gen.Where(i => i != x)
+            from y in Arb.Int.Gen
+            where y != x
             select new Foo { Bar = x, Buz = y };
 
         public static Arbitrary<Foo> arbFoo = Arbitrary.Create(genFoo, Shrink.Any<Foo>(), PrettyModule.Any);
