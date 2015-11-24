@@ -1,6 +1,7 @@
 ﻿namespace Persimmon.Dried.Ext
 
 open System
+open System.ComponentModel
 open System.Runtime.CompilerServices
 open Persimmon.Dried
 
@@ -18,6 +19,10 @@ type GenExtensions () =
 
   [<Extension>]
   static member inline SelectMany(g, f: Func<_, _>) = Gen.bind (fun x -> f.Invoke(x)) g
+
+  [<Extension>]
+  static member SelectMany(self, f: Func<_, Gen<_>>, g: Func<_, _, _>) =
+    self >>= (fun x -> f.Invoke(x) >>= (fun y -> Gen.constant <| g.Invoke(x, y)))
 
   [<Extension>]
   static member inline RetryUntil(g, pred: Func<_, _>) = Gen.retryUntil (fun x -> pred.Invoke(x)) g
