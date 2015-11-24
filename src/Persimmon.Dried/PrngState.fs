@@ -9,13 +9,20 @@ let ofBinary bin =
   binary.UnPickle<PrngState>(bin)
 
 let ofBinaryString (bin: string) =
-  bin.Split([|'-'; ' '|])
-  |> Array.map (fun x -> Convert.ToByte(x, 16))
-  |> ofBinary
+  let ofBinaryStringForOldFormat () =
+    bin.Split([|'-'; ' '|])
+    |> Array.map (fun x -> Convert.ToByte(x, 16))
+
+  let bin =
+    if bin.Contains("-") then
+      ofBinaryStringForOldFormat ()
+    else
+      Convert.FromBase64String(bin)
+  ofBinary bin
 
 let toBinary (state: PrngState) =
   let binary = FsPickler.CreateBinarySerializer()
   binary.Pickle state
 
 let toBinaryString (state: PrngState) =
-  BitConverter.ToString(toBinary state)
+  Convert.ToBase64String(toBinary state)
