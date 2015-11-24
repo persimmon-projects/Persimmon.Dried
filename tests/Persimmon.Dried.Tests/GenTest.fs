@@ -249,3 +249,43 @@ module GenTest =
     property {
       apply (Prop.forAll treeArb (fun _ -> true))
     }
+
+  let `` listOfMaxLength `` =
+    let arb = {
+      Gen = choose (Statistics.uniformDiscrete (0, 100))
+      Shrinker = Shrink.shrinkInt
+      PrettyPrinter = Pretty.prettyAny
+    }
+    property {
+      apply (Prop.forAll arb (fun n ->
+        let arb = {
+          Gen = Gen.listOfMaxLength n Arb.int.Gen
+          Shrinker = Shrink.shrinkList Arb.int.Shrinker
+          PrettyPrinter = Pretty.prettyList
+        }
+        Prop.forAll arb (fun ls ->
+          let len = List.length ls
+          n >= len
+        )
+      ))
+    }
+
+  let `` listOfMinLength `` =
+    let arb = {
+      Gen = choose (Statistics.uniformDiscrete (0, 100))
+      Shrinker = Shrink.shrinkInt
+      PrettyPrinter = Pretty.prettyAny
+    }
+    property {
+      apply (Prop.forAll arb (fun n ->
+        let arb = {
+          Gen = Gen.listOfMinLength n Arb.int.Gen
+          Shrinker = Shrink.shrinkList Arb.int.Shrinker
+          PrettyPrinter = Pretty.prettyList
+        }
+        Prop.forAll arb (fun ls ->
+          let len = List.length ls
+          n <= len
+        )
+      ))
+    }
