@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>PropArg<'T> - Persimmon.Dried</title>
+    <title>AllowNullArbitrary<'T, 'U> - Persimmon.Dried</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="persimmon-projects">
@@ -30,120 +30,30 @@
 
 
 
-<h1>PropArg<'T></h1>
+<h1>AllowNullArbitrary<'T, 'U></h1>
 <p>
   <span>Namespace: Persimmon.Dried</span><br />
 </p>
 <div class="xmldoc">
 </div>
-  <h3>Record Fields</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Record Field</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '362', 362)" onmouseover="showTip(event, '362', 362)">
-            Arg
+          <code onmouseout="hideTip(event, '290', 290)" onmouseover="showTip(event, '290', 290)">
+            new(arb)
           </code>
-          <div class="tip" id="362">
-            <strong>Signature:</strong> &#39;T<br />
+          <div class="tip" id="290">
+            <strong>Signature:</strong> arb:&#39;U -&gt; AllowNullArbitrary&lt;&#39;T,&#39;U&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L7-7" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '363', 363)" onmouseover="showTip(event, '363', 363)">
-            Label
-          </code>
-          <div class="tip" id="363">
-            <strong>Signature:</strong> string<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L6-6" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '364', 364)" onmouseover="showTip(event, '364', 364)">
-            OrigArg
-          </code>
-          <div class="tip" id="364">
-            <strong>Signature:</strong> &#39;T<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L9-9" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '365', 365)" onmouseover="showTip(event, '365', 365)">
-            PrettyArg
-          </code>
-          <div class="tip" id="365">
-            <strong>Signature:</strong> Pretty<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L10-10" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '366', 366)" onmouseover="showTip(event, '366', 366)">
-            PrettyOrigArg
-          </code>
-          <div class="tip" id="366">
-            <strong>Signature:</strong> Pretty<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L11-11" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '367', 367)" onmouseover="showTip(event, '367', 367)">
-            Shrinks
-          </code>
-          <div class="tip" id="367">
-            <strong>Signature:</strong> int<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L8-8" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -161,15 +71,87 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '368', 368)" onmouseover="showTip(event, '368', 368)">
-            BoxedTypeParam()
+          <code onmouseout="hideTip(event, '291', 291)" onmouseover="showTip(event, '291', 291)">
+            Gen
           </code>
-          <div class="tip" id="368">
-            <strong>Signature:</strong> unit -&gt; PropArg&lt;obj&gt;<br />
+          <div class="tip" id="291">
+            <strong>Signature:</strong> Gen&lt;&#39;T&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Prop.fs#L14-14" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L43-43" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '292', 292)" onmouseover="showTip(event, '292', 292)">
+            NonNull
+          </code>
+          <div class="tip" id="292">
+            <strong>Signature:</strong> &#39;U<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '293', 293)" onmouseover="showTip(event, '293', 293)">
+            NonShrinker
+          </code>
+          <div class="tip" id="293">
+            <strong>Signature:</strong> NonShrinkerArbitrary&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L50-50" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '294', 294)" onmouseover="showTip(event, '294', 294)">
+            PrettyPrinter
+          </code>
+          <div class="tip" id="294">
+            <strong>Signature:</strong> &#39;T -&gt; Pretty<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L49-49" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '295', 295)" onmouseover="showTip(event, '295', 295)">
+            Shrinker
+          </code>
+          <div class="tip" id="295">
+            <strong>Signature:</strong> Shrink&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Arbitrary.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
