@@ -3,7 +3,7 @@
 * fix list coarbitrary
 * add some coarbitrary instances
 * support query syntax for C#
-* change formatto write prngstate from hex to base64
+* change format to write prngstate from hex to base64
 * fix bug Shrink#xmap
 
 ### 1.1.0 - November 15 2015
