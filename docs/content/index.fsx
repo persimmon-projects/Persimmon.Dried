@@ -26,6 +26,7 @@ Documentation
 The documentation is also available in [Japanese](ja/index.html).
 
 * [Getting Started](GettingStarted.html) to get started.
+* [Practical](Practice.html) Persimmon.Dried.
 
 More information
 ----------------

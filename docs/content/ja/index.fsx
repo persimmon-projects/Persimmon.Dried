@@ -26,6 +26,7 @@ Persimmon.Dried
 この日本語ドキュメントは [最新の英語ドキュメント](../index.html) を反映できていない可能性があります。
 
 * [はじめに](GettingStarted.html) から始めましょう。
+* [実践的な使い方](Practice.html)
 
 更なる情報
 ----------
