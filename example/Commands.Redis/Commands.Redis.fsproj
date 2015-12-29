@@ -68,7 +68,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.1.5.2\lib\net45\FsPickler.dll</HintPath>
+      <HintPath>..\..\packages\FsPickler.1.7.0\lib\net45\FsPickler.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsRandom">
@@ -84,7 +84,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Persimmon">
-      <HintPath>..\..\packages\Persimmon.1.0.0\lib\net20\Persimmon.dll</HintPath>
+      <HintPath>..\..\packages\Persimmon.1.0.1\lib\net20\Persimmon.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sigil">
