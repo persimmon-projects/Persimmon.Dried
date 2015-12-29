@@ -63,6 +63,7 @@
     <Content Include="packages.config" />
     <Content Include="app.config" />
     <Compile Include="Gen.fs" />
+    <Compile Include="Syntax.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FsRandom">

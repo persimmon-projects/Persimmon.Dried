@@ -278,14 +278,3 @@ type GenBuilder internal () =
   member __.Return(x) = Gen.constant x
   member __.ReturnFrom(g: Gen<_>) = g
   member __.Bind(x, f) = Gen.bind f x
-
-[<AutoOpen>]
-module GenSyntax =
-  let gen = GenBuilder()
-  let (<*>) (f:Gen<_ -> _>) (g:Gen<_>) = gen {
-    let! f = f
-    let! g = g
-    return f g
-  }
-  let (<!>) f a = Gen.constant f <*> a
-  let inline (>>=) m f = Gen.bind f m
