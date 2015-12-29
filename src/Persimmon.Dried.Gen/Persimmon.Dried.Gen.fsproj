@@ -2,19 +2,19 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>3816edfd-43cc-4ed7-9832-96e4a3e77eb2</ProjectGuid>
+    <ProjectGuid>5a48ee9c-ed3f-4872-988c-b305b54a36f5</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Persimmon.Dried.Ext</RootNamespace>
-    <AssemblyName>Persimmon.Dried.Ext</AssemblyName>
+    <RootNamespace>Persimmon.Dried.Gen</RootNamespace>
+    <AssemblyName>Persimmon.Dried.Gen</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
-    <Name>Persimmon.Dried.Ext</Name>
-    <TargetFrameworkProfile />
+    <Name>Persimmon.Dried.Gen</Name>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +24,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\Persimmon.Dried.Ext.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Persimmon.Dried.Gen.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\Persimmon.Dried.Ext.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Persimmon.Dried.Gen.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -59,29 +59,20 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Configuration.fs" />
-    <Compile Include="PropExtensions.fs" />
-    <Compile Include="Types.fs" />
-    <Compile Include="GenExtensions.fs" />
-    <Compile Include="ArbitraryExtensions.fs" />
+    <Compile Include="Gen.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core">
-      <HintPath>..\..\packages\FSharp.Core.3.1.2.1\lib\net40\FSharp.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.1.5.2\lib\net40\FsPickler.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FsRandom">
       <HintPath>..\..\packages\FsRandom.1.3.3\lib\net40\FsRandom.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Persimmon">
       <HintPath>..\..\packages\Persimmon.1.0.0\lib\net20\Persimmon.dll</HintPath>
       <Private>True</Private>
@@ -89,20 +80,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj">
-      <Name>Persimmon.Dried.Gen</Name>
-      <Project>{5a48ee9c-ed3f-4872-988c-b305b54a36f5}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Persimmon.Dried\Persimmon.Dried.fsproj">
-      <Name>Persimmon.Dried</Name>
-      <Project>{39471e01-a873-4ad4-baae-19c82118f467}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

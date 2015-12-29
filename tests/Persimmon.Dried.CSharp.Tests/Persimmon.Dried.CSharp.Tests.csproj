@@ -66,6 +66,10 @@
       <Project>{3816edfd-43cc-4ed7-9832-96e4a3e77eb2}</Project>
       <Name>Persimmon.Dried.Ext</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj">
+      <Project>{5a48ee9c-ed3f-4872-988c-b305b54a36f5}</Project>
+      <Name>Persimmon.Dried.Gen</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Persimmon.Dried\Persimmon.Dried.fsproj">
       <Project>{39471e01-a873-4ad4-baae-19c82118f467}</Project>
       <Name>Persimmon.Dried</Name>

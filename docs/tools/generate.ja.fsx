@@ -1,4 +1,4 @@
-let referenceBinaries = [ "Persimmon.Dried.dll"; "Persimmon.Dried.Ext.dll" ]
+let referenceBinaries = [ "Persimmon.Dried.Gen.dll"; "Persimmon.Dried.dll"; "Persimmon.Dried.Ext.dll" ]
 let website = "/Persimmon.Dried/ja"
 let info =
   [ "project-name", "Persimmon.Dried"

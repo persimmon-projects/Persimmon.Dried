@@ -4,8 +4,8 @@
     <id>$id$</id>
     <version>$version$</version>
     <dependencies>
-      <dependency id="Persimmon.Dried.Gen" version="$version$" />
-      <dependency id="FsPickler" version="1.5.2" />
+      <dependency id="Persimmon" version="1.0.0" />
+      <dependency id="FsRandom" version="1.3.3" />
     </dependencies>
     <title>$title$</title>
     <authors>bleis-tift, Gab-km, pocketberserker</authors>
@@ -14,7 +14,7 @@
     <iconUrl>https://raw.githubusercontent.com/persimmon-projects/Persimmon.Dried/$version$/docs/files/images/logo.png</iconUrl>
     <projectUrl>https://github.com/persimmon-projects/Persimmon.Dried</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Persimmon.Dried is a random testing library for Persimmon.</description>
-    <tags>f# test testing</tags>
+    <description>Persimmon.Dried.Gen provide value generator for property based testing.</description>
+    <tags>fsharp test testing</tags>
   </metadata>
 </package>

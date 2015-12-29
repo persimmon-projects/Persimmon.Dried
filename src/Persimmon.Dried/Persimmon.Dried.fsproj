@@ -61,7 +61,6 @@
     <Content Include="packages.config" />
     <Content Include="app.config" />
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Gen.fs" />
     <Compile Include="Shrink.fs" />
     <Compile Include="Pretty.fs" />
     <Compile Include="CoArbitrary.fs" />
@@ -96,6 +95,13 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj">
+      <Name>Persimmon.Dried.Gen</Name>
+      <Project>{5a48ee9c-ed3f-4872-988c-b305b54a36f5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -87,6 +87,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\..\src\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj">
+      <Name>Persimmon.Dried.Gen</Name>
+      <Project>{5a48ee9c-ed3f-4872-988c-b305b54a36f5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Persimmon.Dried\Persimmon.Dried.fsproj">
       <Name>Persimmon.Dried</Name>
       <Project>{39471e01-a873-4ad4-baae-19c82118f467}</Project>
