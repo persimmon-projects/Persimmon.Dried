@@ -5,7 +5,7 @@
     <version>$version$</version>
     <dependencies>
       <dependency id="Persimmon.Dried.Gen" version="$version$" />
-      <dependency id="FsPickler" version="1.7.0" />
+      <dependency id="FsPickler" version="1.8.0" />
     </dependencies>
     <title>$title$</title>
     <authors>bleis-tift, Gab-km, pocketberserker</authors>
