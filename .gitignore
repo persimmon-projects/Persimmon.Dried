@@ -194,3 +194,4 @@ paket-files
 *.orig
 .paket/paket.exe
 .fake/
+docs/content/release-notes.md

@@ -1,5 +1,5 @@
-let referenceBinaries = [ "Persimmon.Dried.Gen.dll"; "Persimmon.Dried.dll"; "Persimmon.Dried.Ext.dll" ]
 let website = "/Persimmon.Dried"
+
 let githubLink = "https://github.com/persimmon-projects/Persimmon.Dried"
 let info =
   [ "project-name", "Persimmon.Dried"
@@ -8,68 +8,114 @@ let info =
     "project-github", githubLink
     "project-nuget", "https://www.nuget.org/packages/Persimmon.Dried/"]
 
-#I "../../packages/FSharp.Formatting/lib/net40"
-#I "../../packages/FSharp.Compiler.Service/lib/net45"
-#I "../../packages/FSharpVSPowerTools.Core/lib/net45"
-#r "FSharpVSPowerTools.Core.dll"
-#r "FSharp.Compiler.Service.dll"
-#r "FSharp.Literate.dll"
-#r "FSharp.CodeFormat.dll"
-#r "FSharp.MetadataFormat.dll"
-#r "FSharp.MarkDown.dll"
+#I "../../packages/FAKE/tools/"
+#load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
+#r "NuGet.Core.dll"
+#r "FakeLib.dll"
+open Fake
 open System.IO
+open Fake.FileHelper
 open FSharp.Literate
 open FSharp.MetadataFormat
 
-let (@@) path1 path2 = Path.Combine(path1, path2)
-
-#if Release
+#if RELEASE
 let root = website
-let configuration = "Release"
 #else
 let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../output")
-let configuration = "Debug"
 #endif
 
-let bin = __SOURCE_DIRECTORY__ @@ "../../src/Persimmon.Dried.Ext/bin" @@ configuration
-let content = __SOURCE_DIRECTORY__ @@ "../content"
-let output = __SOURCE_DIRECTORY__ @@ "../output"
-let files = __SOURCE_DIRECTORY__ @@ "../files"
-let templates = __SOURCE_DIRECTORY__ @@ "templates"
+let bin        = __SOURCE_DIRECTORY__ @@ "../../bin"
+let content    = __SOURCE_DIRECTORY__ @@ "../content"
+let output     = __SOURCE_DIRECTORY__ @@ "../output"
+let files      = __SOURCE_DIRECTORY__ @@ "../files"
+let templates  = __SOURCE_DIRECTORY__ @@ "templates"
 let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/FSharp.Formatting/"
 let docTemplate = formatting @@ "templates/docpage.cshtml"
 
-let layoutRoots = [
-  templates
-  formatting @@ "templates"
-  formatting @@ "templates/reference"
-]
+let layoutRootsAll = new System.Collections.Generic.Dictionary<string, string list>()
+layoutRootsAll.Add("en",[ templates; formatting @@ "templates"
+                          formatting @@ "templates/reference" ])
+subDirectories (directoryInfo templates)
+|> Seq.iter (fun d ->
+                let name = d.Name
+                if name.Length = 2 || name.Length = 3 then
+                    layoutRootsAll.Add(
+                            name, [templates @@ name
+                                   formatting @@ "templates"
+                                   formatting @@ "templates/reference" ]))
+
+let copyFiles () =
+  CopyRecursive files output true |> Log "Copying file: "
+  ensureDirectory (output @@ "content")
+  CopyRecursive (formatting @@ "styles") (output @@ "content") true
+    |> Log "Copying styles and scripts: "
+
+let references =
+  if isMono then
+    let d = RazorEngine.Compilation.ReferenceResolver.UseCurrentAssembliesReferenceResolver()
+    let loadedList = d.GetReferences () |> Seq.map (fun r -> r.GetFile()) |> Seq.cache
+    let getItem name = loadedList |> Seq.find (fun l -> l.Contains name)
+    [ (getItem "FSharp.Core").Replace("4.3.0.0", "4.3.1.0")
+      Path.GetFullPath "./../../packages/FSharp.Compiler.Service/lib/net40/FSharp.Compiler.Service.dll"
+      Path.GetFullPath "./../../packages/FSharp.Formatting/lib/net40/System.Web.Razor.dll"
+      Path.GetFullPath "./../../packages/FSharp.Formatting/lib/net40/RazorEngine.dll"
+      Path.GetFullPath "./../../packages/FSharp.Formatting/lib/net40/FSharp.Literate.dll"
+      Path.GetFullPath "./../../packages/FSharp.Formatting/lib/net40/FSharp.CodeFormat.dll"
+      Path.GetFullPath "./../../packages/FSharp.Formatting/lib/net40/FSharp.MetadataFormat.dll" ]
+    |> Some
+  else None
+
+let binaries =
+    directoryInfo bin
+    |> subDirectories
+    |> Array.map (fun d -> d.FullName @@ (sprintf "%s.dll" d.Name))
+    |> List.ofArray
+
+let libDirs =
+    directoryInfo bin
+    |> subDirectories
+    |> Array.map (fun d -> d.FullName)
+    |> List.ofArray
 
 let buildReference () =
-  let libDirs = [
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/Persimmon.1.0.0/lib/net20/")
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsRandom.1.3.3/lib/net40/")
-    Path.GetFullPath(__SOURCE_DIRECTORY__ @@ "../../packages/FsPickler.1.5.2/lib/net40/")
-  ]
-  let outputDir = output @@ "reference"
-  System.IO.Directory.CreateDirectory(outputDir) |> ignore
-  MetadataFormat.Generate(
-    referenceBinaries |> List.map (fun lib -> __SOURCE_DIRECTORY__ @@  "../../src" @@ Path.GetFileNameWithoutExtension(lib) @@ "bin" @@ configuration @@ lib),
-    outputDir,
-    layoutRoots,
-    parameters = ("root", root)::info,
-    libDirs = libDirs,
-    sourceRepo = githubLink @@ "tree/master",
-    sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ ".." @@ "src",
-    publicOnly = true)
+  CleanDir (output @@ "reference")
+  MetadataFormat.Generate
+    ( binaries, output @@ "reference", layoutRootsAll.["en"],
+      parameters = ("root", root)::info,
+      sourceRepo = githubLink @@ "tree/master",
+      sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
+      ?assemblyReferences = references,
+      publicOnly = true,libDirs = libDirs )
 
 let buildDocumentation () =
-  let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.AllDirectories)
-  for dir in Seq.append [content] subdirs do
-    let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
-    Literate.ProcessDirectory
-      (dir, docTemplate, output @@ sub, replacements = ("root", root)::info,
-        layoutRoots = layoutRoots,  fsiEvaluator = new FsiEvaluator(), lineNumbers=false)
+  let fsi = FsiEvaluator()
+  Literate.ProcessDirectory
+    ( content, docTemplate, output, replacements = ("root", root)::info,
+      layoutRoots = layoutRootsAll.["en"],
+      ?assemblyReferences = references,
+      generateAnchors = true,
+      processRecursive = false,
+      fsiEvaluator = fsi )
 
-buildDocumentation ()
-buildReference ()
+  let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.TopDirectoryOnly)
+  for dir in subdirs do
+    let dirname = (new DirectoryInfo(dir)).Name
+    let layoutRoots =
+        let key = layoutRootsAll.Keys |> Seq.tryFind (fun i -> i = dirname)
+        match key with
+        | Some lang -> layoutRootsAll.[lang]
+        | None -> layoutRootsAll.["en"] // "en" is the default language
+    Literate.ProcessDirectory
+      ( dir, docTemplate, output @@ dirname, replacements = ("root", root)::info,
+        layoutRoots = layoutRoots,
+        ?assemblyReferences = references,
+        generateAnchors = true,
+        fsiEvaluator = fsi )
+
+copyFiles()
+#if HELP
+buildDocumentation()
+#endif
+#if REFERENCE
+buildReference()
+#endif
