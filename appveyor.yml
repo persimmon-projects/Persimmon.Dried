@@ -11,9 +11,7 @@ skip_commits:
 
 clone_depth: 50
 
-configuration:
-  - Release
+test: off
 
-test_script:
-  - .\.nuget\NuGet.exe Install Persimmon.Console -Pre -OutputDirectory packages -ExcludeVersion
-  - ps: .\packages\Persimmon.Console\tools\Persimmon.Console.exe --parallel .\tests\Persimmon.Dried.Tests\bin\$env:configuration\Persimmon.Dried.Tests.dll .\tests\Persimmon.Dried.CSharp.Tests\bin\$env:configuration\Persimmon.Dried.CSharp.Tests.dll
+build_script:
+  - cmd: build.cmd

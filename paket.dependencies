@@ -1,9 +1,15 @@
 source https://api.nuget.org/v3/index.json
 source https://www.nuget.org/api/v2
 
+nuget FAKE
+nuget FAKE.Persimmon
 nuget NuGet.CommandLine
 nuget CloudStructures
 nuget FSharp.Core >= 3.1.2.1
 nuget FsPickler
 nuget FsRandom
 nuget Persimmon
+nuget Persimmon.Console
+nuget SourceLink.Fake
+
+github fsharp/FAKE modules/Octokit/Octokit.fsx

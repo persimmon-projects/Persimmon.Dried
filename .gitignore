@@ -193,3 +193,4 @@ localpackages/
 paket-files
 *.orig
 .paket/paket.exe
+.fake/
