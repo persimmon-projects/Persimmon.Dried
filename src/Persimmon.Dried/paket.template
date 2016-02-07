@@ -1,0 +1,17 @@
+type project
+owners
+    bleis-tift, Gab-km, pocketberserker
+authors
+    bleis-tift, Gab-km, pocketberserker
+projectUrl
+    https://github.com/persimmon-projects/Persimmon.Dried
+licenseUrl
+    https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE
+iconUrl
+    https://raw.githubusercontent.com/persimmon-projects/Persimmon.Dried/master/docs/files/images/logo.png
+requireLicenseAcceptance
+    false
+tags
+    fsharp testing property
+description
+    Persimmon.Dried is a random testing library for Persimmon.

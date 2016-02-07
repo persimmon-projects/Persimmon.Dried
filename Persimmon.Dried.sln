@@ -3,14 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried", "src\Persimmon.Dried\Persimmon.Dried.fsproj", "{39471E01-A873-4AD4-BAAE-19C82118F467}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{68180514-86BB-45A9-8F44-F9812DB2118D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{4381B760-C3E6-417C-ADA5-252BED151A23}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
+		paket.dependencies = paket.dependencies
 	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried", "src\Persimmon.Dried\Persimmon.Dried.fsproj", "{39471E01-A873-4AD4-BAAE-19C82118F467}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Persimmon.Dried.Tests", "tests\Persimmon.Dried.Tests\Persimmon.Dried.Tests.fsproj", "{956AE151-E895-4D5C-8E7F-A4D89C304DA1}"
 EndProject
