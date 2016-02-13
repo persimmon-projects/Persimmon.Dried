@@ -1,7 +1,6 @@
 source https://api.nuget.org/v3/index.json
 source https://www.nuget.org/api/v2
 
-nuget NuGet.CommandLine
 nuget CloudStructures
 nuget FSharp.Core >= 3.1.2.1
 nuget FsPickler >= 1.8.0
@@ -13,6 +12,7 @@ group Build
 
   nuget FAKE
   nuget FAKE.Persimmon
+  nuget NuGet.CommandLine
   nuget SourceLink.Fake
   nuget Persimmon.Console
   nuget FSharp.Formatting
