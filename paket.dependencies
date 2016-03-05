@@ -13,7 +13,6 @@ group Build
   nuget FAKE.Persimmon
   nuget NuGet.CommandLine
   nuget SourceLink.Fake
-  nuget Persimmon.Console
   nuget FSharp.Formatting
 
   github fsharp/FAKE modules/Octokit/Octokit.fsx
