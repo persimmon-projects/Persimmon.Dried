@@ -6,11 +6,11 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyDescriptionAttribute("")>]
 [<assembly: GuidAttribute("5a48ee9c-ed3f-4872-988c-b305b54a36f5")>]
 [<assembly: AssemblyProductAttribute("Persimmon.Dried")>]
-[<assembly: AssemblyVersionAttribute("1.2.0")>]
-[<assembly: AssemblyFileVersionAttribute("1.2.0")>]
-[<assembly: AssemblyInformationalVersionAttribute("1.2.0")>]
+[<assembly: AssemblyVersionAttribute("2.0.0")>]
+[<assembly: AssemblyFileVersionAttribute("2.0.0")>]
+[<assembly: AssemblyInformationalVersionAttribute("2.0.0")>]
 do ()
 
 module internal AssemblyVersionInformation =
-    let [<Literal>] Version = "1.2.0"
-    let [<Literal>] InformationalVersion = "1.2.0"
+    let [<Literal>] Version = "2.0.0"
+    let [<Literal>] InformationalVersion = "2.0.0"
