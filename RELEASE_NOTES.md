@@ -1,3 +1,6 @@
+### 2.0.1 - April 24 2016
+* fix target dependencies
+
 ### 2.0.0 - April 24 2016
 * create Persimmon.Dried.Gen project and move Gen type
 * update Persimmon, FsPickler
