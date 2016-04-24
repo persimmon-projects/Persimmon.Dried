@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use
 // it to define helpers that you do not want to show in the documentation.
+#I "../../src/Persimmon.Dried.Gen/bin/Release"
 #I "../../src/Persimmon.Dried/bin/Release"
 #r "FsRandom"
 
@@ -28,6 +29,7 @@ open an fsx file and start with:
 *)
 
 #r "Persimmon"
+#r "Persimmon.Dried.Gen"
 #r "Persimmon.Dried"
 
 open Persimmon
