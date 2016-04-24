@@ -45,35 +45,16 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '320', 320)" onmouseover="showTip(event, '320', 320)">
+          <code onmouseout="hideTip(event, '321', 321)" onmouseover="showTip(event, '321', 321)">
             CanCreateNewSut(arg1, arg2, arg3)
           </code>
-          <div class="tip" id="320">
+          <div class="tip" id="321">
             <strong>Signature:</strong> (&#39;State * seq&lt;&#39;State&gt; * seq&lt;&#39;Sut&gt;) -&gt; bool<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L54-54" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '321', 321)" onmouseover="showTip(event, '321', 321)">
-            DestroySut(arg1)
-          </code>
-          <div class="tip" id="321">
-            <strong>Signature:</strong> &#39;Sut -&gt; unit<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L56-56" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -84,15 +65,15 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '322', 322)" onmouseover="showTip(event, '322', 322)">
-            GenCommand(arg1)
+            DestroySut(arg1)
           </code>
           <div class="tip" id="322">
-            <strong>Signature:</strong> &#39;State -&gt; Gen&lt;Command&lt;&#39;Sut,&#39;State,obj&gt;&gt;<br />
+            <strong>Signature:</strong> &#39;Sut -&gt; unit<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L59-59" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L56-56" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -103,15 +84,15 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '323', 323)" onmouseover="showTip(event, '323', 323)">
-            GenInitialState
+            GenCommand(arg1)
           </code>
           <div class="tip" id="323">
-            <strong>Signature:</strong> Gen&lt;&#39;State&gt;<br />
+            <strong>Signature:</strong> &#39;State -&gt; Gen&lt;Command&lt;&#39;Sut,&#39;State,obj&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L58-58" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -122,15 +103,35 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '324', 324)" onmouseover="showTip(event, '324', 324)">
-            InitialPreCondition(arg1)
+            GenInitialState
           </code>
           <div class="tip" id="324">
+            <strong>Signature:</strong> Gen&lt;&#39;State&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L58-58" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>get_GenInitialState</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '325', 325)" onmouseover="showTip(event, '325', 325)">
+            InitialPreCondition(arg1)
+          </code>
+          <div class="tip" id="325">
             <strong>Signature:</strong> &#39;State -&gt; bool<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L57-57" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L57-57" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -140,16 +141,16 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '325', 325)" onmouseover="showTip(event, '325', 325)">
+          <code onmouseout="hideTip(event, '326', 326)" onmouseover="showTip(event, '326', 326)">
             NewSut(arg1)
           </code>
-          <div class="tip" id="325">
+          <div class="tip" id="326">
             <strong>Signature:</strong> &#39;State -&gt; &#39;Sut<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/Persimmon.Dried/Commands.fs#L55-55" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Commands.fs#L55-55" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -172,7 +173,7 @@
             <ul class="list-unstyled">
               <li><a href="https://www.nuget.org/packages/Persimmon.Dried/"><img src="http://img.shields.io/nuget/v/Persimmon.Dried.svg?style=flat" /></a></li>
               <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/LICENSE"><img src="https://img.shields.io/github/license/persimmon-projects/Persimmon.Dried.svg" /></a></li>
-              <li><a href="https://github.com/persimmon-projects/Persimmon.Dried/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+              <li><a href="/Persimmon.Dried/release-notes.html">Release Notes</a></li>
             </ul>
           </div>
 
@@ -180,6 +181,7 @@
             <h4>Tutorial</h4>
             <ul class="list-unstyled">
               <li><a href="/Persimmon.Dried/GettingStarted.html">Getting Started</a></li>
+              <li><a href="/Persimmon.Dried/Practice.html">Practice</a></li>
             </ul>
           </div>
 
