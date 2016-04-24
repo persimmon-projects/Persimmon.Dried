@@ -1,3 +1,8 @@
+### 2.0.0 - April 24 2016
+* create Persimmon.Dried.Gen project and move Gen type
+* update Persimmon, FsPickler
+* drop support old prngstate format under 1.1.0
+
 ### 1.2.0 - November 27 2015
 * support collections arbitrary
 * fix list coarbitrary
