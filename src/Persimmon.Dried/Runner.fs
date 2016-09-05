@@ -65,7 +65,7 @@ module Result =
 
   open Pretty
   open Helper
-  open Nessos.FsPickler
+  open MBrace.FsPickler
   open System
 
   let prettyTestRes res = Pretty(fun prms ->

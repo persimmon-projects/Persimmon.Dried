@@ -1,6 +1,6 @@
 ﻿namespace Persimmon.Dried.Tests
 
-open Nessos.FsPickler
+open MBrace.FsPickler
 open Persimmon.Dried
 open UseTestNameByReflection
 

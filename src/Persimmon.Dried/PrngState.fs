@@ -2,7 +2,7 @@
 
 open System
 open FsRandom
-open Nessos.FsPickler
+open MBrace.FsPickler
 
 let ofBinary bin =
   let binary = FsPickler.CreateBinarySerializer()
