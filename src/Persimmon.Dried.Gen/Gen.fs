@@ -39,23 +39,20 @@ module Gen =
   let resize s (g: Gen<_>) = gen (fun p -> g.Apply({ p with Size = s }))
 
   let private suchThatOption (f: _ -> bool) g =
-    let rp i j g = resize (2 * i + j) g
+    let rp k n = resize (2 * k + n) g
     let inner k n =
       gen (fun p ->
-        if n = 0 then None
-        else
-          let mutable n = n
-          let mutable k = k
-          let mutable g = rp k n g
-          let mutable p = p
-          let mutable x = apply p g
-          while n <> 0 && not (f x) do
-            n <- n - 1
-            k <- k + 1
-            g <- rp k n g
-            p <- Parameters.nextSeed p
-            x <- apply p g
-          if n = 0 then None else Some x)
+        let mutable n = n
+        let mutable k = k
+        let mutable p = p
+        let mutable x = apply p (rp k n)
+        while n <> 0 && not (f x) do
+          n <- n - 1
+          k <- k + 1
+          p <- Parameters.nextSeed p
+          x <- apply p (rp k n)
+        if n = 0 then None else Some x
+      )
     sized(max 1 >> inner 0)
 
   let suchThat f (g: Gen<_>) = gen (fun p ->
