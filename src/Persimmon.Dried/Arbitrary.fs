@@ -402,6 +402,7 @@ module Arb =
   let private fraction (a:int) (b:int) (c:int) =
     double a + double b / (abs (double c) + 1.0)
 
+  [<CompiledName("Double")>]
   let float = {
     Gen =
       Gen.frequency [
