@@ -20,7 +20,7 @@ let prms = { Runner.Parameters.Default with Callback = Runner.createConsoleRepor
 
 ## Arbitrary
 
-干し柿では、引数候補はかなり柔軟に指定することができます。 `Arb.int` や `Arb.byte`、 `Arb.string` などの基本型や、 `Arb.list Arb.int`、 `Arb.array Arb.float`、 `Arb.map Arb.int Arb.string` のようなコレクション型も指定できます。
+Persimmon.Driedでは、引数候補はかなり柔軟に指定することができます。 `Arb.int` や `Arb.byte`、 `Arb.string` などの基本型や、 `Arb.list Arb.int`、 `Arb.array Arb.float`、 `Arb.map Arb.int Arb.string` のようなコレクション型も指定できます。
 
 関数や `System.Func` を引数候補にすることもできます：
 
