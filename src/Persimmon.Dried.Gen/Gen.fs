@@ -82,6 +82,56 @@ module Gen =
   [<CompiledName("Choose")>]
   let choose f = gen (fun p -> Random.next f p.PrngState |> fst)
 
+  [<CompiledName("Choose")>]
+  let chooseFloat min max =
+    Random.map (fun r -> min + (max - min) * r) ``[0, 1]``
+    |> choose
+
+  [<CompiledName("Choose")>]
+  let chooseInt8 (min: int8) (max: int8) =
+    chooseFloat (float min) (float max)
+    |> map int8
+
+  [<CompiledName("Choose")>]
+  let chooseInt16 (min: int16) (max: int16) =
+    chooseFloat (float min) (float max)
+    |> map int16
+
+  [<CompiledName("Choose")>]
+  let chooseInt32 (min: int) (max: int) =
+    chooseFloat (float min) (float max)
+    |> map int
+
+  [<CompiledName("Choose")>]
+  let chooseInt64 (min: int64) (max: int64) =
+    chooseFloat (float min) (float max)
+    |> map int64
+
+  [<CompiledName("Choose")>]
+  let chooseUInt8 (min: uint8) (max: uint8) =
+    chooseFloat (float min) (float max)
+    |> map uint8
+
+  [<CompiledName("Choose")>]
+  let chooseUInt16 (min: uint16) (max: uint16) =
+    chooseFloat (float min) (float max)
+    |> map uint16
+
+  [<CompiledName("Choose")>]
+  let chooseUInt32 (min: uint32) (max: uint32) =
+    chooseFloat (float min) (float max)
+    |> map uint32
+
+  [<CompiledName("Choose")>]
+  let chooseFloat32 (min: float32) (max: float32) =
+    chooseFloat (float min) (float max)
+    |> map float32
+
+  [<CompiledName("Choose")>]
+  let chooseUInt64 (min: uint64) (max: uint64) =
+    chooseFloat (float min) (float max)
+    |> map uint64
+
   [<CompiledName("Elements")>]
   let elements xs =
     Statistics.uniformDiscrete(0, Seq.length xs - 1)

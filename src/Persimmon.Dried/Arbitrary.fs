@@ -108,35 +108,42 @@ module Arb =
   open System
 
   [<CompiledName("Byte")>]
-  let byte = {
+  let uint8 = {
     Gen = Gen.choose (ruint8)
     Shrinker = Shrink.shrinkByte
     PrettyPrinter = Pretty.prettyAny
   }
 
+  [<CompiledName("Int")>]
+  let int = {
+    Gen = Gen.sized (fun s -> Gen.chooseInt32 -s s)
+    Shrinker = Shrink.shrinkInt
+    PrettyPrinter = Pretty.prettyAny
+  }
+
   [<CompiledName("UInt16")>]
   let uint16 = {
-    Gen = Gen.choose (ruint16)
+    Gen = int.Gen |> Gen.map (abs >> uint16)
     Shrinker = Shrink.shrinkUInt16
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("UInt32")>]
   let uint32 = {
-    Gen = Gen.choose (ruint32)
+    Gen = int.Gen |> Gen.map (abs >> uint32)
     Shrinker = Shrink.shrinkUInt32
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("UInt64")>]
   let uint64 = {
-    Gen = Gen.choose (ruint64)
+    Gen = int.Gen |> Gen.map (abs >> uint64)
     Shrinker = Shrink.shrinkUInt64
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("SByte")>]
-  let sbyte = {
+  let int8 = {
     Gen = Gen.choose rint8
     Shrinker = Shrink.shrinkSbyte
     PrettyPrinter = Pretty.prettyAny
@@ -144,24 +151,61 @@ module Arb =
 
   [<CompiledName("Int16")>]
   let int16 = {
-    Gen = Gen.choose rint16
+    Gen = int.Gen |> Gen.map int16
     Shrinker = Shrink.shrinkInt16
-    PrettyPrinter = Pretty.prettyAny
-  }
-
-  [<CompiledName("Int")>]
-  let int = {
-    Gen = Gen.choose rint32
-    Shrinker = Shrink.shrinkInt
     PrettyPrinter = Pretty.prettyAny
   }
 
   [<CompiledName("Int64")>]
   let int64 = {
-    Gen = Gen.choose rint64
+    Gen = int.Gen |> Gen.map int64
     Shrinker = Shrink.shrinkInt64
     PrettyPrinter = Pretty.prettyAny
   }
+
+  module DoNotSize =
+
+    [<CompiledName("UInt16")>]
+    let uint16 = {
+      Gen = Gen.choose (ruint16)
+      Shrinker = Shrink.shrinkUInt16
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    [<CompiledName("UInt32")>]
+    let uint32 = {
+      Gen = Gen.choose (ruint32)
+      Shrinker = Shrink.shrinkUInt32
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    [<CompiledName("UInt64")>]
+    let uint64 = {
+      Gen = Gen.choose (ruint64)
+      Shrinker = Shrink.shrinkUInt64
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    [<CompiledName("Int16")>]
+    let int16 = {
+      Gen = Gen.choose rint16
+      Shrinker = Shrink.shrinkInt16
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    [<CompiledName("Int")>]
+    let int = {
+      Gen = Gen.choose rint32
+      Shrinker = Shrink.shrinkInt
+      PrettyPrinter = Pretty.prettyAny
+    }
+
+    [<CompiledName("Int64")>]
+    let int64 = {
+      Gen = Gen.choose rint64
+      Shrinker = Shrink.shrinkInt64
+      PrettyPrinter = Pretty.prettyAny
+    }
 
   [<CompiledName("Single")>]
   let float32 = {
@@ -346,14 +390,14 @@ module Arb =
       let! a = int
       let! b = int16
       let! c = int16
-      let! d = byte
-      let! e = byte
-      let! f = byte
-      let! g = byte
-      let! h = byte
-      let! i = byte
-      let! j = byte
-      let! k = byte
+      let! d = uint8
+      let! e = uint8
+      let! f = uint8
+      let! g = uint8
+      let! h = uint8
+      let! i = uint8
+      let! j = uint8
+      let! k = uint8
       return Guid(a, b, c, d, e, f, g, h, i, j, k)
     }
     Shrinker = Shrink.shrinkAny

@@ -47,7 +47,7 @@ module Parameters =
 
   let Default = {
     MinSuccessfulTests = 100
-    MinSize = 0
+    MinSize = 1
     MaxSize = Gen.Parameters.Default.Size
     PrngState = Gen.Parameters.Default.PrngState
     Workers = 1
@@ -139,7 +139,7 @@ module private Impl =
         | Undecided ->
           d <- d + 1
           prms.Callback.OnPropEval("", workerIdx, n, d)
-          if n + d > prms.MinSuccessfulTests && 1.0f + float32 prms.Workers * prms.MaxDiscardRatio * float32 n < float32 d then
+          if float32 d > float32 prms.MinSuccessfulTests * prms.MaxDiscardRatio then
             res <- Some { Status = Exhausted; Succeeded = n; Discarded = d; FreqMap = fm; CurrentPrngState = rng; Time = 0L }
         | True ->
           n <- n + 1

@@ -35,6 +35,7 @@ module ShrinkTest =
     minSize 10
     maxSize 10
     apply (Prop.forAll (Arb.list Arb.int |> Arb.nonEmpty) (fun l ->
+      (l <> [0]) ==> lazy
         let ls = shrinkClosure (Arb.list Arb.int).Shrinker l
         sprintf "%A" l @| (Seq.exists (List.isEmpty) ls && Seq.exists ((=) [0]) ls)))
   }

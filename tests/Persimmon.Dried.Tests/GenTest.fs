@@ -48,15 +48,26 @@ module GenTest =
   }
 
   let ``choose int`` = property {
-    apply (Prop.forAll (Arb.int, Arb.int) (fun l h ->
+    apply (Prop.forAll (Arb.DoNotSize.int, Arb.DoNotSize.int) (fun l h ->
       l <= h ==> lazy
-        let arb = {
-          Gen = choose (Statistics.uniformDiscrete (l, h))
-          Shrinker = Shrink.shrinkInt
-          PrettyPrinter = Pretty.prettyAny
-        }
-        Prop.forAll arb (fun x -> x >= l && x <= h )))
+        let g = Gen.chooseInt32 l h
+        let x = Gen.sample g
+        x >= l && x <= h
+    ))
   }
+
+  module DoNotSize =
+
+    let ``choose int`` = property {
+      apply (Prop.forAll (Arb.int, Arb.int) (fun l h ->
+        l <= h ==> lazy
+          let arb = {
+            Gen = choose (Statistics.uniformDiscrete (l, h))
+            Shrinker = Shrink.shrinkInt
+            PrettyPrinter = Pretty.prettyAny
+          }
+          Prop.forAll arb (fun x -> x >= l && x <= h )))
+    }
 
   let `` sized `` = property {
     apply (Prop.forAll (Arb.gen Arb.int) (fun g ->

@@ -22,7 +22,7 @@ type GenExtensions () =
 
   [<Extension>]
   static member SelectMany(self, f: Func<_, Gen<_>>, g: Func<_, _, _>) =
-    self >>= (fun x -> f.Invoke(x) >>= (fun y -> Gen.constant <| g.Invoke(x, y)))
+    self >>= (fun x -> f.Invoke(x) |> Gen.map (fun y -> g.Invoke(x, y)))
 
   [<Extension>]
   static member inline RetryUntil(g, pred: Func<_, _>) = Gen.retryUntil (fun x -> pred.Invoke(x)) g

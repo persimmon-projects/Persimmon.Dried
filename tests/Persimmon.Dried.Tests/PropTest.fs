@@ -130,7 +130,7 @@ module PropTest =
     }
 
   let ``.&. right prio`` = property {
-    apply (Prop.forAll (Arb.int, Arb.genParameters) (fun _ prms ->
+    apply (Prop.forAll Arb.genParameters (fun prms ->
       let p =
         (Prop.proved.Value |> Prop.map (PropResult.label "RHS"))
         .&. Prop.proved |> Prop.map(PropResult.label "LHS")
@@ -337,7 +337,7 @@ module PropTest =
     apply (Prop.forAll a (fun p -> p == Prop.sizedProp (fun _ -> p)))
   }
 
-  let ``chek some prop`` = property {
+  let ``check some prop`` = property {
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a + b = b + a))
     apply (Prop.forAll (Arb.int, Arb.int) (fun a b -> a * b = b * a))
   }
