@@ -1,3 +1,10 @@
+### 3.0.0 - Jan 15 2017
+* add size base number Arbitrary
+* add Arb.DoNotSize module
+* improve Gen.suchThat
+* fix worker count
+* fix default Runner.Parameters.MinSize value
+
 ### 2.0.1 - April 24 2016
 * fix target dependencies
 
