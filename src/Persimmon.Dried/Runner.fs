@@ -184,7 +184,7 @@ module private Impl =
       if prms.Workers < 2 then workerFun 0
       else
         try
-          let fs = [ 0 .. prms.Workers ] |> List.map (fun idx -> async {
+          let fs = [ 0 .. prms.Workers - 1 ] |> List.map (fun idx -> async {
             return workerFun idx
           })
           let zeroRes = { Status = Passed; Succeeded = 0; Discarded = 0; FreqMap = FreqMap.empty; CurrentPrngState = prms.PrngState; Time = 0L }
