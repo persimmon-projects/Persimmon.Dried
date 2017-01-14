@@ -31,7 +31,7 @@
 <div class="blog-post">
 <h1><a name="実践Persimmon-Dried" class="anchor" href="#実践Persimmon-Dried">実践Persimmon.Dried</a></h1>
 <h2><a name="Arbitrary" class="anchor" href="#Arbitrary">Arbitrary</a></h2>
-<p>干し柿では、引数候補はかなり柔軟に指定することができます。 <code>Arb.int</code> や <code>Arb.byte</code>、 <code>Arb.string</code> などの基本型や、 <code>Arb.list Arb.int</code>、 <code>Arb.array Arb.float</code>、 <code>Arb.map Arb.int Arb.string</code> のようなコレクション型も指定できます。</p>
+<p>Persimmon.Driedでは、引数候補はかなり柔軟に指定することができます。 <code>Arb.int</code> や <code>Arb.byte</code>、 <code>Arb.string</code> などの基本型や、 <code>Arb.list Arb.int</code>、 <code>Arb.array Arb.float</code>、 <code>Arb.map Arb.int Arb.string</code> のようなコレクション型も指定できます。</p>
 <p>関数や <code>System.Func</code> を引数候補にすることもできます：</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -287,7 +287,20 @@
 </code></pre></td>
 </tr>
 </table>
-<table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>! Falsified after 0 passed tests.
+&gt; ARG_0: 0
+&gt; ARG_1: 0
+&gt; current random state: AM6R9dAH6f0AAAEoRnNSYW5kb20uUmFuZG9tTnVtYmVyR2VuZXJ
+  hdG9yK1BybmdTdGF0ZQLOkfUAzpH1BQAAAADOkfUAAAAAAC1Gc1JhbmRvbS5SYW5kb21OdW1i
+  ZXJHZW5lcmF0b3IrQ3JlYXRlU3RhdGVAMTEAzpH1AAhGc1JhbmRvbQAHMS4zLjMuMAAHbmV1d
+  HJhbAAQNWY3MmY2ZTIzYzY5MjBkNADOkfUBAAAAEM6R9QDOkfUFAAAAAM6R9QAAAAAADlN5c3
+  RlbS5UdXBsZWA0AM6R9QAIbXNjb3JsaWIABzQuMC4wLjAAB25ldXRyYWwAEGI3N2E1YzU2MTk
+  zNGUwODkAzpH1BAAAABDOkfUAzpH1AAAAAAANU3lzdGVtLlVJbnQzMgTOkfUHAAAAAAAAAATO
+  kfUJAAAAAAAAAATOkfUJAAAAAAAAAATOkfUJAAAAAAAAAADOkfUCzpH1AM6R9QAAAAAALkZzU
+  mFuZG9tLlJhbmRvbU51bWJlckdlbmVyYXRvcitYb3JzaGlmdFBybmdANjAEzpH1AwAAAAAAAA
+  AAzpH1AM6R9Y0amNyDvQlBkSLwUO3RWyk=
+&gt; Collected test data: 
+100% y is zero, x is zero</code></pre></td></tr></table>
 <p>ここから、テストに失敗した時の引数の分布が分かります。</p>
 </div>
 

@@ -38,6 +38,23 @@
 </div>
 
 <!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered module-list">
+    <thead>
+      <tr><td>Module</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="module-name">
+            <a href="persimmon-dried-arb-donotsize.html">DoNotSize</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -56,7 +73,7 @@
                           <strong>Type parameters:</strong> '?8577          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L209-209" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L253-253" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -87,33 +104,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            byte
-          </code>
-          <div class="tip" id="3">
-            <strong>Signature:</strong> Arbitrary&lt;uint8&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L111-111" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>Byte</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
             char
           </code>
-          <div class="tip" id="4">
+          <div class="tip" id="3">
             <strong>Signature:</strong> Arbitrary&lt;char&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L295-295" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L339-339" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -124,15 +122,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
             choice(at au)
           </code>
-          <div class="tip" id="5">
+          <div class="tip" id="4">
             <strong>Signature:</strong> at:IArbitrary&lt;&#39;?8603&gt; -&gt; au:IArbitrary&lt;&#39;?8604&gt; -&gt; Arbitrary&lt;Choice&lt;&#39;?8603,&#39;?8604&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8603, '?8604          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L373-373" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L417-417" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -142,15 +140,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
             datetime(fmt)
           </code>
-          <div class="tip" id="6">
+          <div class="tip" id="5">
             <strong>Signature:</strong> fmt:string -&gt; Arbitrary&lt;DateTime&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L318-318" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L362-362" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -161,15 +159,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
             dict(key, value)
           </code>
-          <div class="tip" id="7">
+          <div class="tip" id="6">
             <strong>Signature:</strong> (key:IArbitrary&lt;&#39;?8588&gt; * value:IArbitrary&lt;&#39;?8589&gt;) -&gt; AllowNullArbitrary&lt;Dictionary&lt;&#39;?8588,&#39;?8589&gt;,CollectionArbitrary&lt;KeyValuePair&lt;&#39;?8588,&#39;?8589&gt;,Dictionary&lt;&#39;?8588,&#39;?8589&gt;,Arbitrary&lt;Dictionary&lt;&#39;?8588,&#39;?8589&gt;&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8588, '?8589          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L281-281" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L325-325" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -180,33 +178,34 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
             float
           </code>
-          <div class="tip" id="8">
+          <div class="tip" id="7">
             <strong>Signature:</strong> Arbitrary&lt;float&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L405-405" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L450-450" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
+              <p>CompiledName: <code>Double</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
             float32
           </code>
-          <div class="tip" id="9">
+          <div class="tip" id="8">
             <strong>Signature:</strong> Arbitrary&lt;float32&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L167-167" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L211-211" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -217,15 +216,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
+          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
             func(c a)
           </code>
-          <div class="tip" id="10">
+          <div class="tip" id="9">
             <strong>Signature:</strong> c:CoArbitrary&lt;&#39;?8594&gt; -&gt; a:IArbitrary&lt;&#39;?8595&gt; -&gt; Arbitrary&lt;(&#39;?8594 -&gt; &#39;?8595)&gt;<br />
                           <strong>Type parameters:</strong> '?8594, '?8595          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L328-328" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L372-372" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -235,15 +234,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
             guid
           </code>
-          <div class="tip" id="11">
+          <div class="tip" id="10">
             <strong>Signature:</strong> Arbitrary&lt;Guid&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L344-344" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L388-388" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -254,15 +253,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
+          <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
             icollection(cs)
           </code>
-          <div class="tip" id="12">
+          <div class="tip" id="11">
             <strong>Signature:</strong> cs:IArbitrary&lt;&#39;?8586&gt; -&gt; AllowNullArbitrary&lt;ICollection&lt;&#39;?8586&gt;,CollectionArbitrary&lt;&#39;?8586,ICollection&lt;&#39;?8586&gt;,Arbitrary&lt;ICollection&lt;&#39;?8586&gt;&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8586          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L267-267" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L311-311" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -273,15 +272,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '13', 13)" onmouseover="showTip(event, '13', 13)">
+          <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
             int
           </code>
-          <div class="tip" id="13">
-            <strong>Signature:</strong> Arbitrary&lt;int32&gt;<br />
+          <div class="tip" id="12">
+            <strong>Signature:</strong> Arbitrary&lt;int&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L153-153" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L118-118" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -292,15 +291,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '14', 14)" onmouseover="showTip(event, '14', 14)">
+          <code onmouseout="hideTip(event, '13', 13)" onmouseover="showTip(event, '13', 13)">
             int16
           </code>
-          <div class="tip" id="14">
+          <div class="tip" id="13">
             <strong>Signature:</strong> Arbitrary&lt;int16&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L146-146" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L153-153" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -311,10 +310,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '15', 15)" onmouseover="showTip(event, '15', 15)">
+          <code onmouseout="hideTip(event, '14', 14)" onmouseover="showTip(event, '14', 14)">
             int64
           </code>
-          <div class="tip" id="15">
+          <div class="tip" id="14">
             <strong>Signature:</strong> Arbitrary&lt;int64&gt;<br />
                       </div>
         </td>
@@ -330,6 +329,25 @@
       <tr>
         <td class="member-name">
 
+          <code onmouseout="hideTip(event, '15', 15)" onmouseover="showTip(event, '15', 15)">
+            int8
+          </code>
+          <div class="tip" id="15">
+            <strong>Signature:</strong> Arbitrary&lt;int8&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L146-146" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>SByte</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
           <code onmouseout="hideTip(event, '16', 16)" onmouseover="showTip(event, '16', 16)">
             list(a)
           </code>
@@ -338,7 +356,7 @@
                           <strong>Type parameters:</strong> '?8571          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L178-178" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L222-222" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -356,7 +374,7 @@
                           <strong>Type parameters:</strong> '?8581, '?8582          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L231-231" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L275-275" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -393,7 +411,7 @@
                           <strong>Type parameters:</strong> '?8573          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L189-189" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L233-233" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -430,7 +448,7 @@
                           <strong>Type parameters:</strong> '?8606          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L380-380" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L424-424" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -449,7 +467,7 @@
                           <strong>Type parameters:</strong> '?8601          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L363-363" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L407-407" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -467,7 +485,7 @@
                           <strong>Type parameters:</strong> '?8584          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L253-253" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L297-297" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -479,33 +497,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
-            sbyte
-          </code>
-          <div class="tip" id="24">
-            <strong>Signature:</strong> Arbitrary&lt;int8&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L139-139" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>SByte</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
             seq(s)
           </code>
-          <div class="tip" id="25">
+          <div class="tip" id="24">
             <strong>Signature:</strong> s:IArbitrary&lt;&#39;?8575&gt; -&gt; AllowNullArbitrary&lt;seq&lt;&#39;?8575&gt;,CollectionArbitrary&lt;&#39;?8575,seq&lt;&#39;?8575&gt;,Arbitrary&lt;seq&lt;&#39;?8575&gt;&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8575          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L196-196" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L240-240" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -516,15 +515,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
             set(s)
           </code>
-          <div class="tip" id="26">
+          <div class="tip" id="25">
             <strong>Signature:</strong> s:IArbitrary&lt;&#39;?8579&gt; -&gt; CollectionArbitrary&lt;&#39;?8579,Set&lt;&#39;?8579&gt;,Arbitrary&lt;Set&lt;&#39;?8579&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8579          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L221-221" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L265-265" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -534,15 +533,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
             string
           </code>
-          <div class="tip" id="27">
+          <div class="tip" id="26">
             <strong>Signature:</strong> AllowNullArbitrary&lt;String,Arbitrary&lt;String&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L308-308" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L352-352" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -553,15 +552,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
+          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
             systemFunc(c, a)
           </code>
-          <div class="tip" id="28">
+          <div class="tip" id="27">
             <strong>Signature:</strong> (c:CoArbitrary&lt;&#39;?8597&gt; * a:IArbitrary&lt;&#39;?8598&gt;) -&gt; Arbitrary&lt;Func&lt;&#39;?8597,&#39;?8598&gt;&gt;<br />
                           <strong>Type parameters:</strong> '?8597, '?8598          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L335-335" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L379-379" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -572,15 +571,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
+          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
             uint16
           </code>
-          <div class="tip" id="29">
+          <div class="tip" id="28">
             <strong>Signature:</strong> Arbitrary&lt;uint16&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L118-118" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L125-125" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -591,15 +590,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
+          <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
             uint32
           </code>
-          <div class="tip" id="30">
+          <div class="tip" id="29">
             <strong>Signature:</strong> Arbitrary&lt;uint32&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L125-125" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L132-132" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -610,20 +609,39 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
             uint64
           </code>
-          <div class="tip" id="31">
+          <div class="tip" id="30">
             <strong>Signature:</strong> Arbitrary&lt;uint64&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L132-132" class="github-link">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L139-139" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
               <p>CompiledName: <code>UInt64</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+            uint8
+          </code>
+          <div class="tip" id="31">
+            <strong>Signature:</strong> Arbitrary&lt;uint8&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/persimmon-projects/Persimmon.Dried/tree/master/src/Persimmon.Dried/Arbitrary.fs#L111-111" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>Byte</code></p>
         </td>
       </tr>
       <tr>
