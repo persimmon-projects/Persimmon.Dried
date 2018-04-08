@@ -66,6 +66,12 @@ Target "CleanDocs" (fun _ ->
 
 Target "Build" (fun _ ->
 
+  DotNetCli.Restore (fun p ->
+    { p with
+        Project = solutionFile
+    }
+  )
+
   !! solutionFile
   |> MSBuildRelease "" "Rebuild"
   |> ignore
