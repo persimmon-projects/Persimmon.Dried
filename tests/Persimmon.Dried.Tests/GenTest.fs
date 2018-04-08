@@ -16,7 +16,7 @@ module GenTest =
       Shrinker = Shrink.shrinkAny
       PrettyPrinter = Pretty.prettyAny
     }
-    let la l = {
+    let la (l: Gen<int> list) = {
       Gen = sequence l
       Shrinker = Shrink.shrinkAny
       PrettyPrinter = Pretty.prettyAny
@@ -227,7 +227,7 @@ module GenTest =
   }
 
   let ``return sample`` = test {
-    let revrevOrig xs = xs |> List.rev |> List.rev = xs
+    let revrevOrig (xs: int list) = xs |> List.rev |> List.rev = xs
     let! xs = property {
       applyReturn (Prop.forAll (Arb.list Arb.int) revrevOrig)
     }

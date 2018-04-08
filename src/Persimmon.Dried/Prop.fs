@@ -277,6 +277,8 @@ module internal PropImpl =
   let classifyF c ifTrue ifFalse (prop: Prop) : Prop =
     if c then collect ifTrue prop else collect ifFalse prop
 
+  let appendLabel l p = map (fun r -> { r with Labels = Set.add l r.Labels }) p
+
   module Persimmon =
 
     open Persimmon

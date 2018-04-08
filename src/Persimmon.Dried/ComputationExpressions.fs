@@ -1,6 +1,8 @@
 ﻿namespace Persimmon.Dried
 
 open System.Diagnostics
+open System.Reflection
+open FSharp.Quotations
 open Persimmon
 open Runner
 
@@ -10,6 +12,37 @@ type PropertiesState<'T> = {
   Properties: Prop seq
   Sample: 'T
 }
+
+module private Label =
+
+  open Patterns
+
+  let (|PropertyName|) (info: PropertyInfo) = info.Name
+  let (|Property|) (info: PropertyInfo) = (info.GetValue(null, null), info.Name)
+
+  let (|MethodName|) (info: MethodInfo) = info.Name
+
+  let append<'T when 'T :> Prop> (add: string -> 'T -> 'T) = function
+  | ValueWithName(p, _, name) 
+  // lazy value
+  | WithValue(p, _, PropertyGet(Some(PropertyGet (None, PropertyName name, [])), _, []))
+  | WithValue(p, _, PropertyGet(Some(ValueWithName(_, _, name)), _, []))
+  // local variable
+  | WithValue(p, _, ValueWithName(_, _, name))
+  // ref
+  | WithValue(p, _, Call(_, _, [PropertyGet(_, PropertyName name, _)]))
+  | WithValue(p, _, Call(_, _, [ValueWithName(_, _, name)]))
+  // method
+  | WithValue(p, _, Call(_, MethodName name, _))
+  // local function
+  | WithValue(p, _, Application(ValueWithName(_, _, name), _))
+  // get property
+  | WithValue(p, _, PropertyGet(_, PropertyName name, _))
+  | PropertyGet(_, Property(p, name), _) ->
+    add name (p :?> 'T)
+  | WithValue(p, _, _)
+  | Value(p, _) -> p :?> 'T
+  | expr -> failwithf "expected value, but was %A" expr
 
 type PropertiesBuilder private (name: string option) =
   new() = PropertiesBuilder(None)
@@ -45,10 +78,16 @@ type PropertiesBuilder private (name: string option) =
   member __.MaxDiscardRatio(s, v) =
     { s with RunnerParams = { s.RunnerParams with MaxDiscardRatio = v } }
   [<CustomOperation("apply")>]
-  member __.Apply(s, p) =
-    { s with Properties = seq { yield! s.Properties; yield p } }
+  member __.Apply<'T, 'U when 'U :> Prop>(s: PropertiesState<'T>, [<ReflectedDefinition(true)>] expr: Expr<'U>) =
+    { s with
+        Properties = seq {
+          yield! s.Properties
+          yield Label.append PropImpl.appendLabel expr
+        }
+    }
   [<CustomOperation("applyReturn")>]
-  member __.ApplyReturn(s, p: Prop<'T>) =
+  member __.ApplyReturn(s, [<ReflectedDefinition(true)>] expr: Expr<Prop<'T>>) =
+    let p = Label.append (fun n p -> new Prop<'T>(p.Sample, PropImpl.appendLabel n p)) expr
     {
       RunnerParams = s.RunnerParams
       PrettyParams = s.PrettyParams
