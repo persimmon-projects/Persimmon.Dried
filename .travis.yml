@@ -12,8 +12,3 @@ before_script:
  - chmod +x ./build.sh
 script:
   - ./build.sh
-
-cache:
-  directories:
-    - paket-files
-    - packages
