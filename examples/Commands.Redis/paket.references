@@ -1,7 +1,9 @@
-FSharp.Core
 FsPickler
 FsRandom
 Persimmon
+
+group Example
+  CloudStructures
 
 group Test
   Persimmon.TestAdapter

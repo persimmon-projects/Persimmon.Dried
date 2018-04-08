@@ -1,3 +1,7 @@
 FsPickler
 FsRandom
 Persimmon
+
+group Test
+  Persimmon.TestAdapter
+  Microsoft.NET.Test.Sdk

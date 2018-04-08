@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Persimmon.Dried.Tests</AssemblyName>
+    <AssemblyName>Persimmon.Dried.CSharpExamples</AssemblyName>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="app.config" />
-    <Compile Include="Arb.fs" />
-    <Compile Include="ShrinkTest.fs" />
-    <Compile Include="PropTest.fs" />
-    <Compile Include="GenTest.fs" />
-    <Compile Include="ArbTest.fs" />
-    <Compile Include="PrngStateTest.fs" />
-    <Compile Include="CommandTest.fs" />
+    <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj" />
     <ProjectReference Include="..\..\src\Persimmon.Dried\Persimmon.Dried.fsproj" />
+    <ProjectReference Include="..\..\src\Persimmon.Dried.Ext\Persimmon.Dried.Ext.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

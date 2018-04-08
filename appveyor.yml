@@ -1,5 +1,7 @@
 version: 3.1.0.{build}
 
+os: Visual Studio 2017
+
 branches:
   except:
     - gh-pages
@@ -15,7 +17,3 @@ test: off
 
 build_script:
   - cmd: build.cmd
-
-cache:
-  - packages -> paket.lock
-  - paket-files -> paket.lock

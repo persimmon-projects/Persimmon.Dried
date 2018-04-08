@@ -23,9 +23,6 @@ let tags = "fsharp F# testing"
 // File system information
 let solutionFile  = "Persimmon.Dried.sln"
 
-// Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
-
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
 let gitOwner = "persimmon-projects"
@@ -43,46 +40,6 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/persimmon-proj
 
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
-
-// Helper active pattern for project types
-let (|Fsproj|Csproj|Vbproj|) (projFileName:string) =
-    match projFileName with
-    | f when f.EndsWith("fsproj") -> Fsproj
-    | f when f.EndsWith("csproj") -> Csproj
-    | f when f.EndsWith("vbproj") -> Vbproj
-    | _                           -> failwith (sprintf "Project file %s not supported. Unknown project type." projFileName)
-
-// Generate assembly info files with the right version & up-to-date information
-Target "AssemblyInfo" (fun _ ->
-    let common = [
-        Attribute.Product project
-        Attribute.Version release.AssemblyVersion
-        Attribute.FileVersion release.AssemblyVersion
-        Attribute.InformationalVersion release.NugetVersion
-    ]
-
-    [
-        Attribute.Title "Persimmon.Dried.Gen"
-        Attribute.Description ""
-        Attribute.Guid "5a48ee9c-ed3f-4872-988c-b305b54a36f5"
-    ] @ common
-    |> CreateFSharpAssemblyInfo "./src/Persimmon.Dried.Gen/AssemblyInfo.fs"
-
-    [
-        Attribute.Title "Persimmon.Dried"
-        Attribute.Description ""
-        Attribute.InternalsVisibleTo "Persimmon.Dried.Tests"
-        Attribute.Guid "735BAAC1-153E-44A1-B1CE-63516BFB732F"
-    ] @ common
-    |> CreateFSharpAssemblyInfo "./src/Persimmon.Dried/AssemblyInfo.fs"
-
-    [
-        Attribute.Title "Persimmon.Dried.Ext"
-        Attribute.Description ""
-        Attribute.Guid "6C0B494C-BBCC-4B99-9B75-C18C332AF359"
-    ] @ common
-    |> CreateFSharpAssemblyInfo "./src/Persimmon.Dried.Ext/AssemblyInfo.fs"
-)
 
 // Copies binaries from default VS location to exepcted bin folder
 // But keeps a subdirectory structure for each project in the
@@ -108,17 +65,24 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! solutionFile
-    |> MSBuildRelease "" "Rebuild"
-    |> ignore
+
+  DotNetCli.Restore (fun p ->
+    { p with
+        Project = solutionFile
+    }
+  )
+
+  !! solutionFile
+  |> MSBuildRelease "" "Rebuild"
+  |> ignore
 )
 
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    !! testAssemblies
-    |> Persimmon id
+  DotNetCli.Test (fun p -> { p with Project = "./tests/Persimmon.Dried.Tests" })
+  DotNetCli.Test (fun p -> { p with Project = "./tests/Persimmon.Dried.CSharp.Tests" })
 )
 
 #if MONO
@@ -290,7 +254,6 @@ Target "BuildPackage" DoNothing
 Target "All" DoNothing
 
 "Clean"
-  ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"

@@ -68,7 +68,7 @@ let references =
 let binaries =
     directoryInfo bin
     |> subDirectories
-    |> Array.map (fun d -> d.FullName @@ (sprintf "%s.dll" d.Name))
+    |> Array.map (fun d -> d.FullName @@ "net45" @@ (sprintf "%s.dll" d.Name))
     |> List.ofArray
 
 let libDirs =

@@ -7,17 +7,17 @@ open System.Runtime.CompilerServices
 type PropExtensions () =
 
   [<Extension>]
-  static member Or(p1: Prop, p2: Func<Prop>) = p1 .|. Lazy(p2)
+  static member Or(p1: Prop, p2: Func<Prop>) = p1 .|. Lazy<_>(p2)
   [<Extension>]
-  static member Or(p1: Prop, p2: Func<bool>) = p1 .|. Lazy(p2)
+  static member Or(p1: Prop, p2: Func<bool>) = p1 .|. Lazy<_>(p2)
   [<Extension>]
-  static member And(p1: Prop, p2: Func<Prop>) = p1 .&. Lazy(p2)
+  static member And(p1: Prop, p2: Func<Prop>) = p1 .&. Lazy<_>(p2)
   [<Extension>]
-  static member And(p1: Prop, p2: Func<bool>) = p1 .&. Lazy(p2)
+  static member And(p1: Prop, p2: Func<bool>) = p1 .&. Lazy<_>(p2)
   [<Extension>]
-  static member Append(p1: Prop, p2: Func<Prop>) = p1 ++ Lazy(p2)
+  static member Append(p1: Prop, p2: Func<Prop>) = p1 ++ Lazy<_>(p2)
   [<Extension>]
-  static member Append(p1: bool, p2: Func<Prop>) = p1 ++ Lazy(p2)
+  static member Append(p1: bool, p2: Func<Prop>) = p1 ++ Lazy<_>(p2)
   [<Extension>]
   static member When(body: Lazy<Prop>, pred: bool) = pred ==> body
   [<Extension>]
