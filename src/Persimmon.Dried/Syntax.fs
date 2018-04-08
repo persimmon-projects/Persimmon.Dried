@@ -35,6 +35,7 @@ module Syntax =
     [<CompiledName("AtLeastOne")>]
     member __.atLeastOne ps = PropImpl.atLeastOne ps
     member __.secure p = PropImpl.secure p
+    member __.appendLabel n p = PropImpl.appendLabel n p
     member inline this.forAllNoShrink(g1, g2) = fun f ->
       (this.forAllNoShrink g1 (f >> this.forAllNoShrink g2))
         .Snoc(Gen.sample g2.Gen)
@@ -143,7 +144,7 @@ module Syntax =
       instance PropApply p
       |> Prop.map (fun r2 ->
         PropResult.merge r1 r2 (if r1.Status = r2.Status then True else False)))
-  let inline (@|) s p = instance PropApply p |> Prop.map (fun r -> { r with Labels = Set.add s r.Labels })
+  let inline (@|) s p = instance PropApply p |> Prop.appendLabel s
   let inline (|@) p s = s @| p
 
   let property (name: string) = PropertiesBuilder(name)

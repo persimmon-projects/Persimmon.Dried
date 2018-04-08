@@ -49,14 +49,14 @@ module ShrinkTest =
 
   let ``choice 1 of 2`` = property {
     apply (Prop.forAll Arb.int (fun i ->
-      let e = Choice1Of2 i
+      let e: Choice<int, int> = Choice1Of2 i
       Shrink.shrink (Shrink.shrinkChoice Shrink.shrinkInt Shrink.shrinkInt) e
       |> Seq.forall (function | Choice1Of2 _ -> true | _ -> false)))
   }
 
   let ``choice 2 of 2`` = property {
     apply (Prop.forAll Arb.int (fun i ->
-      let e = Choice2Of2 i
+      let e: Choice<int, int> = Choice2Of2 i
       Shrink.shrink (Shrink.shrinkChoice Shrink.shrinkInt Shrink.shrinkInt) e
       |> Seq.forall (function | Choice2Of2 _ -> true | _ -> false)))
   }
