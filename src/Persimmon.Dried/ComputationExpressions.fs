@@ -59,26 +59,27 @@ type PropertiesBuilder private (name: string option) =
   member __.Run(f) =
     try
       let s = f ()
-      let meta = { Name = name; Parameters = [] }
-      let body () =
+      let body tc = async {
         let watch = Stopwatch.StartNew()
         let res = s.Properties |> PropImpl.all |> check s.RunnerParams
         watch.Stop()
-        match res.Status with
-        | Proved _ | Passed ->
-          Done(meta, NonEmptyList.singleton (AssertionResult.Passed s.Sample), watch.Elapsed)
-        | Skipped s ->
-          Done(meta, NonEmptyList.singleton (AssertionResult.NotPassed (NotPassedCause.Skipped s)), watch.Elapsed)
-        | Failed _
-        | Exhausted ->
-          let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
-          Done(meta, NonEmptyList.singleton (NotPassed v), watch.Elapsed)
-        | PropException (_, e, _) ->
-          let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
-          Error(meta, [e], [v], watch.Elapsed)
-      TestCase(meta, body)
+        return
+          match res.Status with
+          | Proved _ | Passed ->
+            Done(tc, NonEmptyList.singleton (AssertionResultExtensions.Passed s.Sample), watch.Elapsed)
+          | Skipped s ->
+            Done(tc, NonEmptyList.singleton (AssertionResultExtensions.NotPassed (None, NotPassedCause.Skipped s)), watch.Elapsed)
+          | Failed _
+          | Exhausted ->
+            let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
+            Done(tc, NonEmptyList.singleton (NotPassed(None, v)), watch.Elapsed)
+          | PropException (_, e, _) ->
+            let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
+            Error(tc, [|e|], [v], watch.Elapsed)
+      }
+      TestCase<_>(name, [], [], body)
     with e ->
-      TestCase.makeError name [] e
+      TestCase.makeError name [] [] e
 
 type ArbitraryBuilder internal () =
   let returnAny g = {

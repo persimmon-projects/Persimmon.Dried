@@ -280,6 +280,7 @@ module internal PropImpl =
   module Persimmon =
 
     open Persimmon
+    open Persimmon.ActivePatterns
 
     let applyAssertionResult (r: AssertionResult<_>) =
       { new Prop() with
@@ -296,15 +297,17 @@ module internal PropImpl =
         member __.Apply(_) =
           match r with
           | Done _ -> { Status = True; Args = []; Labels = Set.empty; Collected = [] }
-          | Error(_, [], [], _) ->
+          | Error(_, [||], [||], _) ->
             let e = System.Exception("Persimmon.TestResult is error, but exn list and NotPassedCasue are empty.")
             { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] }
-          | Error(_, [], x::_, _) ->
+          | Error(_, [||], xs, _) ->
+            let x = Array.head xs
             match x with
             | Violated msg -> { Status = False; Args = []; Labels = Set.singleton msg; Collected = [] }
             | Skipped s ->
               { Status = PropStatus.Skipped s; Args = []; Labels = Set.empty; Collected = [] }
-          | Error(_, e::_, _, _) ->
+          | Error(_, es, _, _) ->
+            let e = Array.head es
             { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] } }
 
 type PropApply =
