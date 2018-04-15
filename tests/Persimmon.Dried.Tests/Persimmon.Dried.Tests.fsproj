@@ -15,6 +15,7 @@
     <Compile Include="PrngStateTest.fs" />
     <Compile Include="CommandTest.fs" />
     <Compile Include="QuotationTest.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj" />
