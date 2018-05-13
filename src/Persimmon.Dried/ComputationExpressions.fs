@@ -114,11 +114,11 @@ type PropertiesBuilder private (name: string option) =
             Done(tc, NonEmptyList.singleton (NotPassed(None, v)), watch.Elapsed)
           | PropException (_, e, _) ->
             let v = Violated (Result.prettyTestRes res |> Pretty.pretty s.PrettyParams)
-            Error(tc, [|e|], [v], watch.Elapsed)
+            Error(tc, [| ExceptionWrapper(e) |], [v], watch.Elapsed)
       }
       TestCase<_>(name, [], [], body)
     with e ->
-      TestCase.makeError name [] [] e
+      TestCase.makeError name [] [] (ExceptionWrapper(e))
 
 type ArbitraryBuilder internal () =
   let returnAny g = {

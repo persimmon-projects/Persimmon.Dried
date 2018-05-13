@@ -24,7 +24,7 @@ type PropertiesBuilder with
     })
   member __.Run(f: unit -> TestCase<_>) =
     try f ()
-    with e -> TestCase.makeError None [] [] e
+    with e -> TestCase.makeError None [] [] (ExceptionWrapper(e))
 
 module ReturnValue =
 

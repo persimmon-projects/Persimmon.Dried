@@ -310,7 +310,7 @@ module internal PropImpl =
               { Status = PropStatus.Skipped s; Args = []; Labels = Set.empty; Collected = [] }
           | Error(_, es, _, _) ->
             let e = Array.head es
-            { Status = Exception e; Args = []; Labels = Set.empty; Collected = [] } }
+            { Status = Exception e.Unwrap; Args = []; Labels = Set.empty; Collected = [] } }
 
 type PropApply =
   | PropApply

@@ -136,7 +136,7 @@ module Gen =
   let elements xs =
     Statistics.uniformDiscrete(0, Seq.length xs - 1)
     |> choose
-    |> map (fun n -> Seq.nth n xs)
+    |> map (fun n -> Seq.item n xs)
 
   [<CompiledName("OneOf")>]
   let oneOf gens = elements gens |> bind id
