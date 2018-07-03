@@ -1,3 +1,8 @@
+### 4.0.0 - July 4 2018
+* update Persimmon, FsPickler, FsRandom
+* support netstandard
+* append property, method, or binding name
+
 ### 3.0.0 - Jan 15 2017
 * add size base number Arbitrary
 * add Arb.DoNotSize module
