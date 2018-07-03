@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Shrink.fs" />
     <Compile Include="Pretty.fs" />
     <Compile Include="CoArbitrary.fs" />
@@ -16,7 +17,6 @@
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Syntax.fs" />
     <Compile Include="Commands.fs" />
-    <Compile Include="Attributes.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persimmon.Dried.Gen\Persimmon.Dried.Gen.fsproj" />

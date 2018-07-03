@@ -12,6 +12,8 @@ open System.IO
 open SourceLink
 #endif
 
+let configuration = getBuildParamOrDefault "configuration" "Release"
+
 let project = "Persimmon.Dried"
 
 // List of author names (for NuGet package)
@@ -41,6 +43,44 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/persimmon-proj
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
+let (|Fsproj|Csproj|Vbproj|Shproj|) (projFileName:string) =
+    match projFileName with
+    | f when f.EndsWith("fsproj") -> Fsproj
+    | f when f.EndsWith("csproj") -> Csproj
+    | f when f.EndsWith("vbproj") -> Vbproj
+    | f when f.EndsWith("shproj") -> Shproj
+    | _                           -> failwith (sprintf "Project file %s not supported. Unknown project type." projFileName)
+
+// Generate assembly info files with the right version & up-to-date information
+Target "AssemblyInfo" (fun _ ->
+    let getAssemblyInfoAttributes projectName =
+        [ yield Attribute.Title (projectName)
+          yield Attribute.Product project
+          if projectName = "Persimmon.Dried" then
+            yield Attribute.InternalsVisibleTo "Persimmon.Dried.Tests"
+          yield Attribute.Version release.AssemblyVersion
+          yield Attribute.FileVersion release.AssemblyVersion
+          yield Attribute.Configuration configuration ]
+
+    let getProjectDetails projectPath =
+        let projectName = System.IO.Path.GetFileNameWithoutExtension(projectPath)
+        ( projectPath,
+          projectName,
+          System.IO.Path.GetDirectoryName(projectPath),
+          (getAssemblyInfoAttributes projectName)
+        )
+
+    !! "src/**/*.??proj"
+    |> Seq.map getProjectDetails
+    |> Seq.iter (fun (projFileName, projectName, folderName, attributes) ->
+        match projFileName with
+        | Fsproj -> CreateFSharpAssemblyInfo (folderName </> "AssemblyInfo.fs") attributes
+        | Csproj -> CreateCSharpAssemblyInfo ((folderName </> "Properties") </> "AssemblyInfo.cs") attributes
+        | Vbproj -> CreateVisualBasicAssemblyInfo ((folderName </> "My Project") </> "AssemblyInfo.vb") attributes
+        | Shproj -> ()
+        )
+)
+
 // Copies binaries from default VS location to exepcted bin folder
 // But keeps a subdirectory structure for each project in the
 // src folder to support multiple project outputs
@@ -54,7 +94,9 @@ Target "CopyBinaries" (fun _ ->
 // Clean build results
 
 Target "Clean" (fun _ ->
-    CleanDirs ["bin"; "temp"]
+  CleanDirs ["bin"; "temp"]
+  !! ("./src/**/bin" @@ configuration)
+  |> CleanDirs
 )
 
 Target "CleanDocs" (fun _ ->
@@ -73,7 +115,7 @@ Target "Build" (fun _ ->
   )
 
   !! solutionFile
-  |> MSBuildRelease "" "Rebuild"
+  |> MSBuild "" "Rebuild" [ ("Platform", "Any CPU"); ("Configuration", configuration) ]
   |> ignore
 )
 
@@ -254,6 +296,7 @@ Target "BuildPackage" DoNothing
 Target "All" DoNothing
 
 "Clean"
+  ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
