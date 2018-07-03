@@ -15,3 +15,17 @@ tags
     fsharp testing property csharp
 description
     Persimmon.Dried.Gen provide value generator for property based testing.
+dependencies
+  framework: net45
+    FSharp.Core >= LOCKEDVERSION
+    FsRandom >= LOCKEDVERSION
+    Persimmon ~> LOCKED:Minor
+  framework: netstandard1.6
+    FSharp.Core >= LOCKEDVERSION
+    FsRandom >= LOCKEDVERSION
+    Persimmon ~> LOCKED:Minor
+files
+    bin/Release/net45/Persimmon.Dried.Gen.dll ==> lib/net45
+    bin/Release/net45/Persimmon.Dried.Gen.xml ==> lib/net45
+    bin/Release/netstandard1.6/Persimmon.Dried.Gen.dll ==> lib/netstandard1.6
+    bin/Release/netstandard1.6/Persimmon.Dried.Gen.xml ==> lib/netstandard1.6

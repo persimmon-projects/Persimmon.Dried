@@ -3,7 +3,7 @@ source https://api.nuget.org/v3/index.json
 nuget FSharp.Core >= 4.3.4 lowest_matching:true
 nuget FsPickler ~> 5.2 lowest_matching:true
 nuget FsRandom >= 1.4.0.1 lowest_matching:true
-nuget Persimmon ~> 4.0.1 lowest_matching:true
+nuget Persimmon ~> 4 lowest_matching:true
 
 group Test
   source https://api.nuget.org/v3/index.json
