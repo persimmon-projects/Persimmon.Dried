@@ -1,4 +1,6 @@
-FSharp.Core
 FsPickler
 FsRandom
 Persimmon
+
+group Test
+  FSharp.Core

@@ -4,6 +4,7 @@ Persimmon
 
 group Example
   CloudStructures
+  FSharp.Core
 
 group Test
   Persimmon.TestAdapter

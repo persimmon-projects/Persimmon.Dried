@@ -1,4 +1,5 @@
 source https://api.nuget.org/v3/index.json
+framework: netstandard1.6, netstandard2.0, net45
 
 nuget FSharp.Core >= 4.3.4 lowest_matching:true
 nuget FsPickler ~> 5.2 lowest_matching:true
@@ -17,19 +18,19 @@ group Build
   source https://api.nuget.org/v3/index.json
   framework: net45
 
-  nuget FAKE
-  nuget FAKE.Persimmon
+  nuget FAKE < 5
   nuget NuGet.CommandLine
   nuget SourceLink.Fake
   nuget FSharp.Formatting
+  nuget Octokit = 0.29
 
-  github fsharp/FAKE modules/Octokit/Octokit.fsx
+  github fsharp/FAKE:2bd41546d8549654ad4d4b5639425537afe5e1f7 modules/Octokit/Octokit.fsx
   github persimmon-projects/Persimmon.Materials StandardIcons/persimmon.ico
   github persimmon-projects/Persimmon.Materials StandardIcons/persimmon_128.png
 
 group Example
   source https://api.nuget.org/v3/index.json
-  framework: auto-detect
+  framework: net45
 
   nuget CloudStructures
   nuget FSharp.Core >= 4.5.0
