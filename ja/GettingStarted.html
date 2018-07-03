@@ -48,8 +48,8 @@
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;Persimmon&quot;</span>
 <span class="prep">#r</span> <span class="s">&quot;Persimmon.Dried&quot;</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Persimmon</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Persimmon</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">Dried</span>
+<span class="k">open</span> <span class="i">Persimmon</span>
+<span class="k">open</span> <span class="i">Persimmon</span><span class="o">.</span><span class="i">Dried</span>
 </code></pre></td>
 </tr>
 </table>
@@ -58,8 +58,8 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 6)" onmouseover="showTip(event, 'fs3', 6)" class="i">forAll</span> (<span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="i">list</span> <span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs3', 11)" onmouseover="showTip(event, 'fs3', 11)" class="i">xs</span> <span class="k">-&gt;</span>
-  <span onmouseout="hideTip(event, 'fs3', 12)" onmouseover="showTip(event, 'fs3', 12)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="i">rev</span> (<span onmouseout="hideTip(event, 'fs3', 14)" onmouseover="showTip(event, 'fs3', 14)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 15)" onmouseover="showTip(event, 'fs6', 15)" class="i">rev</span> <span onmouseout="hideTip(event, 'fs3', 16)" onmouseover="showTip(event, 'fs3', 16)" class="i">xs</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 17)" onmouseover="showTip(event, 'fs3', 17)" class="i">xs</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">``reverse and reverse is original``</span> <span class="o">=</span> <span class="i">Prop</span><span class="o">.</span><span class="i">forAll</span> (<span class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">list</span> <span class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">int</span>) (<span class="k">fun</span> <span class="i">xs</span> <span class="k">-&gt;</span>
+  <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">rev</span> (<span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="i">rev</span> <span class="i">xs</span>) <span class="o">=</span> <span class="i">xs</span>
 )
 </code></pre></td>
 </tr>
@@ -68,25 +68,25 @@
 <p>F# インタラクティブ上にこの定義をロードして、起動してみましょう。</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 18)" onmouseover="showTip(event, 'fs3', 18)" class="i">prms</span> <span class="o">=</span> { <span onmouseout="hideTip(event, 'fs3', 19)" onmouseover="showTip(event, 'fs3', 19)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs7', 20)" onmouseover="showTip(event, 'fs7', 20)" class="t">Parameters</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs8', 21)" onmouseover="showTip(event, 'fs8', 21)" class="i">Default</span> <span class="k">with</span> <span onmouseout="hideTip(event, 'fs3', 22)" onmouseover="showTip(event, 'fs3', 22)" class="i">Callback</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 23)" onmouseover="showTip(event, 'fs3', 23)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="f">createConsoleReporter</span> <span class="n">1</span> }
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="i">prms</span> <span class="o">=</span> { <span class="i">Runner</span><span class="o">.</span><span class="i">Parameters</span><span class="o">.</span><span class="i">Default</span> <span class="k">with</span> <span class="i">Callback</span> <span class="o">=</span> <span class="i">Runner</span><span class="o">.</span><span class="i">createConsoleReporter</span> <span class="n">1</span> }
 </code></pre></td>
 </tr>
 </table>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs3', 25)" onmouseover="showTip(event, 'fs3', 25)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="f">run</span> <span class="s">&quot;&quot;</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 28)" onmouseover="showTip(event, 'fs3', 28)" class="i">``reverse and reverse is original``</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">Runner</span><span class="o">.</span><span class="i">run</span> <span class="s">&quot;&quot;</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs1', 10)" onmouseover="showTip(event, 'fs1', 10)" class="i">``reverse and reverse is original``</span>
 </code></pre></td>
 </tr>
 </table>
-<table class="pre"><tr><td><pre><code>+ OK, passed 100 tests.</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 <p>性質が失敗したとき、 Persimmon.Dried は判例を表示します。
 例えば,</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 29)" onmouseover="showTip(event, 'fs3', 29)" class="i">``failure example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 30)" onmouseover="showTip(event, 'fs3', 30)" class="i">Prop</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 31)" onmouseover="showTip(event, 'fs3', 31)" class="i">forAll</span> (<span onmouseout="hideTip(event, 'fs3', 32)" onmouseover="showTip(event, 'fs3', 32)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 33)" onmouseover="showTip(event, 'fs4', 33)" class="i">list</span> <span onmouseout="hideTip(event, 'fs3', 34)" onmouseover="showTip(event, 'fs3', 34)" class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 35)" onmouseover="showTip(event, 'fs5', 35)" class="i">int</span>) (<span class="k">fun</span> <span onmouseout="hideTip(event, 'fs3', 36)" onmouseover="showTip(event, 'fs3', 36)" class="i">xs</span> <span class="k">-&gt;</span>
-  <span onmouseout="hideTip(event, 'fs3', 37)" onmouseover="showTip(event, 'fs3', 37)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 38)" onmouseover="showTip(event, 'fs6', 38)" class="i">rev</span> <span onmouseout="hideTip(event, 'fs3', 39)" onmouseover="showTip(event, 'fs3', 39)" class="i">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 40)" onmouseover="showTip(event, 'fs3', 40)" class="i">xs</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="i">``failure example``</span> <span class="o">=</span> <span class="i">Prop</span><span class="o">.</span><span class="i">forAll</span> (<span class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="i">list</span> <span class="i">Arb</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 13)" onmouseover="showTip(event, 'fs3', 13)" class="i">int</span>) (<span class="k">fun</span> <span class="i">xs</span> <span class="k">-&gt;</span>
+  <span onmouseout="hideTip(event, 'fs4', 14)" onmouseover="showTip(event, 'fs4', 14)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="i">rev</span> <span class="i">xs</span> <span class="o">=</span> <span class="i">xs</span>
 )
 </code></pre></td>
 </tr>
@@ -94,22 +94,11 @@
 <p>を定義し、性質を確認してみましょう。</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs3', 41)" onmouseover="showTip(event, 'fs3', 41)" class="t">Runner</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 42)" onmouseover="showTip(event, 'fs10', 42)" class="f">run</span> <span class="s">&quot;&quot;</span> <span onmouseout="hideTip(event, 'fs3', 43)" onmouseover="showTip(event, 'fs3', 43)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs3', 44)" onmouseover="showTip(event, 'fs3', 44)" class="i">``failure example``</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">Runner</span><span class="o">.</span><span class="i">run</span> <span class="s">&quot;&quot;</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="i">prms</span> <span onmouseout="hideTip(event, 'fs7', 17)" onmouseover="showTip(event, 'fs7', 17)" class="i">``failure example``</span>
 </code></pre></td>
 </tr>
 </table>
-<table class="pre"><tr><td><pre><code>! Falsified after 3 passed tests.
-&gt; ARG_0: [ "0";  "1"; ]
-&gt; ARG_0_ORIGINAL: [ "2";  "0";  "3"; ]
-&gt; current random state: AM6R9dAH6f0AAAEoRnNSYW5kb20uUmFuZG9tTnVtYmVyR2VuZXJ
-  hdG9yK1BybmdTdGF0ZQLOkfUAzpH1BQAAAADOkfUAAAAAAC1Gc1JhbmRvbS5SYW5kb21OdW1i
-  ZXJHZW5lcmF0b3IrQ3JlYXRlU3RhdGVAMTEAzpH1AAhGc1JhbmRvbQAHMS4zLjMuMAAHbmV1d
-  HJhbAAQNWY3MmY2ZTIzYzY5MjBkNADOkfUBAAAAEM6R9QDOkfUFAAAAAM6R9QAAAAAADlN5c3
-  RlbS5UdXBsZWA0AM6R9QAIbXNjb3JsaWIABzQuMC4wLjAAB25ldXRyYWwAEGI3N2E1YzU2MTk
-  zNGUwODkAzpH1BAAAABDOkfUAzpH1AAAAAAANU3lzdGVtLlVJbnQzMgTOkfUHAAAAAAAAAATO
-  kfUJAAAAAAAAAATOkfUJAAAAAAAAAATOkfUJAAAAAAAAAADOkfUCzpH1AM6R9QAAAAAALkZzU
-  mFuZG9tLlJhbmRvbU51bWJlckdlbmVyYXRvcitYb3JzaGlmdFBybmdANjAEzpH1AwAAAAAAAA
-  AAzpH1AM6R9bnl1+j3lfQfEu7EdUg7b1k=</code></pre></td></tr></table>
+<table class="pre"><tr><td><pre><code>No output has been produced.</code></pre></td></tr></table>
 <h2><a name="Persimmon-Console-を使って性質を確認する" class="anchor" href="#Persimmon-Console-を使って性質を確認する">Persimmon.Console を使って性質を確認する</a></h2>
 <p>プロジェクトを作成し、<code>property</code> コンピュテーション式を使ってテストを書きます。</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -118,10 +107,10 @@
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 45)" onmouseover="showTip(event, 'fs3', 45)" class="i">FsRandom</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FsRandom</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 46)" onmouseover="showTip(event, 'fs3', 46)" class="i">``binding example``</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 47)" onmouseover="showTip(event, 'fs3', 47)" class="f">property</span> <span class="s">&quot;binding example&quot;</span> {
-  <span onmouseout="hideTip(event, 'fs3', 48)" onmouseover="showTip(event, 'fs3', 48)" class="i">apply</span> <span onmouseout="hideTip(event, 'fs3', 49)" onmouseover="showTip(event, 'fs3', 49)" class="i">``reverse and reverse is original``</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="i">``binding example``</span> <span class="o">=</span> <span class="i">property</span> <span class="s">&quot;binding example&quot;</span> {
+  <span class="i">apply</span> <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="i">``reverse and reverse is original``</span>
 }
 </code></pre></td>
 </tr>
@@ -135,16 +124,14 @@
 </code></pre></td></tr></table>
 </div>
 
-<div class="tip" id="fs1">namespace Persimmon</div>
-<div class="tip" id="fs2">namespace Persimmon.Dried</div>
-<div class="tip" id="fs3"></div>
-<div class="tip" id="fs4">val list : a:IArbitrary&lt;&#39;a&gt; -&gt; CollectionArbitrary&lt;&#39;a,&#39;a list,Arbitrary&lt;&#39;a list&gt;&gt;<br /><br />Full name: Persimmon.Dried.Arb.list</div>
-<div class="tip" id="fs5">val int : Arbitrary&lt;int&gt;<br /><br />Full name: Persimmon.Dried.Arb.int</div>
-<div class="tip" id="fs6">val rev : list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.rev</div>
-<div class="tip" id="fs7">Multiple items<br />module Parameters<br /><br />from Persimmon.Dried.Runner<br /><br />--------------------<br />type Parameters =<br />&#160;&#160;{MinSuccessfulTests: int;<br />&#160;&#160;&#160;MinSize: int;<br />&#160;&#160;&#160;MaxSize: int;<br />&#160;&#160;&#160;PrngState: PrngState;<br />&#160;&#160;&#160;Workers: int;<br />&#160;&#160;&#160;Callback: TestCallback;<br />&#160;&#160;&#160;MaxDiscardRatio: float32;}<br /><br />Full name: Persimmon.Dried.Runner.Parameters</div>
-<div class="tip" id="fs8">val Default : Runner.Parameters<br /><br />Full name: Persimmon.Dried.Runner.Parameters.Default</div>
-<div class="tip" id="fs9">val createConsoleReporter : verbosity:int -&gt; Runner.TestCallback<br /><br />Full name: Persimmon.Dried.Runner.createConsoleReporter</div>
-<div class="tip" id="fs10">val run : name:string -&gt; prms:Runner.Parameters -&gt; p:#Prop -&gt; unit<br /><br />Full name: Persimmon.Dried.Runner.run</div>
+<div class="tip" id="fs1">val ( reverse and reverse is original ) : obj<br /><br />Full name: GettingStarted.( reverse and reverse is original )</div>
+<div class="tip" id="fs2">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
+<div class="tip" id="fs3">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs4">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------</div>
+<div class="tip" id="fs5"></div>
+<div class="tip" id="fs6">val prms : obj<br /><br />Full name: GettingStarted.prms</div>
+<div class="tip" id="fs7">val ( failure example ) : obj<br /><br />Full name: GettingStarted.( failure example )</div>
+<div class="tip" id="fs8">val ( binding example ) : obj<br /><br />Full name: GettingStarted.( binding example )</div>
 
         </div>
         <div class="col-sm-3 blog-sidebar" id="menu">
