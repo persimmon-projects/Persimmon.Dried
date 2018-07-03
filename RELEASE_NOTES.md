@@ -1,3 +1,6 @@
+### 4.0.1 - July 4 2018
+* fix FSharp.Core version
+
 ### 4.0.0 - July 4 2018
 * update Persimmon, FsPickler, FsRandom
 * support netstandard
